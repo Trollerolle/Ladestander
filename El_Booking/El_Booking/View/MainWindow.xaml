@@ -1,0 +1,27 @@
+﻿<Window x:Class="El_Booking.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:El_Booking"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush Stretch="None" ImageSource="Background1.png" AlignmentY="Top" AlignmentX="Center"/>
+        </Grid.Background>
+        <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Height="250" Margin="100,-10,0,0">
+            <TextBlock Text="Login" FontSize="25" TextDecorations="Underline" HorizontalAlignment="Center"/>
+            <TextBlock Text="Bruger" Margin="0,40,0,0"/>
+            <TextBox Width="100" Text="{Binding EnteredUsername, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Text="Kodeord" Margin="0,10,0,0"/>
+            <TextBox Width="100" Text="{Binding EnteredUsername, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Content="Log Ind" Margin="0,10,0,0" Click="Button_Click" Command="{Binding LoginCommand}"/>
+            <Button Content="Opret Bruger" Margin="0,10,0,0" Click="Button_Click" Command="{Binding CreateLoginCommand}"/>
+            <Button Content="Glemt Kodeord" Margin="0,10,0,0" Click="Button_Click" Command="{Binding ForgotPasswordCommand}"/>
+            
+            
+        </StackPanel>
+
+    </Grid>
+</Window>
