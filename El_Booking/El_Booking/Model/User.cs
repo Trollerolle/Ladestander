@@ -9,53 +9,53 @@ namespace El_Booking.Model
 {
     internal class User
     {
-		private int userID;
+		private int _userID;
 
 		public int UserID
 		{
-			get { return userID; }
-			set { userID = value; }
+			get { return _userID; }
+			set { _userID = value; }
 		}
 
 
-		private string email;
+		private string _email;
 
 		public string Email
 		{
-			get { return email; }
-			set { email = value; }
+			get { return _email; }
+			set { _email = value; }
 		}
 
-		private string telephoneNumber;
+		private string _telephoneNumber;
 
 		public string TelephoneNumber
 		{
-			get { return telephoneNumber; }
-			set { telephoneNumber = value; }
+			get { return _telephoneNumber; }
+			set { _telephoneNumber = value; }
 		}
 
-		private string firstName;
+		private string _firstName;
 
 		public string FirstName
 		{
-			get { return firstName; }
-			set { firstName = value; }
+			get { return _firstName; }
+			set { _firstName = value; }
 		}
 
-		private string lastName;
+		private string _lastName;
 
 		public string LastName
 		{
-			get { return lastName; }
-			set { lastName = value; }
+			get { return _lastName; }
+			set { _lastName = value; }
 		}
 
-		private string password;
+		private string _password;
 
 		public string Password
 		{
-			get { return password; }
-			set { password = value; }
+			get { return _password; }
+			set { _password = value; }
 		}
 
 		public User(string email, string telephoneNumber, string firstName, string lastName, string password = null) 
