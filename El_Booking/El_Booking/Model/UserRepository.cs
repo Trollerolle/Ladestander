@@ -14,6 +14,7 @@ namespace El_Booking.Model
 
         public void Add(User entity)
         {
+            //
             throw new NotImplementedException();
         }
 

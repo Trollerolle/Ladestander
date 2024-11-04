@@ -63,23 +63,44 @@ namespace El_Booking.ViewModel
 
         UserRepository _userRepo;
 
+        public RelayCommand CreateUserCommand => new RelayCommand(
+                execute => CreateNewUser(),
+                canExecute => CanCreate()
+                );
+
+        bool CanCreate()
+        {
+            if (
+                string.IsNullOrEmpty(EnteredEmail) ||
+                string.IsNullOrEmpty(EnteredPhoneNumber) ||
+                string.IsNullOrEmpty(EnteredFirstName) ||
+                string.IsNullOrEmpty(EnteredLastName) ||
+                string.IsNullOrEmpty(EnteredPassword) ||
+                string.Equals(EnteredPassword, EnteredPasswordAgain)
+                )
+                return false;
+
+            return true;
+        }
+
         public void CreateNewUser()
         {
-            if (!CheckIfUserExists(EnteredEmail))
+            if (CheckIfUserExists(EnteredEmail))
                 throw new Exception("Email already exists");
-
-            if (EnteredPassword != EnteredPasswordAgain)
-                throw new Exception("Passwords doesn't match");
 
             User newUser = new User(EnteredEmail, EnteredPhoneNumber, EnteredFirstName, EnteredLastName, EnteredPassword);
 
             _userRepo.Add(newUser);
         }
-
+        
         public bool CheckIfUserExists(string email)
         {
-
-            return true;
+            if (_userRepo.GetBy(EnteredEmail) != null)
+            {
+                return true;
+            }
+            else 
+                return false;
         }
 	}
 }
