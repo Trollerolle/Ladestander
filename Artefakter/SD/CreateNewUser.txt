@@ -1,0 +1,40 @@
+@startuml
+
+title SD Create User
+
+participant ": CreateUserViewModel" as vm
+participant "UserRepository : _userRepo" as repo
+participant "newUser : User" as newUser
+
+database "Database" as db
+
+-> vm: CreateNewUser()
+activate vm
+
+alt CheckIfUserExists = true
+  vm -> repo : CheckIfUserExists = GetByEmail(email)
+  activate repo
+  repo -> db: GetByEmail(eamil)
+  deactivate repo
+
+  <-- vm: false
+
+else CheckIfUserExists = false
+  vm --> newUser ** : create(Email, PhoneNumber, FirstName, LastName, Password)
+end
+
+alt succes = false
+  vm -> repo: succes = Add(newUser)
+  activate repo
+  
+  repo -> db: usp()
+  deactivate repo
+  
+  <-- vm: false
+
+else succes = true
+  <-- vm: true
+  deactivate vm
+end
+
+@enduml
