@@ -29,3 +29,7 @@ CREATE PROCEDURE usp_CreateUserAndLogin
 END;
 
 CREATE ROLE BookingUserRole;
+
+EXECUTE sp_addlogin 'WPFApp', 'UCL123'
+ 
+EXECUTE sp_adduser 'WPFApp', 'WPFApp'
