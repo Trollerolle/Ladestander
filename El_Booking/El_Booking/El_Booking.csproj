@@ -9,6 +9,14 @@
     <StartupObject>El_Booking.App</StartupObject>
   </PropertyGroup>
 
+
+
+  <ItemGroup>
+    <Content Include="View\Background1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />

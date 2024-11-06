@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using El_Booking.ViewModel;
 
 namespace El_Booking.View
 {
@@ -21,7 +22,27 @@ namespace El_Booking.View
     {
         public CreateUser()
         {
+            var currentApp = Application.Current as App;
+            string connectionString = currentApp.Configuration.GetSection("ConnectionStrings")["AppConnection"];
+
+            CreateUserViewModel cuvm = new CreateUserViewModel(connectionString);
+            DataContext = cuvm;
+
             InitializeComponent();
         }
-    }
+
+		private void Button_Click_Back(object sender, RoutedEventArgs e)
+		{
+			MainWindow mainWindow= new MainWindow();
+			mainWindow.Show();
+			this.Close();
+		}
+
+		private void Button_Click_CreateUser(object sender, RoutedEventArgs e)
+		{
+			MainWindow mainWindow = new MainWindow();
+			mainWindow.Show();
+			this.Close();
+		}
+	}
 }

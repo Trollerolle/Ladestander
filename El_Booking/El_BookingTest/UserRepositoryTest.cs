@@ -40,7 +40,7 @@ namespace El_BookingTest
         [TestMethod]
         public void AddUserSuccess()
         {
-            Repo1.Add(u3);
+            Repo1.Add(u1);
         }
     }
 }

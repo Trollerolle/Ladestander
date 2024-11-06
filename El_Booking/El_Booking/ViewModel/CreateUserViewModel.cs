@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,14 +9,22 @@ using El_Booking.Model;
 
 namespace El_Booking.ViewModel
 {
-    internal class CreateUserViewModel
+    internal class CreateUserViewModel : BaseViewModel
     {
+         UserRepository _userRepo;
+        public CreateUserViewModel(string ConnectionString) 
+        { 
+        _userRepo = new UserRepository(ConnectionString);
+        }
         private string _enteredEmail;
 
         public string EnteredEmail
         {
             get { return _enteredEmail; }
-            set { _enteredEmail = value; }
+            set { 
+                _enteredEmail = value;
+                OnPropertyChanged();
+                }
         }
 
         private string _enteredPhoneNumber;
@@ -22,7 +32,10 @@ namespace El_Booking.ViewModel
         public string EnteredPhoneNumber
         {
             get { return _enteredPhoneNumber; }
-            set { _enteredPhoneNumber = value; }
+            set { 
+                _enteredPhoneNumber = value;
+				OnPropertyChanged();
+			    }
 
         }
 
@@ -31,7 +44,10 @@ namespace El_Booking.ViewModel
         public string EnteredFirstName
         {
             get { return _enteredFirstName; }
-            set { _enteredFirstName = value; }
+            set { 
+                _enteredFirstName = value;
+				OnPropertyChanged();
+			    }
         }
 
         private string _enteredLastName;
@@ -39,7 +55,10 @@ namespace El_Booking.ViewModel
         public string EnteredLastName
         {
             get { return _enteredLastName; }
-            set { _enteredLastName = value; }
+            set { 
+                _enteredLastName = value;
+				OnPropertyChanged();
+			    }
 
         }
 
@@ -48,7 +67,10 @@ namespace El_Booking.ViewModel
         public string EnteredPassword
         {
             get { return _enteredPassword; }
-            set { _enteredPassword = value; }
+            set { 
+                _enteredPassword = value;
+				OnPropertyChanged();
+			    }
 
         }
 
@@ -57,16 +79,19 @@ namespace El_Booking.ViewModel
 		public string EnteredPasswordAgain
 		{
 			get { return _enteredPasswordAgain; }
-			set { _enteredPasswordAgain = value; }
+			set { 
+                _enteredPasswordAgain = value;
+				OnPropertyChanged();
+			    }
 
 		}
 
-        UserRepository _userRepo;
+       
 
         public RelayCommand CreateUserCommand => new RelayCommand(
                 execute => CreateNewUser(),
                 canExecute => CanCreate()
-                );
+				);
 
         bool CanCreate()
         {
@@ -76,7 +101,7 @@ namespace El_Booking.ViewModel
                 string.IsNullOrEmpty(EnteredFirstName) ||
                 string.IsNullOrEmpty(EnteredLastName) ||
                 string.IsNullOrEmpty(EnteredPassword) ||
-                string.Equals(EnteredPassword, EnteredPasswordAgain)
+                EnteredPassword != EnteredPasswordAgain
                 )
                 return false;
 
@@ -95,7 +120,7 @@ namespace El_Booking.ViewModel
         
         public bool CheckIfUserExists(string email)
         {
-            if (_userRepo.GetBy(EnteredEmail) != null)
+            if (_userRepo.GetBy(email) != null)
             {
                 return true;
             }

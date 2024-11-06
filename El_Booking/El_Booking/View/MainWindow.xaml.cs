@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace El_Booking
+namespace El_Booking.View
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
@@ -19,6 +19,13 @@ namespace El_Booking
 		public MainWindow()
 		{
 			InitializeComponent();
+		}
+
+		private void Button_Click_CreateUser(object sender, RoutedEventArgs e)
+		{
+			CreateUser createUser = new CreateUser();
+			createUser.Show();
+			this.Close();
 		}
 	}
 }

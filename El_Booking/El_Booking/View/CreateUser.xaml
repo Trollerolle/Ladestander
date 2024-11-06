@@ -22,26 +22,29 @@
             <StackPanel Grid.Row="1" Grid.Column="0"  HorizontalAlignment="Left" VerticalAlignment="Center" Height="300" Margin="0,-10,0,0">
             
             <TextBlock Text="Email" Margin="0,40,0,0"/>
-            <TextBox Width="100" Text="{Binding EnteredUsername, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Width="100" Text="{Binding EnteredEmail, UpdateSourceTrigger=PropertyChanged}" />
             
             <TextBlock Text="Fornavn" Margin="0,10,0,0"/>
-            <TextBox Width="100" Text="{Binding EnteredUsername, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Width="100" Text="{Binding EnteredFirstName, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Text="Kodeord" Margin="0,10,0,0"/>
-                <TextBox Width="100" Text="{Binding EnteredUsername, UpdateSourceTrigger=PropertyChanged}" />
-                <Button Content="Opret" Margin="0,10,0,0" Click="Button_Click" Command="{Binding LoginCommand}"/>
+                <TextBox Width="100" Text="{Binding EnteredPassword, UpdateSourceTrigger=PropertyChanged}" />
+				<Button Content="Opret"
+						Margin="0,10,0,0"
+						Command="{Binding CreateUserCommand}"
+						Click="Button_Click_CreateUser" />
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Left" VerticalAlignment="Center" Height="300" Margin="0,-10,0,0">
                 <TextBlock Text="Telefonnummer" Margin="0,40,0,0"/>
-                <TextBox Width="100" Text="{Binding EnteredUsername, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Width="100" Text="{Binding EnteredPhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Text="Efternavn" Margin="0,10,0,0"/>
-            <TextBox Width="100" Text="{Binding EnteredUsername, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Width="100" Text="{Binding EnteredLastName, UpdateSourceTrigger=PropertyChanged}" />
             
             <TextBlock Text="Gentag Kodeord" Margin="0,10,0,0"/>
-            <TextBox Width="100" Text="{Binding EnteredUsername, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Width="100" Text="{Binding EnteredPasswordAgain, UpdateSourceTrigger=PropertyChanged}" />
 
             
-            <Button Content="Tilbage" Margin="0,10,0,0" Click="Button_Click" Command="{Binding CreateLoginCommand}"/>
+            <Button Content="Tilbage" Margin="0,10,0,0" Click="Button_Click_Back"/>
             
 
 
