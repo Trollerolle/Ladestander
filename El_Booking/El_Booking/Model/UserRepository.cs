@@ -1,21 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Data.SqlClient;
+using System.Windows;
 
 namespace El_Booking.Model
 {
-    internal class UserRepository : IRepository<User>
+    // ændre til internal
+    public class UserRepository : IRepository<User>
     {
-        public UserRepository() 
-        { 
+        readonly string _connString;
+
+        public UserRepository(string connectionString)
+        {
+            this._connString = connectionString;
         }
 
-        public void Add(User entity)
+        public void Add(User user)
         {
-            //
-            throw new NotImplementedException();
+
+            string query = "EXEC [dbo].[uspAddUserToUsers] @FirstName, @LastName, @Email, @PhoneNumber, @Password;";
+
+            using (SqlConnection connection = new SqlConnection(_connString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@FirstName", user.FirstName);
+                command.Parameters.AddWithValue("@LastName", user.LastName);
+                command.Parameters.AddWithValue("@Email", user.Email);
+                command.Parameters.AddWithValue("@PhoneNumber", user.TelephoneNumber);
+                command.Parameters.AddWithValue("@Password", user.Password);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
         }
 
         public void Delete(int id)
@@ -30,7 +43,33 @@ namespace El_Booking.Model
 
         public User GetBy(string email)
         {
-            throw new NotImplementedException();
+            User user = null;
+
+            string query = "EXEC uspGetUserByEmail @Email;";
+
+            using (SqlConnection connection = new SqlConnection(_connString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Email", email);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        user = new User
+                        (
+                            // skal UserID med??
+                            email: (string)reader["Email"],
+                            telephoneNumber: (string)reader["PhoneNumber"],
+                            firstName: (string)reader["FirstName"],
+                            lastName: (string)reader["LastName"]
+                        );
+                    }
+                }
+            }
+
+            return user;
         }
 
         public void Update(User entity)

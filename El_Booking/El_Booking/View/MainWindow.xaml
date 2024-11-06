@@ -16,9 +16,9 @@
             <TextBox Width="100" Text="{Binding EnteredUsername, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Text="Kodeord" Margin="0,10,0,0"/>
             <TextBox Width="100" Text="{Binding EnteredUsername, UpdateSourceTrigger=PropertyChanged}" />
-            <Button Content="Log Ind" Margin="0,10,0,0" Click="Button_Click" Command="{Binding LoginCommand}"/>
-            <Button Content="Opret Bruger" Margin="0,10,0,0" Click="Button_Click" Command="{Binding CreateLoginCommand}"/>
-            <Button Content="Glemt Kodeord" Margin="0,10,0,0" Click="Button_Click" Command="{Binding ForgotPasswordCommand}"/>
+            <Button Content="Log Ind" Margin="0,10,0,0" Command="{Binding LoginCommand}"/>
+            <Button Content="Opret Bruger" Margin="0,10,0,0" Command="{Binding CreateLoginCommand}"/>
+            <Button Content="Glemt Kodeord" Margin="0,10,0,0" Command="{Binding ForgotPasswordCommand}"/>
             
             
         </StackPanel>

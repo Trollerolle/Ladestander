@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace El_Booking.Model
 {
-    internal class User
+	// ændre til internal
+    public class User
     {
 		private int _userID;
 

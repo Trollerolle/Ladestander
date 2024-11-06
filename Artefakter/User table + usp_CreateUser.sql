@@ -2,8 +2,8 @@ CREATE TABLE Users (
 UserID INT IDENTITY(1,1) PRIMARY KEY,
 FirstName NvarChar(50),
 LastName NvarChar(50),
-Email NvarChar(50),
-PhoneNumber NvarChar(50),
+Email NvarChar(50) UNIQUE,
+PhoneNumber NvarChar(50) UNIQUE,
 Password NvarChar(21)
 )
 
