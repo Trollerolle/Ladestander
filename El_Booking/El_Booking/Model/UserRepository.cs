@@ -16,7 +16,7 @@ namespace El_Booking.Model
         public void Add(User user)
         {
 
-            string query = "EXEC [dbo].[uspAddUserToUsers] @FirstName, @LastName, @Email, @PhoneNumber, @Password;";
+            string query = "EXEC [dbo].[usp_CreateUserAndLogin] @FirstName, @LastName, @Email, @PhoneNumber, @Password;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
             {
@@ -41,16 +41,16 @@ namespace El_Booking.Model
             throw new NotImplementedException();
         }
 
-        public User GetBy(string email)
+        public User GetBy(string param)
         {
             User user = null;
 
-            string query = "EXEC uspGetUserByEmail @Email;";
+            string query = "EXEC uspGetUserBy @Parameter;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Email", email);
+                command.Parameters.AddWithValue("@Parameter", param);
                 connection.Open();
 
                 using (SqlDataReader reader = command.ExecuteReader())

@@ -12,7 +12,9 @@ BEGIN
 END;
 GO
 
-GRANT EXECUTE ON OBJECT::[dbo].[uspGetUserByEmail]
+DROP PROC [dbo].[uspGetUserByEmail];
+
+GRANT EXECUTE ON OBJECT::[dbo].[uspGetUserBy]
     TO WPFApp;
 GO
 

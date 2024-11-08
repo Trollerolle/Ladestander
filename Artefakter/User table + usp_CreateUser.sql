@@ -9,7 +9,7 @@ FirstName NvarChar(50) NOT NULL,
 LastName NvarChar(50)NOT NULL,
 Email NvarChar(50) NOT NULL UNIQUE,
 PhoneNumber NvarChar(50) NOT NULL UNIQUE,
-LicensPlate NvarChar(10) NOT NULL UNIQUE,
+--LicensPlate NvarChar(10) NOT NULL UNIQUE,
 Password NvarChar(21) NOT NULL
 )
 GO
@@ -24,7 +24,7 @@ CREATE OR ALTER PROCEDURE usp_CreateUserAndLogin
 @LastName NVARCHAR(50),
 @Email NVARCHAR(50),
 @PhoneNumber NVARCHAR(50),
-@LicensePlate NVARCHAR(10),
+--@LicensePlate NVARCHAR(10),
 @Password NVARCHAR(21)
 AS 
  BEGIN 
@@ -32,46 +32,60 @@ AS
  DECLARE @LoginName NVARCHAR(50) = @Email;
  DECLARE @UserName NVARCHAR(101) = @FirstName + ' ' + @LastName;
 
-	BEGIN TRY
+--	BEGIN TRY
 		
-		BEGIN TRANSACTION
-
+		
 		EXECUTE sp_addlogin	
 		@loginame = @LoginName, 
 		@passwd = @Password, 
 		@defdb = 'El_Booking';
+		;
 
 		EXECUTE sp_adduser 
 		@loginame = @LoginName, 
 		@name_in_db = @UserName;
+		;
 
 		EXECUTE sp_addrolemember 
 		@rolename = BookingUserRole, 
 		@membername = @UserName;
+		;
+
+		BEGIN TRANSACTION
 
 		EXECUTE uspAddUserToUsers 
 		@FirstName, 
 		@LastName, 
 		@Email,
 		@PhoneNumber,
-		@LicensePlate,
+		--@LicensePlate,
 		@Password;
+
+		IF @@ERROR <> 0
+		BEGIN
+			ROLLBACK TRANSACTION
+		END
+			ELSE
 
 		COMMIT TRANSACTION 
 
-		EXEC msdb.dbo.sp_send_dbmail  
-		@profile_name = 'ElBookingMail',  
-		@recipients = '4531441539@sms.inmobile.dk',  
-		@body = 'Voila..!! This email has been sent from SQL Server Express Edition.',  
-		@subject = 'Voila..!! This email has been sent from SQL Server Express Edition.' ;
+		--EXEC msdb.dbo.sp_send_dbmail  
+		--@profile_name = 'ElBookingMail',  
+		--@recipients = @Email, --'4531441539@sms.inmobile.dk',  
+		--@body = 'Voila..!! This email has been sent from SQL Server Express Edition.',  
+		--@subject = 'Voila..!! This email has been sent from SQL Server Express Edition.' ;
 
-	END TRY
-	BEGIN CATCH
-		PRINT 'An error has occurred:';
-		PRINT ERROR_MESSAGE();
-	END CATCH
+--	END TRY
+	--BEGIN CATCH
+	--	PRINT 'An error has occurred:';
+	--	PRINT ERROR_MESSAGE();
+	--END CATCH
 END;
 GO 
+
+GRANT EXECUTE ON OBJECT::[dbo].[usp_CreateUserAndLogin]
+    TO WPFApp;
+GO
 
 CREATE ROLE BookingUserRole;
 -- GRANT (Her skal der være SELECT, UPDATE osv. på de views og SP som rolle brugerne må bruge. Altså deres permissions.)
