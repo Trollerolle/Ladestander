@@ -1,14 +1,14 @@
 USE El_Booking;
 GO
 
--- GetUserByEmail
-CREATE OR ALTER PROC uspGetUserByEmail
+-- GetUserBy
+CREATE OR ALTER PROC uspGetUserBy
 (
-	@Email NVarChar(50)
+	@Parameter NVarChar(50)
 )
 AS
 BEGIN
-	SELECT * FROM [dbo].[Users] WHERE [Email] = @Email
+	SELECT * FROM [dbo].[Users] WHERE [Email] = @Parameter OR [PhoneNumber] = @Parameter
 END;
 GO
 
