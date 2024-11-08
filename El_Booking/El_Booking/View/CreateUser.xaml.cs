@@ -5,13 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+using System.Text.RegularExpressions;
+using El_Booking.ViewModel;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using El_Booking.ViewModel;
+using Microsoft.IdentityModel.Protocols;
 
 namespace El_Booking.View
 {
@@ -31,18 +29,64 @@ namespace El_Booking.View
             InitializeComponent();
         }
 
-		private void Button_Click_Back(object sender, RoutedEventArgs e)
-		{
-			MainWindow mainWindow= new MainWindow();
-			mainWindow.Show();
-			this.Close();
-		}
+        private void Button_Click_Back(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Close();
+        }
 
-		private void Button_Click_CreateUser(object sender, RoutedEventArgs e)
-		{
-			MainWindow mainWindow = new MainWindow();
-			mainWindow.Show();
-			this.Close();
-		}
-	}
+        private void Button_Click_CreateUser(object sender, RoutedEventArgs e)
+        {
+
+            string? userCredentials = 
+                ((CreateUserViewModel)this.DataContext).CheckIfUserExists(tbEmail.Text, tbPhone.Text);
+
+            if (!string.IsNullOrEmpty(userCredentials))
+                MessageBox.Show($"Bruger med: \"{userCredentials}\" er allerede oprettet.", "Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            else
+            {
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.Show();
+                this.Close();
+            }
+
+        }
+
+        private void pwdBox1_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext != null)
+            {
+                ((CreateUserViewModel)this.DataContext).EnteredPassword = ((PasswordBox)sender).Password;
+            }
+        }
+
+        private void pwdBox2_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+
+            PasswordBox pwdBox = (PasswordBox)sender;
+
+            if (this.DataContext != null)
+            {
+                ((CreateUserViewModel)this.DataContext).EnteredPasswordAgain = pwdBox.Password;
+
+                // if the two passwords doesn't match
+                if (pwdBox.Password != ((CreateUserViewModel)this.DataContext).EnteredPassword)
+                {
+                    pwdBox.BorderBrush = Brushes.Red;
+                }
+                else
+                {
+                    pwdBox.ClearValue(TextBox.BorderBrushProperty);
+                }
+            }
+        }
+
+        private void PhonenumberValidation(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+    }
 }

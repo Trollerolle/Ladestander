@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using El_Booking.Model;
 
 namespace El_Booking.ViewModel
@@ -110,22 +111,30 @@ namespace El_Booking.ViewModel
 
         public void CreateNewUser()
         {
-            if (CheckIfUserExists(EnteredEmail))
-                throw new Exception("Email already exists");
+            string? userCredentials =
+                CheckIfUserExists(EnteredEmail, EnteredPhoneNumber);
 
-            User newUser = new User(EnteredEmail, EnteredPhoneNumber, EnteredFirstName, EnteredLastName, EnteredPassword);
-
-            _userRepo.Add(newUser);
+            if (userCredentials == null)
+            {
+                User newUser = new User(EnteredEmail, EnteredPhoneNumber, EnteredFirstName, EnteredLastName, EnteredPassword);
+                _userRepo.Add(newUser);
+            }
+                
         }
         
-        public bool CheckIfUserExists(string email)
+        // return usercredentials, or null if no user was found
+        public string? CheckIfUserExists(params string[] args)
         {
-            if (_userRepo.GetBy(email) != null)
+            foreach (string arg in args)
             {
-                return true;
+                if (_userRepo.GetBy(arg) != null)
+                {
+                    return arg;
+                }
             }
-            else 
-                return false;
+
+            return null;
+
         }
 	}
 }
