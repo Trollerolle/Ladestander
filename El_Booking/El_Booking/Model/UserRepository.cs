@@ -45,7 +45,7 @@ namespace El_Booking.Model
         {
             User user = null;
 
-            string query = "EXEC uspGetUserBy @Parameter;";
+            string query = "EXEC usp_GetUserBy @Parameter;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
             {

@@ -2,7 +2,7 @@ USE El_Booking;
 GO
 
 -- GetUserBy
-CREATE OR ALTER PROC uspGetUserBy
+CREATE OR ALTER PROC usp_GetUserBy
 (
 	@Parameter NVarChar(50)
 )
@@ -14,11 +14,11 @@ GO
 
 DROP PROC [dbo].[uspGetUserByEmail];
 
-GRANT EXECUTE ON OBJECT::[dbo].[uspGetUserBy]
+GRANT EXECUTE ON OBJECT::[dbo].[usp_GetUserBy]
     TO WPFApp;
 GO
 
-EXEC uspGetUserByEmail 'sander@gmail.com';
+EXEC usp_GetUserBy 'sander@gmail.com';
 GO
 
 -- AddUser
