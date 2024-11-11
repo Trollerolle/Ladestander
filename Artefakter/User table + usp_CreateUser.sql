@@ -239,6 +239,7 @@ GO
 CREATE USER [WPFApp] FOR LOGIN [WPFApp];
 GO
 
+USE El_Booking;
 GRANT EXECUTE ON OBJECT::[dbo].[usp_Login]
     TO WPFApp;
 GO
@@ -253,7 +254,6 @@ GO
 
 USE master;
 GO
-GRANT EXECUTE ON OBJECT::[dbo].[sp_adduser] TO [WPFApp];
 GRANT EXECUTE ON OBJECT::[dbo].[sp_addrolemember] TO [WPFApp];
 GO
 
