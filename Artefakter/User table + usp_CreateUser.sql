@@ -61,13 +61,13 @@ GO
 		--EXECUTE usp_addUser @LoginName, @UserName;
 --GO
 
---CREATE OR ALTER PROC usp_addRole 
+--CREATE OR ALTER PROC usp_addRoleMember 
 --@UserName NVARCHAR(50)
 --AS
 --BEGIN 
 --DECLARE @rolename NvarChar(20) = 'BookingUserRole';
---DECLARE @AddRole NVARCHAR(MAX);
---SET @AddRole = N'ALTER ROLE ' + QUOTENAME(@rolename) + N' ADD MEMBER ' + QUOTENAME(@UserName) + N';';
+--DECLARE @AddRoleMember NVARCHAR(MAX);
+--SET @AddRoleMember = N'ALTER ROLE ' + QUOTENAME(@rolename) + N' ADD MEMBER ' + QUOTENAME(@UserName) + N';';
 --EXEC sp_executesql @AddRole;
 --IF @@ERROR <> 0
 --		BEGIN
@@ -77,7 +77,7 @@ GO
 --		COMMIT TRANSACTION 
 --End;
 --GO
-		--EXECUTE usp_addRole @UserName;
+		--EXECUTE usp_addRoleMember @UserName;
 --GO
 
 
@@ -101,43 +101,10 @@ AS
 
 	--BEGIN TRY
 
-		 EXECUTE master.dbo.sp_addlogin
-		@loginame = @LoginName, 
-		@passwd = @Password, 
-		@defdb = 'El_Booking';
-		;
-		
-		IF @@ERROR <> 0
-            BEGIN
-                PRINT 'Fejl ved sp_addlogin'
-				RETURN
-            END;
-		
-
-		EXECUTE El_Booking.dbo.sp_adduser 
-		@loginame = @LoginName, 
-		@name_in_db = @UserName;
-		;
-		IF @@ERROR <> 0
-            BEGIN
-                PRINT 'Fejl ved sp_adduser'
-				RETURN
-            END;
-
-		EXECUTE El_Booking.dbo.sp_addrolemember 
-		@rolename = BookingUserRole, 
-		@membername = @UserName;
-		;
-		IF @@ERROR <> 0
-            BEGIN
-                PRINT 'Fejl ved sp_addrolemember'
-				RETURN
-            END;
-
-		-- Tekst til besked i oprettelses E-mailen.
+			-- Tekst til besked i oprettelses E-mailen.
 		SET @BodyMessage = 'Kære ' + @UserName + '. Tak for din oprettelse i El Booking, Din bruger er nu oprettet og klar til at logge ind brugernavn ' + @Email + '.';
 
-		EXEC msdb.dbo.sp_send_dbmail  
+			EXEC msdb.dbo.sp_send_dbmail  
 		@profile_name = 'ElBookingMail',  
 		@recipients = @Email, --'4531441539@sms.inmobile.dk',  
 		@body = @BodyMessage,  
@@ -185,6 +152,42 @@ AS
 			COMMIT TRANSACTION;
 			PRINT 'Bruger oprettet og bekræftelses mail er afsendt';
 		END
+
+		 EXECUTE master.dbo.sp_addlogin
+		@loginame = @LoginName, 
+		@passwd = @Password, 
+		@defdb = 'El_Booking';
+		;
+		
+		IF @@ERROR <> 0
+            BEGIN
+                PRINT 'Fejl ved sp_addlogin'
+				RETURN
+            END;
+		
+
+		EXECUTE El_Booking.dbo.sp_adduser 
+		@loginame = @LoginName, 
+		@name_in_db = @UserName;
+		;
+		IF @@ERROR <> 0
+            BEGIN
+                PRINT 'Fejl ved sp_adduser'
+				RETURN
+            END;
+
+		EXECUTE El_Booking.dbo.sp_addrolemember 
+		@rolename = BookingUserRole, 
+		@membername = @UserName;
+		;
+		IF @@ERROR <> 0
+            BEGIN
+                PRINT 'Fejl ved sp_addrolemember'
+				RETURN
+            END;
+
+
+
 		
 -- Kunne ikke bruge TRY... og CATCH.. her fordi systemlagrede procedures ikke tillader at køres inde i en TRANSACTION
 	--END TRY
@@ -222,6 +225,20 @@ IF @@ROWCOUNT = 0
 END;
 GO
 
+USE msdb;
+GO
+
+CREATE USER [WPFApp] FOR LOGIN [WPFApp];
+GO
+ALTER ROLE DatabaseMailUserRole ADD MEMBER [WPFApp];
+GO
+
+
+USE master;
+GO
+CREATE USER [WPFApp] FOR LOGIN [WPFApp];
+GO
+
 GRANT EXECUTE ON OBJECT::[dbo].[usp_Login]
     TO WPFApp;
 GO
@@ -240,10 +257,6 @@ GRANT EXECUTE ON OBJECT::[dbo].[sp_adduser] TO [WPFApp];
 GRANT EXECUTE ON OBJECT::[dbo].[sp_addrolemember] TO [WPFApp];
 GO
 
-GRANT EXECUTE ON OBJECT::[dbo].[sp_addrolemember]
-    TO WPFApp;
-GO
-
 USE master;
 GO
 GRANT ALTER ANY LOGIN TO [WPFApp];
@@ -257,28 +270,19 @@ GO
 --GRANT EXECUTE ON sys.sp_executesql TO [WPFApp];
 --GO
 
-USE msdb;
-GO
-
-CREATE USER [WPFApp] FOR LOGIN [WPFApp];
-GO
-ALTER ROLE DatabaseMailUserRole ADD MEMBER [WPFApp];
-GO
 
 
-USE master;
-GO
-CREATE USER [WPFApp] FOR LOGIN [WPFApp];
-GO
+--GRANT EXECUTE ON sys.sp_executesql TO [WPFApp];
+--GO
 
-GRANT EXECUTE ON sys.sp_executesql TO [WPFApp];
-GO
+-- EXECUTE Test til om WPFApp's permission er sat korrekt. HUSK AT ÆNDRE INPUTNE
 
 EXEC msdb.dbo.sp_send_dbmail  
 		@profile_name = 'ElBookingMail',  
-		@recipients = 'tjtr63311@edu.ucl.dk', --'4531441539@sms.inmobile.dk',  
+		@recipients = 'Rene@Elbooking.dk', --'4531441539@sms.inmobile.dk',  
 		@body = 'Voila..!! This email has been sent from SQL Server Express Edition.',  
 		@subject = 'Voila..!! This email has been sent from SQL Server Express Edition.' ;
+
 
 		EXECUTE uspAddUserToUsers
 		'Troels', 
@@ -306,4 +310,4 @@ EXEC msdb.dbo.sp_send_dbmail
 		--@membername = @UserName;
 		--;
 
-		EXECUTE usp_CreateUserAndLogin 'Troels', 'Trab', 'Troelstrab@hotmail.com', '12345678', '1234';
+		EXECUTE usp_CreateUserAndLogin 'Rene', 'Hansen', 'rmha63250@edu.ucl.dk', '98765432', '1234';

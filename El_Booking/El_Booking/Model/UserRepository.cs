@@ -16,7 +16,7 @@ namespace El_Booking.Model
         public void Add(User user)
         {
 
-            string query = "EXEC [dbo].[usp_CreateUserAndLogin] @FirstName, @LastName, @Email, @PhoneNumber, @Password;";
+            string query = "EXEC [dbo].[usp_CreateUserAndLogin] @Email, @Password;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
             {
@@ -31,7 +31,22 @@ namespace El_Booking.Model
             }
         }
 
-        public void Delete(int id)
+		public void Login(User user)
+		{
+
+			string query = "EXEC [dbo].[usp_Login]  @Email, @Password;";
+
+			using (SqlConnection connection = new SqlConnection(_connString))
+			{
+				SqlCommand command = new SqlCommand(query, connection);
+				command.Parameters.AddWithValue("@Email", user.Email);
+				command.Parameters.AddWithValue("@Password", user.Password);
+				connection.Open();
+				command.ExecuteNonQuery();
+			}
+		}
+
+		public void Delete(int id)
         {
             throw new NotImplementedException();
         }
