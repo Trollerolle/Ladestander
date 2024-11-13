@@ -20,7 +20,7 @@ namespace El_BookingTest
         [TestInitialize]
         public void Init()
         {
-            Repo_WPFApp = new UserRepository(local); // skift connectionstring 
+            Repo_WPFApp = new UserRepository(WPFApp); // skift connectionstring 
 
             u1 = new El_Booking.Model.User(email: "test1mail@gmail.com", telephoneNumber: "11111111", firstName: "test", lastName: "1", password: "pwTest1");
             u2 = new El_Booking.Model.User(email: "test2mail@gmail.com", telephoneNumber: "22222222", firstName: "test", lastName: "2", password: "pwTest2");
