@@ -1,5 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace El_Booking.Model
 {
@@ -16,7 +19,7 @@ namespace El_Booking.Model
         public void Add(User user)
         {
 
-            string query = "EXEC [dbo].[usp_CreateUserAndLogin] @Email, @Password;";
+            string query = "EXEC [dbo].[usp_AddUserToUsers] @FirstName, @LastName, @Email, @PhoneNumber, @Password;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
             {
@@ -31,20 +34,31 @@ namespace El_Booking.Model
             }
         }
 
-		public void Login(User user)
+		public bool Login(string email, string password)
 		{
+			string query = "[dbo].[usp_Login]";
 
-			string query = "EXEC [dbo].[usp_Login]  @Email, @Password;";
+            using (SqlConnection connection = new SqlConnection(_connString))
+            using (SqlCommand command = connection.CreateCommand())
+            {
+                command.CommandText = query;
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Email", email);
+                command.Parameters.AddWithValue("@Password", password);
 
-			using (SqlConnection connection = new SqlConnection(_connString))
-			{
-				SqlCommand command = new SqlCommand(query, connection);
-				command.Parameters.AddWithValue("@Email", user.Email);
-				command.Parameters.AddWithValue("@Password", user.Password);
-				connection.Open();
-				command.ExecuteNonQuery();
-			}
-		}
+                // @ReturnVal can be any name
+                var returnParameter = command.Parameters.Add("@ReturnVal", SqlDbType.Int);
+                returnParameter.Direction = ParameterDirection.ReturnValue;
+
+                connection.Open();
+                command.ExecuteNonQuery();
+
+                int result = (int)returnParameter.Value;
+
+                return result == 0 ? true : false;
+
+            }
+        }
 
 		public void Delete(int id)
         {
@@ -78,7 +92,8 @@ namespace El_Booking.Model
                             email: (string)reader["Email"],
                             telephoneNumber: (string)reader["PhoneNumber"],
                             firstName: (string)reader["FirstName"],
-                            lastName: (string)reader["LastName"]
+                            lastName: (string)reader["LastName"],
+                            password: (string)reader["Password"]
                         );
                     }
                 }

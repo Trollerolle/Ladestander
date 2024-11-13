@@ -13,10 +13,11 @@
         <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Height="250" Margin="100,-10,0,0">
             <TextBlock Text="Login" FontSize="25" TextDecorations="Underline" HorizontalAlignment="Center"/>
             <TextBlock Text="Bruger" Margin="0,40,0,0"/>
-            <TextBox Width="100" Text="{Binding EnteredUsername, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Width="100" Text="{Binding EnteredEmail, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Text="Kodeord" Margin="0,10,0,0"/>
-            <TextBox Width="100" Text="{Binding EnteredUsername, UpdateSourceTrigger=PropertyChanged}" />
-            <Button Content="Log Ind" Margin="0,10,0,0" Command="{Binding LoginCommand}"/>
+            <PasswordBox Width="100" MaxLength="21" PasswordChanged="pwdBox_PasswordChanged" />
+            <!-- <PasswordBox Width="100" MaxLength="21" PasswordChanged="pwdBox1_PasswordChanged"/> -->             
+            <Button x:Name="btnLogin" Content="Log Ind" Margin="0,10,0,0" Command="{Binding LoginCommand}" Click="btnLogin_Click"/>
             <Button Content="Opret Bruger" Margin="0,10,0,0" Command="{Binding CreateLoginCommand}"
 					Click="Button_Click_CreateUser" />
             <Button Content="Glemt Kodeord" Margin="0,10,0,0" Command="{Binding ForgotPasswordCommand}"/>
