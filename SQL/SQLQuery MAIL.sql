@@ -1,10 +1,11 @@
 --Once we are connected to the server, open the new query editor window. First, to create the database account, execute the following query in the MSDB database: 
-Use MSDB
-go
-IF NOT EXISTS(SELECT * FROM msdb.dbo.sysmail_account WHERE  name = 'ElBookingMail') 
-  BEGIN 
-    --CREATE Account [SQLServer Express] 
-    EXECUTE msdb.dbo.sysmail_add_account_sp 
+USE [MSDB]
+GO
+
+IF NOT EXISTS (SELECT * FROM msdb.dbo.sysmail_account WHERE  name = 'ElBookingMail') 
+BEGIN 
+  --CREATE Account [SQLServer Express] 
+  EXECUTE msdb.dbo.sysmail_add_account_sp 
     @account_name            = 'ElBookingMail', 
     @email_address           = 'El.Booking24@gmail.com', 
     @display_name            = 'ElBookingMail', 
@@ -17,14 +18,12 @@ IF NOT EXISTS(SELECT * FROM msdb.dbo.sysmail_account WHERE  name = 'ElBookingMai
     @password                = 'sijt gsus eqzu zckj',
     @use_default_credentials =  0 , 
     @enable_ssl              =  1 ; 
-
-  END --IF EXISTS  account
+END; --IF EXISTS  account
 
 
 -- To assign a database mail account to the database mail profile, execute the following query in the MSDB database: 
-
-Use MSDB
-go
+USE MSDB
+GO
 IF NOT EXISTS(SELECT * FROM msdb.dbo.sysmail_profile WHERE  name = 'ElBookingMail')  
   BEGIN 
     --CREATE Profile [SQLServer Express Edition] 
@@ -34,8 +33,8 @@ IF NOT EXISTS(SELECT * FROM msdb.dbo.sysmail_profile WHERE  name = 'ElBookingMai
   END --IF EXISTS profile
 
   --To assign a database mail account to the database mail profile, execute the following query in the MSDB database: 
-Use MSDB
-go
+USE MSDB
+GO
 IF NOT EXISTS(SELECT * 
               FROM msdb.dbo.sysmail_profileaccount pa 
                 INNER JOIN msdb.dbo.sysmail_profile p ON pa.profile_id = p.profile_id 
@@ -60,11 +59,11 @@ IF NOT EXISTS(SELECT *
   -- SEND EN TEST MAIL
   EXEC msdb.dbo.sp_send_dbmail  
     @profile_name = 'ElBookingMail',  
-    @recipients = 'info@elbooking.dk',  
+    @recipients = 'sean62359@edu.ucl.dk', --'info@elbooking.dk',  
     @body = 'Voila..!! This email has been sent from SQL Server Express Edition.',  
     @subject = 'Voila..!! This email has been sent from SQL Server Express Edition.' ;
 
-	-- MAIL kø status
+	-- MAIL kï¿½ status
 
 	EXEC msdb.dbo.sysmail_help_queue_sp @queue_type = 'Mail';
 

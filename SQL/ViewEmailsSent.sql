@@ -1,7 +1,0 @@
-SELECT TOP (1000) [mailitem_id]
-      ,[recipients]
-      ,[subject]
-      ,[body]
-      ,[sent_status]
-      ,[sent_date]
-  FROM [msdb].[dbo].[sysmail_allitems]
