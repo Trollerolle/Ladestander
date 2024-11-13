@@ -83,3 +83,4 @@ END
 
 --
 EXECUTE dbo.sysmail_start_sp;
+EXECUTE dbo.sysmail_start_sp;
