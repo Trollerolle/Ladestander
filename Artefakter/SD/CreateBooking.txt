@@ -1,0 +1,38 @@
+@startuml
+
+title SD Make Booking
+
+actor User
+participant ": BookingView" as View
+participant ": BookingViewModel" as vm
+participant "newBooking: Booking" as newBooking
+participant "BookingRepository : _bookingRepo" as repo
+
+participant "user: User" as user
+
+database "Database" as db
+
+User -> View: "Klik på ladetid"
+activate View
+
+View --> User: "Viser 'Bekræft'"
+
+User -> View: "Klik på 'Bekræft'"
+
+View -> vm: Execute CreateBookingCommand()
+activate vm
+
+vm --> newBooking ** : newBooking = create(datetime)
+
+vm -> repo : Add(newBooking)
+activate repo
+
+repo -> db : Execute usp_AddBooking
+deactivate repo
+
+vm -> vm : update user.Booking
+
+View --> User : Viser newBooking
+deactivate vm
+deactivate View
+@enduml
