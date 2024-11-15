@@ -7,10 +7,10 @@ using El_Booking.Model;
 
 namespace El_Booking.ViewModel
 {
-    internal class MainWindowViewModel : BaseViewModel
+    internal class LoginViewModel : BaseViewModel
     {
         UserRepository _userRepo;
-        public MainWindowViewModel(string ConnectionString)
+        public LoginViewModel(string ConnectionString)
         {
             _userRepo = new UserRepository(ConnectionString);
         }

@@ -15,24 +15,24 @@ using El_Booking.Model;
 namespace El_Booking.View
 {
 	/// <summary>
-	/// Interaction logic for MainWindow.xaml
+	/// Interaction logic for Login.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class LoginView : Window
 	{
-		public MainWindow()
+		public LoginView()
 		{
             var currentApp = Application.Current as App;
             string connectionString = currentApp.Configuration.GetSection("ConnectionStrings")["AppConnection"];
 
-            MainWindowViewModel mwvm = new MainWindowViewModel(connectionString);
-            DataContext = mwvm;
+            LoginViewModel lvm = new LoginViewModel(connectionString);
+            DataContext = lvm;
 
             InitializeComponent();
 		}
 
 		private void Button_Click_CreateUser(object sender, RoutedEventArgs e)
 		{
-			CreateUser createUser = new CreateUser();
+			CreateUserView createUser = new CreateUserView();
 			createUser.Show();
 			this.Close();
 		}
@@ -43,7 +43,7 @@ namespace El_Booking.View
             
             if (this.DataContext != null)
             {
-                user = ((MainWindowViewModel)this.DataContext).Login();
+                user = ((LoginViewModel)this.DataContext).Login();
             }
 
             if (user is null)
@@ -63,7 +63,7 @@ namespace El_Booking.View
         {
             if (this.DataContext != null)
             {
-                ((MainWindowViewModel)this.DataContext).EnteredPassword = ((PasswordBox)sender).Password;
+                ((LoginViewModel)this.DataContext).EnteredPassword = ((PasswordBox)sender).Password;
             }
         }
     }

@@ -22,6 +22,23 @@ namespace El_Booking.View
         public BookingView()
         {
             InitializeComponent();
+            Main.Content = new BookingWeek();
+        }
+        private void BtnClickBookingWeek(object sender, RoutedEventArgs e)
+        {
+            Main.Content = new BookingWeek();
+        }
+        private void BtnClickYourBooking(object sender, RoutedEventArgs e)
+        {
+            Main.Content = new YourBooking();
+        }
+        private void BtnClickProfile(object sender, RoutedEventArgs e)
+        {
+            //Main.Content = new Page2();
+        }
+        private void BtnClickLogOut(object sender, RoutedEventArgs e)
+        {
+            //Main.Content = new Page2();
         }
     }
 }
