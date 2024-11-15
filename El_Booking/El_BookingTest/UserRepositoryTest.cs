@@ -1,4 +1,4 @@
-using El_Booking.Model;
+using El_Booking.Model.Repositories;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Windows.System;
