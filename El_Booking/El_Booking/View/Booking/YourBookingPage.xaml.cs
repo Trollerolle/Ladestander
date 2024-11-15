@@ -20,7 +20,7 @@ namespace El_Booking.View
     /// </summary>
     public partial class YourBooking : Page
     {
-        public YourBooking()
+        public YourBooking(Model.User user)
         {
             InitializeComponent();
         }

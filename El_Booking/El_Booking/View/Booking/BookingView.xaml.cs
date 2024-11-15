@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using El_Booking.ViewModel;
 
 namespace El_Booking.View
 {
@@ -19,18 +20,37 @@ namespace El_Booking.View
     /// </summary>
     public partial class BookingView : Window
     {
-        public BookingView()
+        private Model.User user;
+
+        public Model.User User
         {
+            get { return user; }
+            set { user = value; }
+        }
+
+
+
+        public BookingView(Model.User user)
+        {
+            
+
+            var currentApp = Application.Current as App;
+            string connectionString = (currentApp.Configuration.GetSection("ConnectionStrings")["DynamicConnection"]) + "User Id=" + user.Email + ";Password=" + user.Password + ";";
+
+            BookingViewModel bvm = new BookingViewModel(connectionString);
+            DataContext = bvm;
+
+            User = user;
             InitializeComponent();
-            Main.Content = new BookingWeek();
+            Main.Content = new BookingWeek(user);
         }
         private void BtnClickBookingWeek(object sender, RoutedEventArgs e)
         {
-            Main.Content = new BookingWeek();
+            Main.Content = new BookingWeek(user);
         }
         private void BtnClickYourBooking(object sender, RoutedEventArgs e)
         {
-            Main.Content = new YourBooking();
+            Main.Content = new YourBooking(user);
         }
         private void BtnClickProfile(object sender, RoutedEventArgs e)
         {

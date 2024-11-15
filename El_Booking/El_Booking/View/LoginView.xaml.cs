@@ -39,7 +39,7 @@ namespace El_Booking.View
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            object user = null;
+            Model.User user = null;
             
             if (this.DataContext != null)
             {
@@ -52,7 +52,7 @@ namespace El_Booking.View
             }
 			else
 			{
-                BookingView bookingView = new BookingView();
+                BookingView bookingView = new BookingView(user);
                 bookingView.Show();
                 this.Close();
             }
