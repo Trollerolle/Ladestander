@@ -52,6 +52,7 @@ namespace El_Booking.View
             }
 			else
 			{
+
                 BookingView bookingView = new BookingView(user);
                 bookingView.Show();
                 this.Close();

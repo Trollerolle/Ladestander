@@ -30,27 +30,27 @@ namespace El_Booking.View
 
 
 
-        public BookingView(Model.User user)
+        public BookingView(Model.User loggedInUser)
         {
             
 
             var currentApp = Application.Current as App;
-            string connectionString = (currentApp.Configuration.GetSection("ConnectionStrings")["DynamicConnection"]) + "User Id=" + user.Email + ";Password=" + user.Password + ";";
+            string connectionString = (currentApp.Configuration.GetSection("ConnectionStrings")["BookingConnection"]);
 
             BookingViewModel bvm = new BookingViewModel(connectionString);
             DataContext = bvm;
 
-            User = user;
+            User = loggedInUser;
             InitializeComponent();
-            Main.Content = new BookingWeek(user);
+            Main.Content = new BookingWeek(User);
         }
         private void BtnClickBookingWeek(object sender, RoutedEventArgs e)
         {
-            Main.Content = new BookingWeek(user);
+            Main.Content = new BookingWeek(User);
         }
         private void BtnClickYourBooking(object sender, RoutedEventArgs e)
         {
-            Main.Content = new YourBooking(user);
+            Main.Content = new YourBooking(User);
         }
         private void BtnClickProfile(object sender, RoutedEventArgs e)
         {

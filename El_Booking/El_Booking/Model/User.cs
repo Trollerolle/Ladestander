@@ -75,11 +75,5 @@ namespace El_Booking.Model
 			
         }
 
-
-
-
-
-
-
     }
 }

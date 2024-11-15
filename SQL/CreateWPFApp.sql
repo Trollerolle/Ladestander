@@ -1,5 +1,5 @@
 
--- opret login
+-- opret login til LoginWindow
     -- master
 USE [master]
 GO
@@ -35,5 +35,36 @@ GO
     -- usp_Login
 GRANT EXECUTE ON OBJECT::[dbo].[usp_Login]
     TO WPFApp;
+GO
+
+
+-- opret login til brugere
+    -- master
+USE [master]
+GO
+
+EXECUTE sp_addlogin 'WPFAccount', 'UCL456';
+GO
+EXECUTE sp_adduser 'WPFAccount', 'WPFAccount';
+GO
+    -- El_Booking
+USE [El_Booking]
+GO
+EXECUTE sp_adduser 'WPFAccount', 'WPFAccount';
+GO
+    -- msdb
+USE [msdb];
+GO
+
+CREATE USER WPFAccount FOR LOGIN [WPFAccount];
+GO
+ALTER ROLE DatabaseMailUserRole ADD MEMBER [WPFAccount];
+GO
+
+-- grant permissions
+    -- usp_GetUserBy
+USE [El_Booking]
+GRANT EXECUTE ON OBJECT::[dbo].[usp_GetUserBy]
+    TO WPFAccount;
 GO
 
