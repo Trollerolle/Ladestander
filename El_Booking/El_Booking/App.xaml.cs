@@ -12,16 +12,23 @@ namespace El_Booking
     {
         public IConfigurationRoot Configuration { get; private set; }
 
-        public Model.User CurrenctUser { get; private set; }
+        private Model.User _currentUser;
+
+        public Model.User CurrentUser
+        {
+            get { return _currentUser; }
+            set { _currentUser = value; }
+        }
+
 
         public void SetCurrentUser(Model.User user)
         {
-            CurrenctUser = user;
+            CurrentUser = user;
         }
 
-        public void ClearCurrentUser(Model.User currentUser)
+        public void ClearCurrentUser()
         {
-            CurrenctUser = null;
+            CurrentUser = null;
         }
         public App()
         {

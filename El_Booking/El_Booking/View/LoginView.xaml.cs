@@ -53,7 +53,10 @@ namespace El_Booking.View
 			else
 			{
 
-                BookingView bookingView = new BookingView(user);
+                var currentApp = Application.Current as App;
+                currentApp?.SetCurrentUser(user);
+
+                BookingView bookingView = new BookingView();
                 bookingView.Show();
                 this.Close();
             }

@@ -20,37 +20,38 @@ namespace El_Booking.View
     /// </summary>
     public partial class BookingView : Window
     {
-        private Model.User user;
+        private Model.User _currentUser;
 
-        public Model.User User
-        {
-            get { return user; }
-            set { user = value; }
+        public Model.User CurrentUser
+		{
+            get { return _currentUser; }
+            set { _currentUser = value; }
         }
 
 
 
-        public BookingView(Model.User loggedInUser)
+        public BookingView()
         {
             
 
             var currentApp = Application.Current as App;
-            string connectionString = (currentApp.Configuration.GetSection("ConnectionStrings")["BookingConnection"]);
+			CurrentUser = currentApp?.CurrentUser;
+			string connectionString = (currentApp.Configuration.GetSection("ConnectionStrings")["BookingConnection"]);
 
             BookingViewModel bvm = new BookingViewModel(connectionString);
             DataContext = bvm;
 
-            User = loggedInUser;
+
             InitializeComponent();
-            Main.Content = new BookingWeek(User);
+            Main.Content = new BookingWeek();
         }
         private void BtnClickBookingWeek(object sender, RoutedEventArgs e)
         {
-            Main.Content = new BookingWeek(User);
+            Main.Content = new BookingWeek();
         }
         private void BtnClickYourBooking(object sender, RoutedEventArgs e)
         {
-            Main.Content = new YourBooking(User);
+            Main.Content = new YourBooking();
         }
         private void BtnClickProfile(object sender, RoutedEventArgs e)
         {
@@ -58,7 +59,12 @@ namespace El_Booking.View
         }
         private void BtnClickLogOut(object sender, RoutedEventArgs e)
         {
-            //Main.Content = new Page2();
+            (Application.Current as App)?.ClearCurrentUser();
+
+            LoginView loginView = new LoginView();
+            loginView.Show();
+
+            this.Close();
         }
     }
 }
