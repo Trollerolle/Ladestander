@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using El_Booking.Model;
+using El_Booking.Model.Repositories;
 
 namespace El_Booking.ViewModel
 {

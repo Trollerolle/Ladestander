@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace El_Booking.Model
+namespace El_Booking.Model.Repositories
 {
     public interface IRepository<T> where T : class
     {
