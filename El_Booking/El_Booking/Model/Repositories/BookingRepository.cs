@@ -19,14 +19,14 @@ namespace El_Booking.Model.Repositories
 
         public void Add(Booking booking)
         {
-            string query = "EXEC [dbo].[usp_AddBooking] @Date, @TimeSlot, @ChargingPoint, @UserEmail;";
+            string query = "EXEC [dbo].[usp_AddBooking] @Date, @TimeSlotStart, @ChargingPointID, @UserEmail;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Date", booking.Date.ToString("yyyy-MM-dd"));
-                command.Parameters.AddWithValue("@TimeSlot", booking.TimeSlot +1);
-                command.Parameters.AddWithValue("@ChargingPoint", booking.ChargingPoint +1);
+                command.Parameters.AddWithValue("@TimeSlotStart", booking.TimeSlotStart);
+                command.Parameters.AddWithValue("@ChargingPointID", booking.ChargingPointID);
                 command.Parameters.AddWithValue("@UserEmail", booking.UserEmail);
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -89,7 +89,7 @@ namespace El_Booking.Model.Repositories
                 using SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    int timeSlot = (int)reader["TimeSlot"] -1; // -1 fordi C# indeks starter på 0
+                    int timeSlot = (int)reader["TimeSlotID"] -1; // -1 fordi C# indeks starter på 0
                     int day = (int)((DateTime)reader["Date_"]).DayOfWeek -1;
 
                     int[] fullTimeSlot = new int[] { timeSlot, day };
@@ -130,11 +130,11 @@ namespace El_Booking.Model.Repositories
 
         Booking InstantiateBooking(SqlDataReader reader)
         {
-            int timeSlot = (int)reader["TimeSlot"] -1; // -1 fordi C# er 0 indeks, men SQL starter ved 1
-            int chargingPoint = (int)reader["ChargingPoint"] -1;
+            string timeSlotStart = ((TimeSpan)reader["TimeSlotStart"]).ToString(@"hh\:mm");
+			int chargingPoint = (int)reader["ChargingPointID"];
             DateOnly date = DateOnly.FromDateTime((DateTime)reader["Date_"]);
 
-            return new Booking(timeSlot, chargingPoint, date);
+            return new Booking(timeSlotStart, chargingPoint, date);
         }
     }
 }

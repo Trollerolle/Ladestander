@@ -23,7 +23,7 @@
 			<TextBlock Text="Dato: "
 					   Margin="0,40,0,0"
 					   HorizontalAlignment="Right" />
-			<TextBlock Text="Tids interval: "
+			<TextBlock Text="Start tid: "
 					   Margin="0,50,0,0"
 					   HorizontalAlignment="Right" />
 			<TextBlock Text="Ladestander nr.: "
@@ -37,7 +37,7 @@
 					Margin="250,-50,0,0">
 			<Label Content="{Binding UsersBooking.Date, FallbackValue=Du har ingen aktuel booking}"
 				   Margin="0,40,0,0" />
-			<Label Content="{Binding UsersBooking.TimeSlot, FallbackValue=Du har ingen aktuel booking}"
+			<Label Content="{Binding UsersBooking.TimeSlotStart, FallbackValue=Du har ingen aktuel booking}"
 				   Margin="0,40,0,0" />
 			<Label Content="{Binding UsersBooking.ChargingPoint, FallbackValue=Du har ingen aktuel booking}"
 				   Margin="0,40,0,0" />

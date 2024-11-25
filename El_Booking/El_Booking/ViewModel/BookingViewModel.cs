@@ -144,19 +144,19 @@ namespace El_Booking.ViewModel
             }
         }
    
-        public void CreateBooking()
-        {
-            int charger = FindAvailableCharger(new bool[4, 2], SelectedTimeSlot);
-            DateOnly selectedDate = mondayOfweek.AddDays(SelectedDay);
+        //public void CreateBooking()
+        //{
+        //    int charger = FindAvailableCharger(new bool[4, 2], SelectedTimeSlot);
+        //    DateOnly selectedDate = mondayOfweek.AddDays(SelectedDay);
 
-            Booking newBooking = new Booking(SelectedTimeSlot, charger, selectedDate);
+        //    Booking newBooking = new Booking(SelectedTimeSlot, charger, selectedDate);
 
-            booking = newBooking;
+        //    booking = newBooking;
 
-            _bookingRepo.Add(booking);
+        //    _bookingRepo.Add(booking);
 
-            LoadFullTimeslots();
-        }
+        //    LoadFullTimeslots();
+        //}
 
         int FindAvailableCharger(bool[,] day, int timeSlot)
         {

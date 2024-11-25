@@ -34,13 +34,7 @@ namespace El_Booking.View
             var currentApp = Application.Current as App;
             CurrentUser = currentApp?.CurrentUser;
 
-            string connectionString = (currentApp.Configuration.GetSection("ConnectionStrings")["WindowsLoginConnection"]);
-
-            if (CurrentUser == null)
-            {
-                UserRepository ur = new UserRepository(connectionString);
-                currentApp.CurrentUser = ur.GetBy("Ren3ersej@gmail.com");
-            }
+            string connectionString = (currentApp.Configuration.GetSection("ConnectionStrings")["BookingConnection"]);
 
             InitializeComponent();
 

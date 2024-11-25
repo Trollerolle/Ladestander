@@ -45,8 +45,8 @@ namespace El_Booking.Model.Repositories
 						timeSlots.Add(new TimeSlot
 						(
 							timeSlotID: (int)reader["TimeSlotID"],
-							timeSlotStart: TimeOnly.FromTimeSpan((TimeSpan)reader["StartTime"]),
-                            interval: (int)reader["Interval"]
+							timeSlotStart: TimeOnly.FromTimeSpan((TimeSpan)reader["TimeSlotStart"]),
+							timeSlotEnd: TimeOnly.FromTimeSpan((TimeSpan)reader["TimeSlotEnd"])
 						)
                         );
 					}
@@ -76,8 +76,9 @@ namespace El_Booking.Model.Repositories
                         (
                             timeSlotID: (int)reader["TimeSlotID"],
                             timeSlotStart: (TimeOnly)reader["TimeSlotStart"],
-                            interval: (int)reader["Interval"]
-                        );
+							timeSlotEnd: (TimeOnly)reader["TimeSlotEnd"]
+
+						);
                     }
                 }
             }
