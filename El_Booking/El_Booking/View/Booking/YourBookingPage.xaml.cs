@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using El_Booking.Model;
+using El_Booking.ViewModel;
 
 namespace El_Booking.View
 {
@@ -20,9 +22,31 @@ namespace El_Booking.View
     /// </summary>
     public partial class YourBooking : Page
     {
-        public YourBooking()
+
+		private Model.User _currentUser;
+
+		public Model.User CurrentUser
+		{
+			get { return _currentUser; }
+			set { _currentUser = value; }
+		}
+
+		public YourBooking()
         {
-            InitializeComponent();
-        }
+			InitializeComponent();
+
+			var currentApp = Application.Current as App;
+			CurrentUser = currentApp?.CurrentUser;
+
+			string connectionString = (currentApp.Configuration.GetSection("ConnectionStrings")["BookingConnection"]);
+
+			YourBookingViewModel ybvm = new YourBookingViewModel(connectionString);
+			DataContext = ybvm;
+
+			ybvm.GetBooking(CurrentUser);
+
+		
+		}
+
     }
 }

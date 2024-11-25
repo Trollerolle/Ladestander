@@ -1,0 +1,109 @@
+﻿<Page x:Class="El_Booking.View.UserPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:El_Booking.View"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="UserPage">
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="50*"/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- baggrund -->
+        <Rectangle Grid.ColumnSpan="2" Height="auto" Width="auto" Fill="{DynamicResource Background3}"/>
+
+        <!-- profilside -->
+        <Grid Grid.Column="0" Margin="30,30,15,30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="25*"/>
+                <RowDefinition Height="55*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Background="{DynamicResource Background1}" CornerRadius="8,8,0,0">
+                <TextBlock Grid.Row="0" Text="Profil" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <Border Grid.Row="1" Margin="0" Background="{DynamicResource Background2}">
+                <StackPanel Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <WrapPanel Margin="0,0,0,10" Width="280">
+                        <TextBlock Text="Email: " FontWeight="Bold"/>
+                        <TextBlock Text="{Binding UserEmail}"/>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Tlf.nr: " FontWeight="Bold"/>
+                        <TextBlock Text="{Binding UserPhoneNumber}"/>
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+            <Border Grid.Row="2" Margin="0" Background="{DynamicResource Background1}" CornerRadius="0,0,8,8">
+                <StackPanel Margin="20" VerticalAlignment="Center">
+                    <WrapPanel Margin="0,10,0,0" Orientation="Vertical" HorizontalAlignment="Center">
+                        <TextBlock Text="Ny Email"/>
+                        <TextBox Width="280" Text="{Binding NewEmail, UpdateSourceTrigger=PropertyChanged}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,10,0,0" Orientation="Vertical" HorizontalAlignment="Center">
+                        <TextBlock Text="Nyt Telefonnummer"/>
+                        <TextBox Width="280" Text="{Binding NewPhoneNumber, UpdateSourceTrigger=PropertyChanged}"/>
+                    </WrapPanel>
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Text="Nyt Kodeord" />
+                            <TextBox Width="130"  Text="{Binding NewPassword, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel Margin="10,0,0,0">
+                            <TextBlock Text="Gentag Kodeord"/>
+                            <TextBox Width="130" Text="{Binding NewPasswordAgain, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <Button Margin="0,10,0,0" Width="280" Content="Gem Ændring" Command="{Binding UpdateUserCommand}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- bilside -->
+        <Grid Grid.Column="1" Margin="15,30,30,30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="25*"/>
+                <RowDefinition Height="55*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Background="{DynamicResource Background1}" CornerRadius="8,8,0,0">
+                <TextBlock Grid.Row="0" Text="Bil" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <Border Grid.Row="1" Margin="0" Background="{DynamicResource Background2}">
+                <StackPanel Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <WrapPanel Margin="0,0,0,10" Width="280" HorizontalAlignment="Left">
+                        <TextBlock Text="Bilmærke og model: " FontWeight="Bold"/>
+                        <TextBlock Text="{Binding CarDetails}"/>
+                    </WrapPanel>
+                    <WrapPanel HorizontalAlignment="Left">
+                        <TextBlock Text="Registreringsnummer: " FontWeight="Bold"/>
+                        <TextBlock Text="{Binding LicensePlate}"/>
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+            <Border Grid.Row="2" Margin="0" Background="{DynamicResource Background1}" CornerRadius="0,0,8,8">
+                <StackPanel Margin="20" VerticalAlignment="Center">
+                    <WrapPanel Margin="0,10,0,0" Orientation="Vertical" HorizontalAlignment="Center">
+                        <TextBlock Text="Bilmærke"/>
+                        <TextBox Width="280" Text="{Binding NewCarBrand, UpdateSourceTrigger=PropertyChanged}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,10,0,0" Orientation="Vertical" HorizontalAlignment="Center">
+                        <TextBlock Text="Model"/>
+                        <TextBox Width="280" Text="{Binding NewCarModel, UpdateSourceTrigger=PropertyChanged}"/>
+                    </WrapPanel>
+                    <WrapPanel Orientation="Vertical" HorizontalAlignment="Center">
+                        <TextBlock Text="Nummerplade"/>
+                        <TextBox Width="280" Text="{Binding NewLicensePlate, UpdateSourceTrigger=PropertyChanged}"/>
+                    </WrapPanel>
+                    <Button Margin="0,10,0,0" Width="280" Content="Gem Ændring" Command="{Binding UpdateCarCommand}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>

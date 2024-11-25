@@ -11,7 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using El_Booking.Model.Repositories;
 using El_Booking.ViewModel;
+using Windows.ApplicationModel.Store;
 
 namespace El_Booking.View
 {
@@ -28,22 +30,29 @@ namespace El_Booking.View
             set { _currentUser = value; }
         }
 
-
-
         public BookingView()
         {
-            
 
             var currentApp = Application.Current as App;
 			CurrentUser = currentApp?.CurrentUser;
+
 			string connectionString = (currentApp.Configuration.GetSection("ConnectionStrings")["BookingConnection"]);
 
-            BookingViewModel bvm = new BookingViewModel(connectionString);
-            DataContext = bvm;
+            // til test ------------------------------------------------- \\
+            //if (CurrentUser == null)
+            //{
+            //    UserRepository ur = new UserRepository(connectionString);
+            //    currentApp.CurrentUser = ur.GetBy("1");
+            //}
+            //// ---------------------------------------------------------- \\
+
+            //BookingViewModel bvm = new BookingViewModel(connectionString);
+            //DataContext = bvm;
 
 
             InitializeComponent();
-            Main.Content = new BookingWeek();
+            Main.Content = new YourBooking();
+
         }
         private void BtnClickBookingWeek(object sender, RoutedEventArgs e)
         {
@@ -55,7 +64,7 @@ namespace El_Booking.View
         }
         private void BtnClickProfile(object sender, RoutedEventArgs e)
         {
-            //Main.Content = new Page2();
+            Main.Content = new UserPage();
         }
         private void BtnClickLogOut(object sender, RoutedEventArgs e)
         {

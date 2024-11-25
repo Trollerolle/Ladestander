@@ -68,3 +68,21 @@ GRANT EXECUTE ON OBJECT::[dbo].[usp_GetUserBy]
     TO WPFAccount;
 GO
 
+    -- usp_GetPlannedBookingsForWeek
+GRANT EXECUTE ON OBJECT::[dbo].[usp_GetPlannedBookingsForWeek]
+    TO WPFAccount;
+GO
+
+    -- usp_AddBooking 
+GRANT EXECUTE ON OBJECT::[dbo].[usp_AddBooking]
+    TO WPFAccount;
+GO
+
+    -- usp_GetBooking 
+GRANT EXECUTE ON OBJECT::[dbo].[usp_GetBooking]
+    TO WPFAccount;
+GO
+
+GRANT SELECT ON OBJECT::[dbo].[ReservedBookings]
+    TO WPFAccount;
+GO

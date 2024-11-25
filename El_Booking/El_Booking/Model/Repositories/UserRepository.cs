@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Windows;
 using System.Windows.Documents;
+using Windows.System;
 
 namespace El_Booking.Model.Repositories
 {
@@ -70,9 +71,11 @@ namespace El_Booking.Model.Repositories
             throw new NotImplementedException();
         }
 
+
+        // der skal findes en løsning på Car
         public User GetBy(string param)
         {
-            User user = null;
+            User? user = null;
 
             string query = "EXEC usp_GetUserBy @Parameter;";
 
@@ -88,12 +91,12 @@ namespace El_Booking.Model.Repositories
                     {
                         user = new User
                         (
-                            // skal UserID med??
+                            userID: (int)reader["UserID"],
                             email: (string)reader["Email"],
                             telephoneNumber: (string)reader["PhoneNumber"],
                             firstName: (string)reader["FirstName"],
                             lastName: (string)reader["LastName"],
-                            password: (string)reader["Password"]
+                            car: null
                         );
                     }
                 }
@@ -102,9 +105,28 @@ namespace El_Booking.Model.Repositories
             return user;
         }
 
-        public void Update(User entity)
+        public void Update(User updatedUser)
         {
-            throw new NotImplementedException();
+            string queryWithPassword = "EXEC [dbo].[usp_UpdateUser] @UserID, @FirstName, @LastName, @Email, @PhoneNumber, @Password;";
+            string queryWithoutPassword = "EXEC [dbo].[usp_UpdateUser] @UserID, @FirstName, @LastName, @Email, @PhoneNumber";
+
+            string query = updatedUser.Password is null ? queryWithoutPassword : queryWithPassword;
+
+            using (SqlConnection connection = new SqlConnection(_connString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserID", updatedUser.UserID);
+                command.Parameters.AddWithValue("@FirstName", updatedUser.FirstName);
+                command.Parameters.AddWithValue("@LastName", updatedUser.LastName);
+                command.Parameters.AddWithValue("@Email", updatedUser.Email);
+                command.Parameters.AddWithValue("@PhoneNumber", updatedUser.TelephoneNumber);
+
+                if (updatedUser.Password is not null)
+                    command.Parameters.AddWithValue("@Password", updatedUser.Password);
+                
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
         }
     }
 }

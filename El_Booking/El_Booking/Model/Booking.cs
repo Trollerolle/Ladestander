@@ -8,26 +8,39 @@ namespace El_Booking.Model
 {
 	public class Booking
 	{
-		private int _bookingID;
-
-		public int BookingID
-		{
-			get { return _bookingID; }
-			set { _bookingID = value; }
+        int _timeSlot;
+		public int TimeSlot 
+		{ 
+			get { return _timeSlot; }
+			set { _timeSlot = value; } // skal vi fjerne setteren??
 		}
 
-		private DateOnly _date;
+		private int _chargingPoint;
+        public int ChargingPoint 
+		{
+			get { return _chargingPoint; }
+			set { _chargingPoint = value; }
+		}
 
+        private DateOnly _date;
 		public DateOnly Date
 		{
 			get { return _date; }
 			set { _date = value; }
 		}
 
-		public Booking(int bookingID, DateOnly date)
+		private string? _userEmail;
+		public string? UserEmail
 		{
-			this.BookingID = bookingID;
+			get { return _userEmail; }
+			set { _userEmail = value; }
+		}
+
+		public Booking(int timeSlot, int chargingPoint, DateOnly date)
+		{
+			_timeSlot = timeSlot;
+			_chargingPoint = chargingPoint;
 			this._date = date;
 		}
-	}
+    }
 }

@@ -4,14 +4,112 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:El_Booking.View"
+      xmlns:converters="clr-namespace:El_Booking.ViewModel"
+      
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="BookingWeek">
 
+    <Page.Resources>
+        <converters:IntToColorConverter x:Key="IntToColorConverter" />
+        <converters:TimeSlotLabelHelper x:Key="TimeSlotLabelHelper" />
+    </Page.Resources>
+
     <Grid>
         <Label Content="EL BOOKING" HorizontalAlignment="Left" Margin="30,30,0,0" VerticalAlignment="Top" FontSize="20"/>
-        <DataGrid Margin="30,70,30,45" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-
-
+        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding TimeSlotAvailabilityView}" Margin="80,80,80,80" AlternationCount="100">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Mandag">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid Background="{Binding [0], Converter={StaticResource IntToColorConverter}}">
+                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
+                                            <!-- Bind to the row index -->
+                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
+                                            <!-- Bind to TimeSlotValues -->
+                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Tirsdag">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid Background="{Binding [1], Converter={StaticResource IntToColorConverter}}">
+                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
+                                            <!-- Bind to the row index -->
+                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
+                                            <!-- Bind to TimeSlotValues -->
+                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Onsdag">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid Background="{Binding [2], Converter={StaticResource IntToColorConverter}}">
+                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
+                                            <!-- Bind to the row index -->
+                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
+                                            <!-- Bind to TimeSlotValues -->
+                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Torsdag">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid Background="{Binding [3], Converter={StaticResource IntToColorConverter}}">
+                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
+                                            <!-- Bind to the row index -->
+                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
+                                            <!-- Bind to TimeSlotValues -->
+                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Fredag">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid Background="{Binding [4], Converter={StaticResource IntToColorConverter}}">
+                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
+                                            <!-- Bind to the row index -->
+                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
+                                            <!-- Bind to TimeSlotValues -->
+                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>

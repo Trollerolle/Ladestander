@@ -22,7 +22,7 @@ User -> View: "Klik på 'Bekræft'"
 View -> vm: Execute CreateBookingCommand()
 activate vm
 
-vm --> newBooking ** : newBooking = create(datetime)
+vm --> newBooking ** : newBooking = create(datetime, int)
 
 vm -> repo : Add(newBooking)
 activate repo
