@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace El_Booking.View
+namespace El_Booking
 {
     /// <summary>
-    /// Interaction logic for ForgotPasswordView1.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class ForgotPasswordView : UserControl
+    public partial class MainWindow : Window
     {
-        public ForgotPasswordView()
+        public MainWindow()
         {
             InitializeComponent();
         }

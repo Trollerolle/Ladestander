@@ -62,31 +62,16 @@ namespace El_Booking.Model
 		}
 
 		// til oprettelse af bruger
-		public User(string email, string telephoneNumber, string firstName, string lastName, string password) 
+		public User(string email, string telephoneNumber, string firstName, string lastName, string? password = null, int? userID = null, Car? car = null) 
 		{
-			this.UserID = null;
-
+			UserID = userID;
 			Email = email;
 			TelephoneNumber = telephoneNumber;
 			FirstName = firstName;
 			LastName = lastName;
 			Password = password;
-
-			Car = null;
+			Car = car;
 		}
-
-		// til indlæsning af bruger
-        public User(string email, string telephoneNumber, string firstName, string lastName, Car? car, int userID) 
-        {
-			this.UserID = userID;
-			this.Email = email;
-			this.TelephoneNumber = telephoneNumber;
-			this.FirstName = firstName;
-			this.LastName = lastName;
-			this.Car = car;
-
-			Password = null;
-        }
 
 		// til test
 		public User() 

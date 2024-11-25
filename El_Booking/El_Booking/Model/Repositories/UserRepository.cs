@@ -73,7 +73,7 @@ namespace El_Booking.Model.Repositories
 
 
         // der skal findes en løsning på Car
-        public User GetBy(string param)
+        public User? GetBy(string param)
         {
             User? user = null;
 
@@ -96,6 +96,7 @@ namespace El_Booking.Model.Repositories
                             telephoneNumber: (string)reader["PhoneNumber"],
                             firstName: (string)reader["FirstName"],
                             lastName: (string)reader["LastName"],
+                            password: null,
                             car: null
                         );
                     }

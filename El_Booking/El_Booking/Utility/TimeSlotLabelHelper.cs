@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace El_Booking.ViewModel
+namespace El_Booking.Utility
 {
-    
+
     public class TimeSlotLabelHelper : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace El_Booking.ViewModel
+namespace El_Booking.Commands
 {
     public class RelayCommand : ICommand
     {

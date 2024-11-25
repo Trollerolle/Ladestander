@@ -3,21 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using El_Booking.Commands;
 using El_Booking.Model;
 using El_Booking.Model.Repositories;
+using El_Booking.Utility;
 
 namespace El_Booking.ViewModel
 {
-    internal class LoginViewModel : BaseViewModel
+    public class LoginViewModel : BaseViewModel
     {
-        UserRepository _userRepo;
-        public LoginViewModel(string ConnectionString)
+        public LoginViewModel(Storer storer, Navigation navigation)
         {
-            _userRepo = new UserRepository(ConnectionString);
+            NavigateCreateUserCommand = new NavigateCommand<CreateUserViewModel>(navigation, () => new CreateUserViewModel(storer, navigation));
+            NavigateForgotPasswordCommand = new NavigateCommand<ForgotPasswordViewModel>(navigation, () => new ForgotPasswordViewModel(storer, navigation));
+            LogInCommand = new LogInCommand(this, navigation, storer);
+
         }
-        
-        private string _enteredEmail;
-        public string EnteredEmail
+
+        private string? _enteredEmail;
+        public string? EnteredEmail
         {
             get { return _enteredEmail; }
             set
@@ -27,9 +32,8 @@ namespace El_Booking.ViewModel
             }
         }
 
-        private string _enteredPassword;
-
-        public string EnteredPassword
+        private string? _enteredPassword;
+        public string? EnteredPassword
         {
             get { return _enteredPassword; }
             set
@@ -40,35 +44,9 @@ namespace El_Booking.ViewModel
 
         }
 
-
-        public User? Login()
-        {
-            User user = null;
-            if (_userRepo.Login(EnteredEmail, EnteredPassword))
-            { 
-                user = _userRepo.GetBy(EnteredEmail);
-            }
-            return user;    
-
-        }
-
-
-
-        //public RelayCommand LoginCommand => new RelayCommand(
-        //execute => _userRepo.Login(EnteredEmail, EnteredPassword),
-        //canExecute => CanLogin()
-        //);
-
-        //bool CanLogin()
-        //{
-        //    if (
-        //        string.IsNullOrEmpty(EnteredEmail) ||
-        //        string.IsNullOrEmpty(EnteredPassword)
-        //        )
-        //        return false;
-
-        //    return true;
-        //}
+        public ICommand NavigateCreateUserCommand { get; }
+        public ICommand NavigateForgotPasswordCommand { get; }
+        public ICommand LogInCommand { get; }
 
     }
 }

@@ -13,14 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace El_Booking.View
+namespace El_Booking.View.Booking
 {
     /// <summary>
-    /// Interaction logic for ForgotPasswordView1.xaml
+    /// Interaction logic for BookingView1.xaml
     /// </summary>
-    public partial class ForgotPasswordView : UserControl
+    public partial class MainBookingView : UserControl
     {
-        public ForgotPasswordView()
+
+        public MainBookingView()
         {
             InitializeComponent();
         }

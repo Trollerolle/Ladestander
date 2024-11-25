@@ -6,9 +6,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using El_Booking.Model.Repositories;
+using El_Booking.Utility;
 
-namespace El_Booking.ViewModel
+namespace El_Booking.ViewModel.BookingVM
 {
     public class BookingViewModel : BaseViewModel
     {
@@ -28,8 +28,8 @@ namespace El_Booking.ViewModel
             }
         }
 
-        int _selectedTimeSlot; // den ladetid, der er klikket på
-        public int SelectedTimeSlot
+        int? _selectedTimeSlot; // den ladetid, der er klikket på
+        public int? SelectedTimeSlot
         {
             get { return _selectedTimeSlot; }
             set
@@ -39,8 +39,8 @@ namespace El_Booking.ViewModel
             }
         }
 
-        int _selectedDay; // den dag der er klikket på (man = 0, tirs = 1 osv.)
-        public int SelectedDay
+        int? _selectedDay; // den dag der er klikket på (man = 0, tirs = 1 osv.)
+        public int? SelectedDay
         {
             get { return _selectedDay; }
             set
@@ -50,7 +50,17 @@ namespace El_Booking.ViewModel
             }
         }
 
-
+        private bool[,] _timeSlotAvailability; // false = ikke fyldt
+        public bool[,] TimeSlotAvailability
+        {
+            get { return _timeSlotAvailability; }
+            set
+            {
+                _timeSlotAvailability = value;
+                OnPropertyChanged(nameof(TimeSlotAvailability));
+                OnPropertyChanged(nameof(TimeSlotAvailabilityView));
+            }
+        }
 
         public List<List<int>> TimeSlotAvailabilityView
         {
@@ -70,37 +80,17 @@ namespace El_Booking.ViewModel
             }
         }
 
+        private readonly Storer _storer;
 
-
-        private bool[,] _timeSlotAvailability; // false = ikke fyldt
-
-        public bool[,] TimeSlotAvailability
-        {
-            get { return _timeSlotAvailability; }
-            set 
-            { 
-                _timeSlotAvailability = value;
-                OnPropertyChanged(nameof(TimeSlotAvailability));
-                OnPropertyChanged(nameof(TimeSlotAvailabilityView));
-            }
-        }
-
-
-        BookingRepository _bookingRepo;
-        ChargingPointRepository _chargingPointRepo;
-        TimeSlotRepository _timeSlotRepo;
-
-        public BookingViewModel(string connectionString, DateTime? startingDate = null) 
+        public BookingViewModel(Storer storer, DateTime? startingDate = null)
         {
             DateTime today = startingDate ?? DateTime.Today; // til test, så datoen den starter på kan ændres. Ellers dd.
 
-            _bookingRepo = new BookingRepository(connectionString);
-            _chargingPointRepo = new ChargingPointRepository(connectionString);
-            _timeSlotRepo = new TimeSlotRepository(connectionString);
+            _storer = storer;
 
             // TimeSlotValues er dynamisk ud fra hvor mange TimeSlots der er i databasen.
-			TimeSlotValues = GenerateTimeSlotValues(_timeSlotRepo.GetAll());
-			TimeSlotAvailability = new bool[TimeSlotValues.Count, 5]; // 5 for antal dage i ugen
+            TimeSlotValues = GenerateTimeSlotValues(_storer.TimeSlotRepository.GetAll());
+            TimeSlotAvailability = new bool[TimeSlotValues.Count, 5]; // 5 for antal dage i ugen
 
             _weekNr = DateUtils.GetIso8601WeekOfYear(today);
             mondayOfweek = today.StartOfWeek();
@@ -116,19 +106,17 @@ namespace El_Booking.ViewModel
                 timeSlotsParameter.Add(timeSlot.TimeSlotStart.ToString(@"hh\:mm")); // Konverter til string
             }
             return timeSlotsParameter;
-		}
+        }
 
         void LoadFullTimeslots()
         {
-            List<int[]> fullTimeSlots = _bookingRepo.GetFullTimeSlotsForWeek(mondayOfweek);
-
-            
+            List<int[]> fullTimeSlots = _storer.BookingRepository.GetFullTimeSlotsForWeek(mondayOfweek);
 
             foreach (int[] fullTimeSlot in fullTimeSlots)
             {
                 int day = fullTimeSlot[0];
                 int timeSlot = fullTimeSlot[1];
-                
+
                 TimeSlotAvailability[day, timeSlot] = true;
             }
         }
@@ -137,38 +125,11 @@ namespace El_Booking.ViewModel
         public List<string> TimeSlotValues
         {
             get { return _timeSlotValues; }
-            set 
-            {  
+            set
+            {
                 _timeSlotValues = value;
                 OnPropertyChanged(nameof(TimeSlotValues));
             }
-        }
-   
-        //public void CreateBooking()
-        //{
-        //    int charger = FindAvailableCharger(new bool[4, 2], SelectedTimeSlot);
-        //    DateOnly selectedDate = mondayOfweek.AddDays(SelectedDay);
-
-        //    Booking newBooking = new Booking(SelectedTimeSlot, charger, selectedDate);
-
-        //    booking = newBooking;
-
-        //    _bookingRepo.Add(booking);
-
-        //    LoadFullTimeslots();
-        //}
-
-        int FindAvailableCharger(bool[,] day, int timeSlot)
-        {
-
-            for (int emptyCharger = 0; emptyCharger < numberOfChargers; emptyCharger++)
-            {
-                if (day[timeSlot, emptyCharger] != true)
-                    return emptyCharger;
-            }
-
-            return -1;
-
         }
     }
 }

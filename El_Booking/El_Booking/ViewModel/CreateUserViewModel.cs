@@ -6,21 +6,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
+using El_Booking.Commands;
 using El_Booking.Model;
 using El_Booking.Model.Repositories;
+using El_Booking.Utility;
 
 namespace El_Booking.ViewModel
 {
-    internal class CreateUserViewModel : BaseViewModel
+    public class CreateUserViewModel : BaseViewModel
     {
-         UserRepository _userRepo;
-        public CreateUserViewModel(string ConnectionString) 
-        { 
-        _userRepo = new UserRepository(ConnectionString);
-        }
-        private string _enteredEmail;
 
-        public string EnteredEmail
+        public ICommand NavigateLoginCommand { get; }
+        public ICommand CreateUserCommand { get; }
+
+        public CreateUserViewModel(Storer storer, Navigation navigation) 
+        { 
+            NavigateLoginCommand = new NavigateCommand<LoginViewModel>(navigation, () => new LoginViewModel(storer, navigation));
+            CreateUserCommand = new CreateUserCommand(this, storer);
+        }
+
+        private string? _enteredEmail;
+        public string? EnteredEmail
         {
             get { return _enteredEmail; }
             set { 
@@ -29,9 +36,8 @@ namespace El_Booking.ViewModel
                 }
         }
 
-        private string _enteredPhoneNumber;
-
-        public string EnteredPhoneNumber
+        private string? _enteredPhoneNumber;
+        public string? EnteredPhoneNumber
         {
             get { return _enteredPhoneNumber; }
             set { 
@@ -41,9 +47,8 @@ namespace El_Booking.ViewModel
 
         }
 
-        private string _enteredFirstName;
-
-        public string EnteredFirstName
+        private string? _enteredFirstName;
+        public string? EnteredFirstName
         {
             get { return _enteredFirstName; }
             set { 
@@ -52,9 +57,8 @@ namespace El_Booking.ViewModel
 			    }
         }
 
-        private string _enteredLastName;
-
-        public string EnteredLastName
+        private string? _enteredLastName;
+        public string? EnteredLastName
         {
             get { return _enteredLastName; }
             set { 
@@ -64,9 +68,8 @@ namespace El_Booking.ViewModel
 
         }
 
-        private string _enteredPassword;
-
-        public string EnteredPassword
+        private string? _enteredPassword;
+        public string? EnteredPassword
         {
             get { return _enteredPassword; }
             set { 
@@ -76,9 +79,8 @@ namespace El_Booking.ViewModel
 
         }
 
-        private string _enteredPasswordAgain;
-
-		public string EnteredPasswordAgain
+        private string? _enteredPasswordAgain;
+		public string? EnteredPasswordAgain
 		{
 			get { return _enteredPasswordAgain; }
 			set { 
@@ -87,55 +89,5 @@ namespace El_Booking.ViewModel
 			    }
 
 		}
-
-       
-
-        public RelayCommand CreateUserCommand => new RelayCommand(
-                execute => CreateNewUser(),
-                canExecute => CanCreate()
-				);
-
-        bool CanCreate()
-        {
-            if (
-                string.IsNullOrEmpty(EnteredEmail) ||
-                string.IsNullOrEmpty(EnteredPhoneNumber) ||
-                string.IsNullOrEmpty(EnteredFirstName) ||
-                string.IsNullOrEmpty(EnteredLastName) ||
-                string.IsNullOrEmpty(EnteredPassword) ||
-                EnteredPassword != EnteredPasswordAgain
-                )
-                return false;
-
-            return true;
-        }
-
-        public void CreateNewUser()
-        {
-            string? userCredentials =
-                CheckIfUserExists(EnteredEmail, EnteredPhoneNumber);
-
-            if (userCredentials == null)
-            {
-                User newUser = new User(EnteredEmail, EnteredPhoneNumber, EnteredFirstName, EnteredLastName, EnteredPassword);
-                _userRepo.Add(newUser);
-            }
-                
-        }
-        
-        // return usercredentials, or null if no user was found
-        public string? CheckIfUserExists(params string[] args)
-        {
-            foreach (string arg in args)
-            {
-                if (_userRepo.GetBy(arg) != null)
-                {
-                    return arg;
-                }
-            }
-
-            return null;
-
-        }
 	}
 }

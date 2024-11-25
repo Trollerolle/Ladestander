@@ -1,57 +1,38 @@
-﻿using System;
+﻿using El_Booking.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Text.RegularExpressions;
-using El_Booking.ViewModel;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.IdentityModel.Protocols;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace El_Booking.View
 {
     /// <summary>
-    /// Interaction logic for CreateUser.xaml
+    /// Interaction logic for CreateUserView1.xaml
     /// </summary>
-    public partial class CreateUserView : Window
+    public partial class CreateUserView : UserControl
     {
         public CreateUserView()
         {
-            var currentApp = Application.Current as App;
-            string connectionString = currentApp.Configuration.GetSection("ConnectionStrings")["AppConnection"];
-
-            CreateUserViewModel cuvm = new CreateUserViewModel(connectionString);
-            DataContext = cuvm;
-
             InitializeComponent();
         }
 
         private void Button_Click_Back(object sender, RoutedEventArgs e)
         {
-            LoginView login = new LoginView();
-            login.Show();
-            this.Close();
         }
 
         private void Button_Click_CreateUser(object sender, RoutedEventArgs e)
         {
-
-            string? userCredentials = 
-                ((CreateUserViewModel)this.DataContext).CheckIfUserExists(tbEmail.Text, tbPhone.Text);
-
-            if (!string.IsNullOrEmpty(userCredentials))
-                MessageBox.Show($"Bruger med: \"{userCredentials}\" er allerede oprettet.", "Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
-
-            else
-            {
-                LoginView Login = new LoginView();
-                Login.Show();
-                this.Close();
-            }
-
         }
 
         private void pwdBox1_PasswordChanged(object sender, RoutedEventArgs e)
