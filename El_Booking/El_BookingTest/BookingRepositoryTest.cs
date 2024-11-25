@@ -40,7 +40,7 @@ namespace El_BookingTest
         [TestMethod]
         public void GetFullTimeSlots()
         {
-            List<int[]> result = BookingRepo_WPFApp.GetFullTimeSlots(new DateOnly(2024, 10, 14));
+            List<int[]> result = BookingRepo_WPFApp.GetFullTimeSlotsForWeek(new DateOnly(2024, 10, 14));
             Assert.IsTrue(result[0].SequenceEqual(new int[] { 1 ,1 }));
             Assert.IsTrue(result[1].SequenceEqual(new int[] { 3, 1 }));
         }

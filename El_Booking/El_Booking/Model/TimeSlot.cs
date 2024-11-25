@@ -24,19 +24,19 @@ namespace El_Booking.Model
 			set { _timeSlotStart = value; }
 		}
 
-		private TimeOnly _timeSlotEnd;
+		private int _interval;
 
-		public TimeOnly TimeSlotEnd
+		public int Interval
 		{
-			get { return _timeSlotEnd; }
-			set { _timeSlotEnd = value; }
+			get { return _interval; }
+			set { _interval = value; }
 		}
 
-		public TimeSlot(int timeSlotID, TimeOnly timeSlotStart, TimeOnly timeSlotEnd) 
+		public TimeSlot(int timeSlotID, TimeOnly timeSlotStart, int interval) 
 		{ 
 			this.TimeSlotID = timeSlotID;
 			this.TimeSlotStart = timeSlotStart;
-			this.TimeSlotEnd = timeSlotEnd;
+			this.Interval = interval;
 		}
 	}
 }

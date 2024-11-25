@@ -74,11 +74,11 @@ namespace El_Booking.Model.Repositories
         }
 
         // bruges til at hente aktuelle bookinger for den uge der vises i BookingView
-        public List<int[]> GetFullTimeSlots(DateOnly mondayOfWeek)
+        public List<int[]> GetFullTimeSlotsForWeek(DateOnly mondayOfWeek)
         {
 
             List<int[]> fullTimeSlots = new List<int[]>();
-            string query = "EXECUTE usp_GetPlannedBookingsForWeek2 @Date;";
+            string query = "EXECUTE usp_GetFullTimeSlotsForWeek @Date;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
             {
@@ -99,27 +99,6 @@ namespace El_Booking.Model.Repositories
             }
 
             return fullTimeSlots;
-        }
-
-        public List<string> GetTimeSlotValues()
-        {
-            List<string> timeSlotValues = new List<string>();
-            string query = "SELECT StartTime FROM TimeSlots;";
-
-            using (SqlConnection connection = new SqlConnection(_connString))
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                connection.Open();
-
-                using SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    TimeSpan timeSlotValue = (TimeSpan)reader["StartTime"]; // Læs værdien som TimeSpan
-                    timeSlotValues.Add(timeSlotValue.ToString(@"hh\:mm")); // Konverter til string
-                }
-            }
-
-            return timeSlotValues;
         }
 
         public Booking? GetBy(string userEmail)

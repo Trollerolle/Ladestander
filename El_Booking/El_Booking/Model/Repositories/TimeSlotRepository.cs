@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
@@ -28,10 +29,34 @@ namespace El_Booking.Model.Repositories
 
         public IEnumerable<TimeSlot> GetAll()
         {
-            throw new NotImplementedException();
-        }
+			List<TimeSlot> timeSlots = new List<TimeSlot>();
 
-        public TimeSlot GetBy(string parameter)
+			string query = "EXEC [dbo].[usp_GetTimeSlots];";
+
+			using (SqlConnection connection = new SqlConnection(_connString))
+			{
+				SqlCommand command = new SqlCommand(query, connection);
+				connection.Open();
+
+				using (SqlDataReader reader = command.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						timeSlots.Add(new TimeSlot
+						(
+							timeSlotID: (int)reader["TimeSlotID"],
+							timeSlotStart: TimeOnly.FromTimeSpan((TimeSpan)reader["StartTime"]),
+                            interval: (int)reader["Interval"]
+						)
+                        );
+					}
+				}
+			}
+
+			return timeSlots;
+		}
+
+		public TimeSlot GetBy(string parameter)
         {
             TimeSlot timeSlot = null;
 
@@ -51,7 +76,7 @@ namespace El_Booking.Model.Repositories
                         (
                             timeSlotID: (int)reader["TimeSlotID"],
                             timeSlotStart: (TimeOnly)reader["TimeSlotStart"],
-                            timeSlotEnd: (TimeOnly)reader["TimeSlotEnd"]
+                            interval: (int)reader["Interval"]
                         );
                     }
                 }

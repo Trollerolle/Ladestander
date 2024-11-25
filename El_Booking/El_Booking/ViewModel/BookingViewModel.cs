@@ -13,7 +13,6 @@ namespace El_Booking.ViewModel
     public class BookingViewModel : BaseViewModel
     {
         const int numberOfChargers = 2; // antal ladere. Skal ændres til at være dynamisk, når ChargingPointRepository virker.
-        int numberOfTimeSlots = 4; // antal ladeintervaller på en dag. Skal ændres til at være dynamisk, når TimeSlotRepository virker.
 
         public Booking? booking; // Brugerens booking, hvis han har en.
         public DateOnly mondayOfweek; // Dato for mandagen i den valgte uge.
@@ -89,6 +88,7 @@ namespace El_Booking.ViewModel
 
         BookingRepository _bookingRepo;
         ChargingPointRepository _chargingPointRepo;
+        TimeSlotRepository _timeSlotRepo;
 
         public BookingViewModel(string connectionString, DateTime? startingDate = null) 
         {
@@ -96,19 +96,31 @@ namespace El_Booking.ViewModel
 
             _bookingRepo = new BookingRepository(connectionString);
             _chargingPointRepo = new ChargingPointRepository(connectionString);
+            _timeSlotRepo = new TimeSlotRepository(connectionString);
 
-            LoadTimeSlotValues();
-            TimeSlotAvailability = new bool[numberOfTimeSlots, 5]; // 5 for antal dage i ugen
+            // TimeSlotValues er dynamisk ud fra hvor mange TimeSlots der er i databasen.
+			TimeSlotValues = GenerateTimeSlotValues(_timeSlotRepo.GetAll());
+			TimeSlotAvailability = new bool[TimeSlotValues.Count, 5]; // 5 for antal dage i ugen
 
             _weekNr = DateUtils.GetIso8601WeekOfYear(today);
             mondayOfweek = today.StartOfWeek();
 
-            LoadBookings();
+            LoadFullTimeslots();
         }
 
-        void LoadBookings()
+        List<string> GenerateTimeSlotValues(IEnumerable<TimeSlot> timeSlots)
         {
-            List<int[]> fullTimeSlots = _bookingRepo.GetFullTimeSlots(mondayOfweek);
+            List<string> timeSlotsParameter = new List<string>();
+            foreach (TimeSlot timeSlot in timeSlots)
+            {
+                timeSlotsParameter.Add(timeSlot.TimeSlotStart.ToString(@"hh\:mm")); // Konverter til string
+            }
+            return timeSlotsParameter;
+		}
+
+        void LoadFullTimeslots()
+        {
+            List<int[]> fullTimeSlots = _bookingRepo.GetFullTimeSlotsForWeek(mondayOfweek);
 
             
 
@@ -131,14 +143,7 @@ namespace El_Booking.ViewModel
                 OnPropertyChanged(nameof(TimeSlotValues));
             }
         }
-
-        void LoadTimeSlotValues()
-        {
-            TimeSlotValues = _bookingRepo.GetTimeSlotValues();
-            numberOfTimeSlots = TimeSlotValues.Count;
-        }
-
-        
+   
         public void CreateBooking()
         {
             int charger = FindAvailableCharger(new bool[4, 2], SelectedTimeSlot);
@@ -150,7 +155,7 @@ namespace El_Booking.ViewModel
 
             _bookingRepo.Add(booking);
 
-            LoadBookings();
+            LoadFullTimeslots();
         }
 
         int FindAvailableCharger(bool[,] day, int timeSlot)
