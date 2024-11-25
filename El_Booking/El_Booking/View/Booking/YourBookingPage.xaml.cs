@@ -15,38 +15,16 @@ using System.Windows.Shapes;
 using El_Booking.Model;
 using El_Booking.ViewModel;
 
-namespace El_Booking.View
+namespace El_Booking.View.Booking
 {
     /// <summary>
     /// Interaction logic for YourBooking.xaml
     /// </summary>
-    public partial class YourBooking : Page
+    public partial class YourBookingPage : Page
     {
-
-		private Model.User _currentUser;
-
-		public Model.User CurrentUser
-		{
-			get { return _currentUser; }
-			set { _currentUser = value; }
-		}
-
-		public YourBooking()
+		public YourBookingPage()
         {
 			InitializeComponent();
-
-			var currentApp = Application.Current as App;
-			CurrentUser = currentApp?.CurrentUser;
-
-			string connectionString = (currentApp.Configuration.GetSection("ConnectionStrings")["BookingConnection"]);
-
-			YourBookingViewModel ybvm = new YourBookingViewModel(connectionString);
-			DataContext = ybvm;
-
-			ybvm.GetBooking(CurrentUser);
-
-		
 		}
-
     }
 }

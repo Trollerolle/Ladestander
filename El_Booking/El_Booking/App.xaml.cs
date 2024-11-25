@@ -1,7 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using El_Booking.Model;
+using El_Booking.Model.Repositories;
+using El_Booking.Utility;
+using El_Booking.View;
+using El_Booking.ViewModel;
+using Microsoft.Extensions.Configuration;
 using System.Configuration;
 using System.Data;
+using System.Runtime.InteropServices.JavaScript;
+using System.Runtime.Serialization.DataContracts;
 using System.Windows;
+using Windows.ApplicationModel.Store;
 
 namespace El_Booking
 {
@@ -10,11 +18,12 @@ namespace El_Booking
     /// </summary>
     public partial class App : Application
     {
+        public readonly string ConnectionString;
         public IConfigurationRoot Configuration { get; private set; }
 
-        private Model.User _currentUser;
+        private User _currentUser;
 
-        public Model.User CurrentUser
+        public User CurrentUser
         {
             get { return _currentUser; }
             set { _currentUser = value; }
@@ -38,8 +47,24 @@ namespace El_Booking
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
             Configuration = builder.Build();
+            ConnectionString = Configuration.GetSection("ConnectionStrings")["WindowsLoginConnection"];
+        }
 
+        protected override void OnStartup(StartupEventArgs e)
+        {
+
+            Storer storer = new Storer(ConnectionString);
+
+            Navigation navigation = new Navigation();
+            navigation.CurrentViewModel = new LoginViewModel(storer, navigation);
+
+            MainWindow = new MainWindow() 
+            { 
+                DataContext = new MainViewModel(navigation)
+            };
+            MainWindow.Show();
+
+            base.OnStartup(e);
         }
     }
-
 }

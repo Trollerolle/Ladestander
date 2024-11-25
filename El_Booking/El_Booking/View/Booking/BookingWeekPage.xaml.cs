@@ -15,39 +15,16 @@ using System.Windows.Shapes;
 using El_Booking.Model.Repositories;
 using El_Booking.ViewModel;
 
-namespace El_Booking.View
+namespace El_Booking.View.Booking
 {
     /// <summary>
     /// Interaction logic for BookingWeek.xaml
     /// </summary>
-    public partial class BookingWeek : Page
+    public partial class BookingWeekPage : Page
     {
-        private Model.User _currentUser;
-
-        public Model.User CurrentUser
+        public BookingWeekPage()
         {
-            get { return _currentUser; }
-            set { _currentUser = value; }
-        }
-        public BookingWeek()
-        {
-            var currentApp = Application.Current as App;
-            CurrentUser = currentApp?.CurrentUser;
-
-            string connectionString = (currentApp.Configuration.GetSection("ConnectionStrings")["WindowsLoginConnection"]);
-
-            if (CurrentUser == null)
-            {
-                UserRepository ur = new UserRepository(connectionString);
-                currentApp.CurrentUser = ur.GetBy("Ren3ersej@gmail.com");
-            }
-
             InitializeComponent();
-
-            BookingViewModel bvm = new BookingViewModel(connectionString);
-            DataContext = bvm;
-
-
         }
     }
 }

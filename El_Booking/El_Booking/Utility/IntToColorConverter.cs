@@ -8,9 +8,9 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows;
 
-namespace El_Booking.ViewModel
+namespace El_Booking.Utility
 {
-    
+
     public class IntToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

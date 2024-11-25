@@ -1,29 +1,57 @@
-﻿<Window x:Class="El_Booking.View.LoginView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:El_Booking.View"
-        mc:Ignorable="d"
-        Title="Login" Height="450" Width="800">
+﻿<UserControl 
+    x:Class="El_Booking.View.LoginView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:El_Booking.View"
+    mc:Ignorable="d"
+    d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.Background>
-            <ImageBrush Stretch="None" ImageSource="Background1.png" AlignmentY="Top" AlignmentX="Center"/>
+            <ImageBrush
+                Stretch="None"
+                ImageSource="Background1.png"
+                AlignmentY="Top"
+                AlignmentX="Center"/>
         </Grid.Background>
-        <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Height="250" Margin="100,-10,0,0">
-            <TextBlock Text="Login" FontSize="25" TextDecorations="Underline" HorizontalAlignment="Center"/>
-            <TextBlock Text="Bruger" Margin="0,40,0,0"/>
-            <TextBox Width="100" Text="{Binding EnteredEmail, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Text="Kodeord" Margin="0,10,0,0"/>
-            <PasswordBox Width="100" MaxLength="21" PasswordChanged="pwdBox_PasswordChanged" />
-            <!-- <PasswordBox Width="100" MaxLength="21" PasswordChanged="pwdBox1_PasswordChanged"/> -->             
-            <Button x:Name="btnLogin" Content="Log Ind" Margin="0,10,0,0" Command="{Binding LoginCommand}" Click="btnLogin_Click"/>
-            <Button Content="Opret Bruger" Margin="0,10,0,0" Command="{Binding CreateLoginCommand}"
-					Click="Button_Click_CreateUser" />
-            <Button Content="Glemt Kodeord" Margin="0,10,0,0" Command="{Binding ForgotPasswordCommand}"/>
-            
-            
+        <StackPanel 
+            Grid.Column="0" 
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Height="250"
+            Margin="100,-10,0,0">
+            <TextBlock 
+                Text="Login" 
+                FontSize="25" 
+                TextDecorations="Underline" 
+                HorizontalAlignment="Center"/>
+            <TextBlock 
+                Text="Bruger" 
+                Margin="0,40,0,0"/>
+            <TextBox 
+                Width="100" 
+                Text="{Binding EnteredEmail, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock 
+                Text="Kodeord" 
+                Margin="0,10,0,0"/>
+            <PasswordBox 
+                Width="100" 
+                MaxLength="21" 
+                PasswordChanged="pwdBox_PasswordChanged" />
+            <Button 
+                x:Name="btnLogin" 
+                Content="Log Ind" 
+                Margin="0,10,0,0" 
+                Command="{Binding LogInCommand}"/>
+            <Button 
+                Content="Opret Bruger" 
+                Margin="0,10,0,0"
+				Command="{Binding NavigateCreateUserCommand}" />
+            <Button 
+                Content="Glemt Kodeord"
+                Margin="0,10,0,0"
+                Command="{Binding NavigateForgotPasswordCommand}"/>
         </StackPanel>
-
     </Grid>
-</Window>
+</UserControl>

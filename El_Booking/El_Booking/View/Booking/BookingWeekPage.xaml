@@ -1,10 +1,11 @@
-﻿<Page x:Class="El_Booking.View.BookingWeek"
+﻿<Page x:Class="El_Booking.View.Booking.BookingWeekPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:El_Booking.View"
-      xmlns:converters="clr-namespace:El_Booking.ViewModel"
+      xmlns:local="clr-namespace:El_Booking.View.Booking"
+      
+      xmlns:converters="clr-namespace:El_Booking.Utility"
       
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -12,7 +13,7 @@
 
     <Page.Resources>
         <converters:IntToColorConverter x:Key="IntToColorConverter" />
-        <converters:TimeSlotLabelHelper x:Key="TimeSlotLabelHelper" />
+        <converters:TimeSlotLabelHelper x:Key="TimeSlotLabelHelper"/>
     </Page.Resources>
 
     <Grid>
