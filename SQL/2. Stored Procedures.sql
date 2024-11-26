@@ -131,15 +131,12 @@ AS
 --Kommentarer er til at teste for en specifik dag eventuelt i historisk data.
 --DECLARE @DATEONLY DATE = '20241119';
 SELECT 
-    B.[BookingID],
-    B.[Date_],
-    T.[TimeSlotStart],
-	T.[TimeSlotEnd],
-    B.[ChargingPointID],
-    B.[UserID]
-FROM [El_Booking].[dbo].[Bookings] AS B
-	INNER JOIN [El_Booking].[dbo].[TimeSlots] AS T
-    ON B.[TimeSlotID] = T.[TimeSlotID]
+    [BookingID],
+    [Date_],
+    [TimeSlotID],
+    [ChargingPointID],
+    [UserID]
+FROM [El_Booking].[dbo].[Bookings]
 	WHERE
 		[UserID] = (SELECT [UserID] FROM [dbo].[Users] WHERE [Email] = @Email)
 		AND

@@ -8,11 +8,11 @@ namespace El_Booking.Model
 {
 	public class Booking
 	{
-        string _timeSlotStart;
-		public string TimeSlotStart
+        private TimeSlot _timeSlot;
+		public TimeSlot TimeSlot
 		{ 
-			get { return _timeSlotStart; }
-			set { _timeSlotStart = value; }
+			get { return _timeSlot; }
+			set { _timeSlot = value; }
 		}
 
 		private int _chargingPointID;
@@ -29,6 +29,13 @@ namespace El_Booking.Model
 			set { _date = value; }
 		}
 
+		private int _bookingID;
+		public int BookingID
+		{
+			get { return _bookingID; }
+			set { _bookingID = value; }
+		}
+
 		private string? _userEmail;
 		public string? UserEmail
 		{
@@ -36,9 +43,10 @@ namespace El_Booking.Model
 			set { _userEmail = value; }
 		}
 
-		public Booking(string timeSlotStart, int chargingPointID, DateOnly date)
+		public Booking(TimeSlot timeSlot, int chargingPointID, DateOnly date, int bookingID)
 		{
-			_timeSlotStart = timeSlotStart;
+			this.BookingID = bookingID;
+			_timeSlot = timeSlot;
 			_chargingPointID = chargingPointID;
 			this._date = date;
 		}

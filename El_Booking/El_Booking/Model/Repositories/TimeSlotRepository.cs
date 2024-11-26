@@ -11,10 +11,12 @@ namespace El_Booking.Model.Repositories
     public class TimeSlotRepository : IRepository<TimeSlot>
     {
         readonly string _connString;
+        public readonly List<TimeSlot> timeSlots;
 
         public TimeSlotRepository(string connectionString)
         {
             _connString = connectionString;
+            timeSlots = GetAll().ToList();
         }
 
         public void Add(TimeSlot entity)

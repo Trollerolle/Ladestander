@@ -16,8 +16,9 @@ namespace El_Booking.Utility
         public Storer(string connectionString)
         {
             UserRepository = new UserRepository(connectionString);
-            BookingRepository = new BookingRepository(connectionString);
-            TimeSlotRepository = new TimeSlotRepository(connectionString);
+			TimeSlotRepository = new TimeSlotRepository(connectionString);
+			BookingRepository = new BookingRepository(connectionString, TimeSlotRepository);
+
         }
     }
 }

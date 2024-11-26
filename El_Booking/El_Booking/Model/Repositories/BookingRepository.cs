@@ -11,10 +11,12 @@ namespace El_Booking.Model.Repositories
     public class BookingRepository : IRepository<Booking>
     {
         readonly string _connString;
+        readonly IRepository<TimeSlot> _timeSlotRepo;
 
-        public BookingRepository(string connectionString)
+        public BookingRepository(string connectionString, IRepository<TimeSlot> timeSlotRepo)
         {
             _connString = connectionString;
+            _timeSlotRepo = timeSlotRepo;
         }
 
         public void Add(Booking booking)
@@ -25,7 +27,7 @@ namespace El_Booking.Model.Repositories
             {
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Date", booking.Date.ToString("yyyy-MM-dd"));
-                command.Parameters.AddWithValue("@TimeSlotStart", booking.TimeSlotStart);
+                command.Parameters.AddWithValue("@TimeSlotID", booking.TimeSlot.TimeSlotID);
                 command.Parameters.AddWithValue("@ChargingPointID", booking.ChargingPointID);
                 command.Parameters.AddWithValue("@UserEmail", booking.UserEmail);
                 connection.Open();
@@ -130,11 +132,14 @@ namespace El_Booking.Model.Repositories
 
         Booking InstantiateBooking(SqlDataReader reader)
         {
-            string timeSlotStart = ((TimeSpan)reader["TimeSlotStart"]).ToString(@"hh\:mm");
-			int chargingPoint = (int)reader["ChargingPointID"];
+            
+            int timeSlotID = (int)reader["TimeSlotID"];
+			int chargingPointID = (int)reader["ChargingPointID"];
             DateOnly date = DateOnly.FromDateTime((DateTime)reader["Date_"]);
+			int bookingID = (int)reader["BookingID"];
+            TimeSlot timeSlot = ((TimeSlotRepository)_timeSlotRepo).timeSlots.Find(ts => ts.TimeSlotID == timeSlotID);
 
-            return new Booking(timeSlotStart, chargingPoint, date);
+			return new Booking(timeSlot, chargingPointID, date, bookingID);
         }
     }
 }
