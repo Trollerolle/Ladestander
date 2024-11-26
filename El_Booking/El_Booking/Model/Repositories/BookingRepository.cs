@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Microsoft.Data.SqlClient;
 using Windows.System;
 
@@ -10,12 +11,13 @@ namespace El_Booking.Model.Repositories
 {
     public class BookingRepository : IRepository<Booking>
     {
-        readonly string _connString;
+        private App currentApp;
+        private string _connString => currentApp.ConnectionString;
         readonly IRepository<TimeSlot> _timeSlotRepo;
 
-        public BookingRepository(string connectionString, IRepository<TimeSlot> timeSlotRepo)
+        public BookingRepository( IRepository<TimeSlot> timeSlotRepo)
         {
-            _connString = connectionString;
+			currentApp = Application.Current as App;
             _timeSlotRepo = timeSlotRepo;
         }
 

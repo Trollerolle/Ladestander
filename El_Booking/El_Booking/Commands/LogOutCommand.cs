@@ -29,8 +29,9 @@ namespace El_Booking.Commands
         {
             var currentApp = Application.Current as App;
             currentApp?.ClearCurrentUser();
+			currentApp?.ClearConnection();
 
-            _navigation.CurrentViewModel = new LoginViewModel(_storer, _navigation);
+			_navigation.CurrentViewModel = new LoginViewModel(_storer, _navigation);
         }
     }
 }

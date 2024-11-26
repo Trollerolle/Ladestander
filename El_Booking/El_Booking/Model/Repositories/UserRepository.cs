@@ -10,11 +10,12 @@ namespace El_Booking.Model.Repositories
     // ændre til internal
     public class UserRepository : IRepository<User>
     {
-        readonly string _connString;
+		private App currentApp;
+		private string _connString => currentApp.ConnectionString;
 
-        public UserRepository(string connectionString)
+		public UserRepository(string connectionString)
         {
-            _connString = connectionString;
+			currentApp = Application.Current as App;
         }
 
         public void Add(User user)

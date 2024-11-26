@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Microsoft.Data.SqlClient;
 
 namespace El_Booking.Model.Repositories
 {
     public class ChargingPointRepository : IRepository<ChargingPoint>
     {
-        readonly string _connString;
+		private App currentApp;
+		private string _connString => currentApp.ConnectionString;
 
-        public ChargingPointRepository(string connectionString)
+		public ChargingPointRepository(string connectionString)
         {
-            _connString = connectionString;
-        }
+			currentApp = Application.Current as App;
+		}
 
-        public void Add(ChargingPoint entity)
+		public void Add(ChargingPoint entity)
         {
             throw new NotImplementedException();
         }

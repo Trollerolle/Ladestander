@@ -53,12 +53,13 @@ namespace El_Booking.Commands
 
                     MessageBox.Show($"Du er nu oprettet som bruger", "Succes", MessageBoxButton.OK);
 
-                    _createUserViewModel.EnteredEmail = null;
-                    _createUserViewModel.EnteredPhoneNumber = null;
-                    _createUserViewModel.EnteredFirstName = null;
-                    _createUserViewModel.EnteredLastName = null;
-                    _createUserViewModel.EnteredPassword = null;
-                    _createUserViewModel.EnteredPasswordAgain = null;
+                    _createUserViewModel.NavigateLoginCommand.Execute(parameter);
+                    //_createUserViewModel.EnteredEmail = null;
+                    //_createUserViewModel.EnteredPhoneNumber = null;
+                    //_createUserViewModel.EnteredFirstName = null;
+                    //_createUserViewModel.EnteredLastName = null;
+                    //_createUserViewModel.EnteredPassword = null;
+                    //_createUserViewModel.EnteredPasswordAgain = null;
 
                 }
                 catch (NotSupportedException ex)

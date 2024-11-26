@@ -44,7 +44,9 @@ namespace El_Booking.Commands
             if (_storer.UserRepository.Login(email, password))
             {
                 LogUserIn();
-                _navigation.CurrentViewModel = new MainBookingViewModel(_storer, _navigation);
+				var currentApp = Application.Current as App;
+                currentApp?.SetCurrentConnection("BookingConnection");
+				_navigation.CurrentViewModel = new MainBookingViewModel(_storer, _navigation);
             }
 
             else

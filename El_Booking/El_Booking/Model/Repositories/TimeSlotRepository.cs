@@ -4,22 +4,25 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Microsoft.Data.SqlClient;
+using Windows.ApplicationModel.Store;
 
 namespace El_Booking.Model.Repositories
 {
     public class TimeSlotRepository : IRepository<TimeSlot>
     {
-        readonly string _connString;
-        public readonly List<TimeSlot> timeSlots;
+		private App currentApp;
+		private string _connString => currentApp.ConnectionString;
+		public List<TimeSlot> timeSlots => GetAll().ToList();
 
         public TimeSlotRepository(string connectionString)
         {
-            _connString = connectionString;
-            timeSlots = GetAll().ToList();
-        }
+			currentApp = Application.Current as App;
+			//timeSlots = GetAll().ToList();
+		}
 
-        public void Add(TimeSlot entity)
+		public void Add(TimeSlot entity)
         {
             throw new NotImplementedException();
         }

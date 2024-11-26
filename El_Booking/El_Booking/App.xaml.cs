@@ -9,6 +9,7 @@ using System.Data;
 using System.Runtime.InteropServices.JavaScript;
 using System.Runtime.Serialization.DataContracts;
 using System.Windows;
+using Windows.ApplicationModel.Appointments.DataProvider;
 using Windows.ApplicationModel.Store;
 
 namespace El_Booking
@@ -18,7 +19,7 @@ namespace El_Booking
     /// </summary>
     public partial class App : Application
     {
-        public readonly string ConnectionString;
+        public string ConnectionString => Configuration.GetSection("ConnectionStrings")[Connection];
         public IConfigurationRoot Configuration { get; private set; }
 
         private User _currentUser;
@@ -29,6 +30,23 @@ namespace El_Booking
             set { _currentUser = value; }
         }
 
+        private string _connection = "AppConnection";
+
+        public string Connection
+        {
+            get { return _connection; }
+            set { _connection = value; }
+        }
+
+        public void SetCurrentConnection(string connection)
+        {
+            _connection = connection;
+        }
+
+        public void ClearConnection()
+        {
+            _connection = "AppConnection";
+        }
 
         public void SetCurrentUser(Model.User user)
         {
@@ -47,7 +65,6 @@ namespace El_Booking
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
             Configuration = builder.Build();
-            ConnectionString = Configuration.GetSection("ConnectionStrings")["WindowsLoginConnection"];
         }
 
         protected override void OnStartup(StartupEventArgs e)
