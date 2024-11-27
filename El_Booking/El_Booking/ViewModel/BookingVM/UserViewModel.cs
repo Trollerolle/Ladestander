@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using User_ = El_Booking.Model.User;
 
 namespace El_Booking.ViewModel.BookingVM
@@ -17,39 +18,42 @@ namespace El_Booking.ViewModel.BookingVM
     public class UserViewModel : BaseViewModel
     {
 
-        public UserViewModel(Storer storer)
+		private readonly Storer _storer;
+		public User_ _currentUser;
+		public App _currentApp { get; init; }
+        public ICommand UpdateCarCommand { get; }
+        public ICommand UpdateUserCommand { get; }
+
+		public UserViewModel(Storer storer)
         {
+
+            _storer = storer;
+
             _currentApp = (App)Application.Current;
-            string connectionString = _currentApp.Configuration.GetSection("ConnectionStrings")["WindowsLoginConnection"];
-            _userRepository = new UserRepository(connectionString);
-
-            _loggedInUser = _currentApp.CurrentUser ?? throw new Exception();
+            string connectionString = _currentApp.Configuration.GetSection("ConnectionStrings")["BookingConnection"];
+			_currentUser = _currentApp.CurrentUser ?? throw new Exception();
         }
-
-        readonly IRepository<User_> _userRepository;
-        public App _currentApp { get; init; }
-        User_ _loggedInUser;
 
         public string UserEmail
         {
-            get { return _loggedInUser.Email; }
-            private set
+            get { return _currentUser.Email; }
+            internal set
             {
-                _loggedInUser.Email = value;
+				_currentUser.Email = value;
                 OnPropertyChanged();
             }
         }
         public string UserPhoneNumber
         {
-            get { return _loggedInUser.TelephoneNumber; }
-            private set
+            get { return _currentUser.TelephoneNumber; }
+            internal set
             {
-                _loggedInUser.TelephoneNumber = value;
+				_currentUser.TelephoneNumber = value;
                 OnPropertyChanged();
             }
         }
-        public string? CarDetails => GetCarDetails(_loggedInUser.Car);
-        public string? LicensePlate => GetLicensePlate(_loggedInUser.Car);
+        public string? CarDetails => GetCarDetails(_currentUser.Car);
+        public string? LicensePlate => GetLicensePlate(_currentUser.Car);
 
         static string? GetLicensePlate(Car? car)
         {
@@ -147,109 +151,121 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-        public RelayCommand UpdateUserCommand => new RelayCommand(
-                execute => UpdateProfile(),
-                canExecute => CanUpdateProfile()
-                );
+		// User Updating er nu sat som en Command klasse i Command mappen.
+		//public RelayCommand UpdateUserCommand => new RelayCommand(
+		//        execute => UpdateProfile(),
+		//        canExecute => CanUpdateProfile()
+		//        );
 
-        void UpdateProfile()
-        {
+		//void UpdateProfile()
+		//{
 
-            User_ userToUpdate = _loggedInUser;
+		//    User_ userToUpdate = _currentUser;
 
-            try
-            {
-                if (NewEmail != null)
-                    userToUpdate.Email = NewEmail;
+		//    try
+		//    {
+		//        if (NewEmail != null)
+		//            userToUpdate.Email = NewEmail;
 
-                if (NewPhoneNumber != null)
-                    userToUpdate.TelephoneNumber = NewPhoneNumber;
+		//        if (NewPhoneNumber != null)
+		//            userToUpdate.TelephoneNumber = NewPhoneNumber;
 
-                if (NewPassword != null)
-                    userToUpdate.Password = NewPassword;
-            }
-            catch (NotSupportedException ex)
-            {
-                MessageBox.Show(ex.Message, "Fejl");
-            }
+		//        if (NewPassword != null)
+		//            userToUpdate.Password = NewPassword;
+		//    }
+		//    catch (NotSupportedException ex)
+		//    {
+		//        MessageBox.Show(ex.Message, "Fejl");
+		//    }
 
 
-            try
-            {
-                _userRepository.Update(userToUpdate);
-                _currentApp.SetCurrentUser(userToUpdate);
-                UserEmail = userToUpdate.Email;
-                UserPhoneNumber = userToUpdate.TelephoneNumber;
-                ClearProfileFields();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+		//    try
+		//    {
+		//        _storer.UserRepository.Update(userToUpdate);
+		//        _currentApp.SetCurrentUser(userToUpdate);
+		//        UserEmail = userToUpdate.Email;
+		//        UserPhoneNumber = userToUpdate.TelephoneNumber;
+		//        ClearProfileFields();
+		//    }
+		//    catch (Exception)
+		//    {
+		//        throw;
+		//    }
+		//}
 
-        void ClearProfileFields()
-        {
-            NewEmail = null;
-            NewPhoneNumber = null;
-            NewPassword = null;
-            NewPasswordAgain = null;
-        }
+		//void ClearProfileFields()
+		//{
+		//    NewEmail = null;
+		//    NewPhoneNumber = null;
+		//    NewPassword = null;
+		//    NewPasswordAgain = null;
+		//}
 
-        bool CanUpdateProfile()
-        {
-            if (string.IsNullOrWhiteSpace(NewEmail) &&
-                string.IsNullOrWhiteSpace(NewPhoneNumber) &&
-                (string.IsNullOrWhiteSpace(NewPassword) || string.IsNullOrWhiteSpace(NewPasswordAgain)))
-            {
-                return false;
-            }
+		//bool CanUpdateProfile()
+		//{
+		//    if (string.IsNullOrWhiteSpace(NewEmail) &&
+		//        string.IsNullOrWhiteSpace(NewPhoneNumber) &&
+		//        (string.IsNullOrWhiteSpace(NewPassword) || string.IsNullOrWhiteSpace(NewPasswordAgain)))
+		//    {
+		//        return false;
+		//    }
 
-            else
-            {
-                return true;
-            }
-        }
+		//    else
+		//    {
+		//        return true;
+		//    }
+		//}
 
-        // Car Updating
-        public RelayCommand UpdateCarCommand => new RelayCommand(
-                execute => UpdateCar(),
-                canExecute => CanUpdateCar()
-                );
+		// Car Updating er nu sat som en Command klasse i Command mappen.
+		//     public RelayCommand UpdateCarCommand => new RelayCommand(
+		//             execute => UpdateCar(),
+		//             canExecute => CanUpdateCar()
+		//             );
 
-        void UpdateCar()
-        {
+		//     void UpdateCar()
+		//     {
 
-            User_ userToUpdate = _loggedInUser;
-            Car newCar = new Car(brand: NewCarBrand, model: NewCarModel, licensePlate: NewLicensePlate);
+		//         Car newCar = new Car(brand: NewCarBrand, model: NewCarModel, licensePlate: NewLicensePlate);
 
-            userToUpdate.Car = newCar;
+		//         try
+		//         {
+		//             if (_currentUser.Car == null)
+		//             {
+		//                 _storer.CarRepository.Update(newCar);
 
-            try
-            {
-                _userRepository.Update(userToUpdate);
+		//                 // my Bil skal sættes i App
+		//                 _currentUser.Car = newCar;
+		//             }
+		//             else
+		//             {
+		//                 _storer.CarRepository.Add(newCar);
 
-                // my bruger skal sættes i App
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+		//		_currentUser.Car = newCar;
+		//	}
+		//}
+		//         catch (Exception)
+		//         {
+		//	NewLicensePlate = null;
+		//	NewCarBrand = null;
+		//             NewCarModel = null;
 
-        bool CanUpdateCar()
-        {
-            if (string.IsNullOrWhiteSpace(NewCarModel) ||
-                string.IsNullOrWhiteSpace(NewCarBrand) ||
-                string.IsNullOrWhiteSpace(NewLicensePlate))
-            {
-                return false;
-            }
+		//             throw;
+		//         }
+		//     }
 
-            else
-            {
-                return true;
-            }
-        }
-    }
+		//     bool CanUpdateCar()
+		//     {
+		//         if (string.IsNullOrWhiteSpace(NewCarModel) ||
+		//             string.IsNullOrWhiteSpace(NewCarBrand) ||
+		//             string.IsNullOrWhiteSpace(NewLicensePlate))
+		//         {
+		//             return false;
+		//         }
+
+		//         else
+		//         {
+		//             return true;
+		//         }
+		//     }
+	}
 }

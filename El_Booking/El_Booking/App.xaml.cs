@@ -57,6 +57,10 @@ namespace El_Booking
         {
             CurrentUser = null;
         }
+        public void SetCurrentUsersCar(Model.Car car)
+        {
+            CurrentUser.Car = car;
+        }
         public App()
         {
 

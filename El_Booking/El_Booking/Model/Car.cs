@@ -8,15 +8,20 @@ namespace El_Booking.Model
 {
     public class Car
     {
-        public string Brand { get; }
-        public string Model { get; }
-        public string LicensePlate { get; }
+		public string LicensePlate { get; set; }
+		public string Brand { get; set; }
+        public string Model { get; set; }
 
-        public Car(string brand, string model, string licensePlate) 
+
+        public Car(string licensePlate, string brand, string model) 
         {
-            Brand = brand;
+			LicensePlate = licensePlate;
+			Brand = brand;
             Model = model;
-            LicensePlate = licensePlate;
+
+        }
+        public Car() 
+        { 
         }
     }
 }

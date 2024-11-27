@@ -12,7 +12,26 @@ namespace El_Booking.ViewModel.BookingVM
 {
     public class BookingViewModel : BaseViewModel
     {
-        const int numberOfChargers = 2; // antal ladere. Skal ændres til at være dynamisk, når ChargingPointRepository virker.
+
+		private readonly Storer _storer;
+
+		public BookingViewModel(Storer storer, DateTime? startingDate = null)
+		{
+			DateTime today = startingDate ?? DateTime.Today; // til test, så datoen den starter på kan ændres. Ellers dd.
+
+			_storer = storer;
+
+			// TimeSlotValues er dynamisk ud fra hvor mange TimeSlots der er i databasen.
+			TimeSlotValues = GenerateTimeSlotValues(_storer.TimeSlotRepository.GetAll());
+			TimeSlotAvailability = new bool[TimeSlotValues.Count, 5]; // 5 for antal dage i ugen
+
+			_weekNr = DateUtils.GetIso8601WeekOfYear(today);
+			mondayOfweek = today.StartOfWeek();
+
+			LoadFullTimeslots();
+		}
+
+		const int numberOfChargers = 2; // antal ladere. Skal ændres til at være dynamisk, når ChargingPointRepository virker.
 
         public Booking? booking; // Brugerens booking, hvis han har en.
         public DateOnly mondayOfweek; // Dato for mandagen i den valgte uge.
@@ -78,24 +97,6 @@ namespace El_Booking.ViewModel.BookingVM
                 }
                 return result;
             }
-        }
-
-        private readonly Storer _storer;
-
-        public BookingViewModel(Storer storer, DateTime? startingDate = null)
-        {
-            DateTime today = startingDate ?? DateTime.Today; // til test, så datoen den starter på kan ændres. Ellers dd.
-
-            _storer = storer;
-
-            // TimeSlotValues er dynamisk ud fra hvor mange TimeSlots der er i databasen.
-            TimeSlotValues = GenerateTimeSlotValues(_storer.TimeSlotRepository.GetAll());
-            TimeSlotAvailability = new bool[TimeSlotValues.Count, 5]; // 5 for antal dage i ugen
-
-            _weekNr = DateUtils.GetIso8601WeekOfYear(today);
-            mondayOfweek = today.StartOfWeek();
-
-            LoadFullTimeslots();
         }
 
         List<string> GenerateTimeSlotValues(IEnumerable<TimeSlot> timeSlots)
