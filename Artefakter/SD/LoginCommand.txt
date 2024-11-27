@@ -1,0 +1,39 @@
+@startuml
+actor User
+
+participant ": LoginViewModel" as LVM
+participant ": LogInCommand" as LIC
+participant ": Storer" as STR
+participant ": UserRepository" as UR
+participant ": Application" as APP
+participant ": Navigation" as NAV
+
+User -> LVM: Enter Email and Password
+LVM -> LIC: PropertyChanged event
+
+LIC -> LIC: CanExecute()
+activate LIC
+LIC --> LVM: Validate input is not empty
+deactivate LIC
+
+User -> LIC: Click Log In
+LIC -> STR: Login(email, password)
+activate STR
+STR -> UR: Login(email, password)
+STR --> LIC: Return true/false
+deactivate STR
+
+alt Login successful
+    LIC -> STR: GetBy(email)
+    activate STR
+    STR -> UR: GetBy(email)
+    STR --> LIC: Return User
+    deactivate STR
+
+    LIC -> APP: SetCurrentUser(User)
+    LIC -> APP: SetCurrentConnection("BookingConnection")
+    LIC -> NAV: Switch Navigation.CurrentViewModel to MainBookingViewModel
+else Login failed
+    LIC -> User: Display error message
+end
+@enduml
