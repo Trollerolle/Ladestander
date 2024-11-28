@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using El_Booking.Utility;
+using El_Booking.Commands;
+using System.Collections.ObjectModel;
 
 namespace El_Booking.ViewModel.BookingVM
 {
@@ -34,7 +36,19 @@ namespace El_Booking.ViewModel.BookingVM
 		const int numberOfChargers = 2; // antal ladere. Skal ændres til at være dynamisk, når ChargingPointRepository virker.
 
         public Booking? booking; // Brugerens booking, hvis han har en.
-        public DateOnly mondayOfweek; // Dato for mandagen i den valgte uge.
+        
+        private DateOnly _mondayOfWeek; // Dato for mandagen i den valgte uge.
+
+        public DateOnly MondayOfWeek
+        {
+            get { return _mondayOfWeek; }
+            set 
+            { 
+                _mondayOfWeek = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         int _weekNr; // ugenummeret for den valgte uge
         public int WeekNr
@@ -109,9 +123,70 @@ namespace El_Booking.ViewModel.BookingVM
             return timeSlotsParameter;
         }
 
+
+        public RelayCommand ChangeWeekForwardCommand => new RelayCommand(
+        execute => ChangeWeek(1),
+        canExecute => NotMoreThanMonthInFuture()
+        );
+
+        public RelayCommand ChangeWeekBackwardCommand => new RelayCommand(
+        execute => ChangeWeek(-1),
+        canExecute => NotLessThanCurrentWeek()
+        );
+
+        public void ChangeWeek(int difference) // forskellen kan være -1 eller 1. Men kan også bruges til at ændre flere uger på en gang fx 3 uger frem
+        {
+            MondayOfWeek = MondayOfWeek.AddDays(7 * difference);
+
+            WeekNr = DateUtils.GetIso8601WeekOfYear(MondayOfWeek.ToDateTime(new TimeOnly()));
+            SetDaysOfWeekDays();
+            LoadFullTimeslots() ;
+        }
+
+        //public List<DateOnly> daysOfWeekDates = new List<DateOnly>();
+        private ObservableCollection<string> _daysOfWeekDates = new ObservableCollection<string>();
+
+        public ObservableCollection<string> DaysOfWeekDates
+        {
+            get { return _daysOfWeekDates; }
+            set 
+            { 
+                _daysOfWeekDates = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        public void SetDaysOfWeekDays()
+        {
+            DaysOfWeekDates.Insert(0, MondayOfWeek.ToShortDateString());
+            
+            for (int i = 1; i < 5; i++) //i starter på 1 fordi vi har puttet mandag ind
+            {
+                DaysOfWeekDates.Insert(i, MondayOfWeek.AddDays(i).ToShortDateString());
+            }
+            OnPropertyChanged(nameof(DaysOfWeekDates));
+            
+        }
+
+        public bool NotLessThanCurrentWeek()
+        {
+            DateTime currentDay = DateTime.Today;
+            return MondayOfWeek > currentDay.StartOfWeek();
+        }
+
+        public bool NotMoreThanMonthInFuture()
+        {
+            DateOnly limit = DateOnly.FromDateTime(DateTime.Today);
+            return MondayOfWeek <= (limit.AddDays(30));
+        }
+
+
+
+
         void LoadFullTimeslots()
         {
-            List<int[]> fullTimeSlots = _storer.BookingRepository.GetFullTimeSlotsForWeek(mondayOfweek);
+            List<int[]> fullTimeSlots = _storer.BookingRepository.GetFullTimeSlotsForWeek(MondayOfWeek);
 
             foreach (int[] fullTimeSlot in fullTimeSlots)
             {
@@ -132,5 +207,9 @@ namespace El_Booking.ViewModel.BookingVM
                 OnPropertyChanged(nameof(TimeSlotValues));
             }
         }
+
+
+
+
     }
 }

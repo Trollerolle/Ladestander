@@ -16,14 +16,126 @@
         <converters:TimeSlotLabelHelper x:Key="TimeSlotLabelHelper"/>
     </Page.Resources>
 
+
     <Grid>
-        <Label Content="EL BOOKING" HorizontalAlignment="Left" Margin="30,30,0,0" VerticalAlignment="Top" FontSize="20"/>
-        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding TimeSlotAvailabilityView}" Margin="80,80,80,80" AlternationCount="100">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.24*"/>
+            <RowDefinition Height="0.12*"/>
+            <RowDefinition Height="0.64*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Button Content="Forrige" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekBackwardCommand}"/>
+            <Label Content="{Binding WeekNr}" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"/>
+            <Button Content="Næste" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekForwardCommand}"/>
+
+
+        </StackPanel>
+
+        <!-- Grid for Days of Week Labels -->
+        <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <!-- Define 5 equal-width columns -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <!-- Monday Label -->
+            <Label Content="Mandag" 
+            Grid.Column="0" 
+            Grid.Row="0"
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            FontSize="14" FontWeight="Bold"/>
+            <Label Content="{Binding DaysOfWeekDates[0], StringFormat='{}{0:dd MMM}'}" 
+            Grid.Column="0" 
+            Grid.Row="1"
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            FontSize="14" />
+
+            <!-- Tuesday Label -->
+            <Label Content="Tirsdag" 
+            Grid.Column="1" 
+            Grid.Row="0"
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            FontSize="14"  FontWeight="Bold"/>
+            <Label Content="{Binding DaysOfWeekDates[1], StringFormat='{}{0: MMM dd}'}" 
+            Grid.Column="1"  
+            Grid.Row="1"
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            FontSize="14" />
+
+            <!-- Wednesday Label -->
+            <Label Content="Onsdag" 
+            Grid.Column="2" 
+            Grid.Row="0"
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            FontSize="14"  FontWeight="Bold"/>
+            <Label Content="{Binding DaysOfWeekDates[2], StringFormat='{}{0: MMM dd}'}" 
+            Grid.Column="2"  
+            Grid.Row="1"
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            FontSize="14" />
+
+            <!-- Thursday Label -->
+
+            <Label Content="Torsdag" 
+            Grid.Column="3" 
+            Grid.Row="0"
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            FontSize="14"  FontWeight="Bold"/>
+            <Label Content="{Binding DaysOfWeekDates[3], StringFormat='{}{0: MMM dd}'}" 
+            Grid.Column="3"  
+            Grid.Row="1"
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            FontSize="14" />
+
+            <!-- Friday Label -->
+            <Label Content="Fredag" 
+            Grid.Column="4" 
+            Grid.Row="0"
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            FontSize="14"  FontWeight="Bold"/>
+            <Label Content="{Binding DaysOfWeekDates[4], StringFormat='{}{0: MMM dd}'}" 
+            Grid.Column="4"  
+            Grid.Row="1"
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            FontSize="14" />
+        </Grid>
+
+
+
+        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding TimeSlotAvailabilityView}" 
+                AlternationCount="100" HeadersVisibility="None"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Grid.Row="2"
+                ColumnWidth="*"
+                RowHeight="50"
+                CanUserResizeRows="True"
+                CanUserAddRows="False"
+                >
+
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Mandag">
+                <DataGridTemplateColumn Header="{Binding DataContext.DaysOfWeekDates[0], FallbackValue='Binding Error'}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid Background="{Binding [0], Converter={StaticResource IntToColorConverter}}">
+                            <Grid Height="Auto" Background="{Binding [0], Converter={StaticResource IntToColorConverter}}">
                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <TextBlock.Text>
                                         <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
@@ -38,10 +150,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Tirsdag">
+                <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[1], FallbackValue='Binding Error'}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid Background="{Binding [1], Converter={StaticResource IntToColorConverter}}">
+                            <Grid Height="Auto" Background="{Binding [1], Converter={StaticResource IntToColorConverter}}">
                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <TextBlock.Text>
                                         <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
@@ -56,10 +168,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Onsdag">
+                <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[2], FallbackValue='Binding Error'}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid Background="{Binding [2], Converter={StaticResource IntToColorConverter}}">
+                            <Grid Height="Auto" Background="{Binding [2], Converter={StaticResource IntToColorConverter}}">
                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <TextBlock.Text>
                                         <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
@@ -74,10 +186,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Torsdag">
+                <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[3], FallbackValue='Binding Error'}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid Background="{Binding [3], Converter={StaticResource IntToColorConverter}}">
+                            <Grid Height="Auto" Background="{Binding [3], Converter={StaticResource IntToColorConverter}}">
                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <TextBlock.Text>
                                         <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
@@ -92,10 +204,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Fredag">
+                <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[4], FallbackValue='Binding Error'}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid Background="{Binding [4], Converter={StaticResource IntToColorConverter}}">
+                            <Grid Height="Auto" Background="{Binding [4], Converter={StaticResource IntToColorConverter}}">
                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <TextBlock.Text>
                                         <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
@@ -113,4 +225,6 @@
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
+
+
 </Page>
