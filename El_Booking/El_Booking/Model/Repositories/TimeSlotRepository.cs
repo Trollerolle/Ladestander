@@ -16,7 +16,7 @@ namespace El_Booking.Model.Repositories
 		private string _connString => currentApp.ConnectionString;
 		public List<TimeSlot> timeSlots => GetAll().ToList();
 
-        public TimeSlotRepository(string connectionString)
+        public TimeSlotRepository()
         {
 			currentApp = Application.Current as App;
 			//timeSlots = GetAll().ToList();

@@ -10,6 +10,7 @@ using El_Booking.ViewModel;
 using El_Booking.ViewModel.BookingVM;
 using Windows.ApplicationModel.Store;
 using El_Booking.Model;
+using System.ComponentModel;
 
 namespace El_Booking.Commands
 {
@@ -22,12 +23,18 @@ namespace El_Booking.Commands
 		{
 			_userViewModel = userViewModel;
 			_storer = storer;
+
+			_userViewModel.PropertyChanged += OnViewModelPropertyChanged;
+
+		}
+
+		private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			OnCanExecuteChanged();
 		}
 
 		public override void Execute(object? parameter)
 		{
-			string? userCredentials =
-			CheckIfUserExists(_userViewModel.NewEmail, _userViewModel.NewPhoneNumber);
 
 			User userToUpdate = _userViewModel._currentUser;
 
@@ -86,18 +93,5 @@ namespace El_Booking.Commands
 			_userViewModel.NewPasswordAgain = null;
 		}
 
-		public string? CheckIfUserExists(params string[] args)
-		{
-			foreach (string arg in args)
-			{
-				if (_storer.UserRepository.GetBy(arg) != null)
-				{
-					return arg;
-				}
-			}
-
-			return null;
-
-		}
 	}
 }

@@ -13,7 +13,7 @@ namespace El_Booking.Model.Repositories
 		private App currentApp;
 		private string _connString => currentApp.ConnectionString;
 
-		public ChargingPointRepository(string connectionString)
+		public ChargingPointRepository()
         {
 			currentApp = Application.Current as App;
 		}

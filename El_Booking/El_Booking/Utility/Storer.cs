@@ -14,12 +14,12 @@ namespace El_Booking.Utility
         public TimeSlotRepository TimeSlotRepository { get; }
         public CarRepository CarRepository { get; }
 
-        public Storer(string connectionString)
+        public Storer()
         {
-            UserRepository = new UserRepository(connectionString);
-			TimeSlotRepository = new TimeSlotRepository(connectionString);
+            UserRepository = new UserRepository();
+			TimeSlotRepository = new TimeSlotRepository();
 			BookingRepository = new BookingRepository(TimeSlotRepository);
-            CarRepository = new CarRepository(connectionString);
+            CarRepository = new CarRepository();
 
         }
     }

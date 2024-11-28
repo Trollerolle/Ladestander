@@ -18,20 +18,17 @@ namespace El_Booking.ViewModel.BookingVM
     public class UserViewModel : BaseViewModel
     {
 
-		private readonly Storer _storer;
-		public User_ _currentUser;
+		public User_ _currentUser => _currentApp.CurrentUser;
 		public App _currentApp { get; init; }
         public ICommand UpdateCarCommand { get; }
         public ICommand UpdateUserCommand { get; }
 
 		public UserViewModel(Storer storer)
         {
-
-            _storer = storer;
+			UpdateCarCommand = new UpdateCarCommand(this, storer);
+			UpdateUserCommand = new UpdateUserCommand(this, storer);
 
             _currentApp = (App)Application.Current;
-            string connectionString = _currentApp.Configuration.GetSection("ConnectionStrings")["BookingConnection"];
-			_currentUser = _currentApp.CurrentUser ?? throw new Exception();
         }
 
         public string UserEmail

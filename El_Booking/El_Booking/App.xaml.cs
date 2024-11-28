@@ -74,7 +74,7 @@ namespace El_Booking
         protected override void OnStartup(StartupEventArgs e)
         {
 
-            Storer storer = new Storer(ConnectionString);
+            Storer storer = new Storer();
 
             Navigation navigation = new Navigation();
             navigation.CurrentViewModel = new LoginViewModel(storer, navigation);

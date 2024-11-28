@@ -21,35 +21,36 @@ namespace El_Booking.Commands
 		{
 			_userViewModel = userViewModel;
 			_storer = storer;
+
+			_userViewModel.PropertyChanged += OnViewModelPropertyChanged;
+
+		}
+		private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			OnCanExecuteChanged();
 		}
 
 		public override void Execute(object? parameter)
 		{
-			string? userCar =
-			CheckIfLicensePlateExists(_userViewModel.NewLicensePlate);
 
+			Car carToUpdate = _userViewModel._currentUser.Car is not null ? _userViewModel._currentUser.Car : new Car();
 
 			try
 			{
-				Car newCar = new Car()
-				{
-					Brand = _userViewModel.NewCarBrand,
-					Model = _userViewModel.NewCarModel,
-					LicensePlate = _userViewModel.NewLicensePlate
-				};
-				if (_userViewModel._currentUser.Car == null)
-				{
-					_storer.CarRepository.Update(newCar);
 
-					// my Bil skal sættes i App
-					_userViewModel._currentUser.Car = newCar;
+				carToUpdate.Brand = _userViewModel.NewCarBrand;
+				carToUpdate.Model = _userViewModel.NewCarModel;
+				carToUpdate.LicensePlate = _userViewModel.NewLicensePlate;
+				if (_userViewModel._currentUser.Car != null)
+				{
+					_storer.CarRepository.Update(carToUpdate);
 				}
 				else
 				{
-					_storer.CarRepository.Add(newCar);
-
-					_userViewModel._currentUser.Car = newCar;
+					_storer.CarRepository.Add(carToUpdate);
 				}
+				_userViewModel._currentUser.Car = carToUpdate;
+
 			}
 			catch (Exception)
 			{
@@ -74,20 +75,6 @@ namespace El_Booking.Commands
 			{
 				return true;
 			}
-		}
-		// return userCar, or null if no car was found
-		public string? CheckIfLicensePlateExists(params string[] args)
-		{
-			foreach (string arg in args)
-			{
-				if (_storer.CarRepository.GetBy(arg) != null)
-				{
-					return arg;
-				}
-			}
-
-			return null;
-
 		}
 
 		void ClearNewCarFields()

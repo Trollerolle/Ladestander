@@ -33,11 +33,7 @@ namespace El_Booking.Commands
 
         public override void Execute(object? parameter)
         {
-            string? userCredentials =
-            CheckIfUserExists(_createUserViewModel.EnteredEmail, _createUserViewModel.EnteredPhoneNumber);
 
-            if (userCredentials == null)
-            {
                 try
                 {
                     User newUser = new User()
@@ -66,13 +62,11 @@ namespace El_Booking.Commands
                 {
                     MessageBox.Show("Ikke en gyldig email eller telefonnummer.", "Fejl", MessageBoxButton.OK);
                 }
-
+                catch (Microsoft.Data.SqlClient.SqlException ex)
+                {
+                    MessageBox.Show($"En bruger med: {_createUserViewModel.EnteredEmail} eller tlf.nr: {_createUserViewModel.EnteredPhoneNumber}, er allerede oprettet.", "Fejl", MessageBoxButton.OK);
+                }
             }
-            else
-            {
-                MessageBox.Show($"En bruger med: {_createUserViewModel.EnteredEmail} og tlf.nr: {_createUserViewModel.EnteredPhoneNumber}, er allerede oprettet.", "Fejl", MessageBoxButton.OK);
-            }
-        }
 
         public override bool CanExecute(object? parameter)
         {
@@ -90,19 +84,5 @@ namespace El_Booking.Commands
             return false;
         }
 
-        // return usercredentials, or null if no user was found
-        public string? CheckIfUserExists(params string[] args)
-        {
-            foreach (string arg in args)
-            {
-                if (_storer.UserRepository.GetBy(arg) != null)
-                {
-                    return arg;
-                }
-            }
-
-            return null;
-
-        }
     }
 }
