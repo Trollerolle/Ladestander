@@ -119,7 +119,7 @@ namespace El_Booking.ViewModel.BookingVM
             List<string> timeSlotsParameter = new List<string>();
             foreach (TimeSlot timeSlot in timeSlots)
             {
-                timeSlotsParameter.Add(timeSlot.TimeSlotStart.ToString(@"hh\:mm")); // Konverter til string
+                timeSlotsParameter.Add(timeSlot.TimeSlotStart.ToString(@"HH\:mm")); // Konverter til string
             }
             return timeSlotsParameter;
         }
