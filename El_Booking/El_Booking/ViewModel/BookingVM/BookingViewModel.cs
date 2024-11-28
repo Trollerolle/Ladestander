@@ -27,10 +27,11 @@ namespace El_Booking.ViewModel.BookingVM
 			TimeSlotValues = GenerateTimeSlotValues(_storer.TimeSlotRepository.GetAll());
 			TimeSlotAvailability = new bool[TimeSlotValues.Count, 5]; // 5 for antal dage i ugen
 
-			_weekNr = DateUtils.GetIso8601WeekOfYear(today);
-			mondayOfweek = today.StartOfWeek();
+			WeekNr = DateUtils.GetIso8601WeekOfYear(today);
+			MondayOfWeek = today.StartOfWeek();
 
 			LoadFullTimeslots();
+            SetDaysOfWeekDays();
 		}
 
 		const int numberOfChargers = 2; // antal ladere. Skal ændres til at være dynamisk, når ChargingPointRepository virker.
@@ -50,7 +51,7 @@ namespace El_Booking.ViewModel.BookingVM
         }
 
 
-        int _weekNr; // ugenummeret for den valgte uge
+        private int _weekNr; // ugenummeret for den valgte uge
         public int WeekNr
         {
             get { return _weekNr; }
