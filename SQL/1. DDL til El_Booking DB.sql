@@ -22,7 +22,7 @@ CREATE TABLE Users
 	LastName NvarChar(50)NOT NULL,
 	Email NvarChar(50) NOT NULL UNIQUE,
 	PhoneNumber NvarChar(50) NOT NULL UNIQUE,
-	--LicensPlate NvarChar(10) NOT NULL UNIQUE,
+	CarID INT DEFAULT NULL,
 	Password NvarChar(21) NOT NULL
 )
 GO
@@ -53,9 +53,23 @@ CREATE TABLE Bookings
 )
 GO
 
+CREATE TABLE Cars
+(
+	CarID INT IDENTITY(1,1) PRIMARY KEY,
+	Brand NVarChar(50) NOT NULL,
+	Model NVarChar(50) NOT NULL,
+	LicensePlate NVarChar(10) NOT NULL UNIQUE
+)
+
 -- on cascade bookings_user
 ALTER TABLE [dbo].[Bookings]  WITH CHECK ADD  CONSTRAINT [FK_Bookings_Users] FOREIGN KEY([UserID])
 REFERENCES [dbo].[Users] ([UserID])
+ON DELETE CASCADE
+GO
+
+-- on cascade users_car
+ALTER TABLE [dbo].[Cars]  WITH CHECK ADD  CONSTRAINT [FK_Users_Cars] FOREIGN KEY([CarID])
+REFERENCES [dbo].[Users] ([CarID])
 ON DELETE CASCADE
 GO
 
