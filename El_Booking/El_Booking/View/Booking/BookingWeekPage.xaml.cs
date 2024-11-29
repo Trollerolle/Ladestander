@@ -26,5 +26,17 @@ namespace El_Booking.View.Booking
         {
             InitializeComponent();
         }
+
+        private void MyDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            foreach (var cell in e.AddedCells)
+            {
+                // Get the row index of the selected cell
+                var rowIndex = myDataGrid.Items.IndexOf(cell.Item);
+                var columnIndex = cell.Column.DisplayIndex;
+
+                MessageBox.Show($"Selected cell at row index: {rowIndex}, {columnIndex}");
+            }
+        }
     }
 }
