@@ -35,13 +35,18 @@ CREATE OR ALTER PROC usp_GetUserBy
 AS
 BEGIN
 	SELECT 
-		[UserID],
-		[FirstName],
-		[LastName],
-		[Email],
-		[PhoneNumber]
+		Users.[UserID],
+		Users.[FirstName],
+		Users.[LastName],
+		Users.[Email],
+		Users.[PhoneNumber],
+		Cars.[CarID]
 	FROM
-		[dbo].[Users]
+		[dbo].[Users] 
+	LEFT JOIN
+		[dbo].[Cars]
+	ON
+		Users.UserID = Cars.UserID
 	WHERE
 		[Email] = @Parameter
 		OR
@@ -109,12 +114,12 @@ CREATE OR ALTER PROC usp_AddBooking
 	@Date DATE,
 	@TimeSlotID INT,
 	@ChargingPointID INT,
-	@UserEmail NVarChar(50)
+	@CarID NVarChar(50)
 )
 AS
 BEGIN TRANSACTION
-	INSERT INTO [dbo].[Bookings] ([Date_], [TimeSlotID], [ChargingPointID], [UserID]) VALUES
-	(@Date, @TimeSlotID, @ChargingPointID, (SELECT [UserID] FROM [dbo].[Users] WHERE [Email] = @UserEmail));
+	INSERT INTO [dbo].[Bookings] ([Date_], [TimeSlotID], [ChargingPointID], [CarID]) VALUES
+	(@Date, @TimeSlotID, @ChargingPointID, @CarID);
 
 	IF @@ERROR <> 0
 		ROLLBACK TRANSACTION
@@ -125,7 +130,7 @@ GO
 -- usp_GetBooking
 CREATE OR ALTER   PROC [dbo].[usp_GetBooking]
 (
-	@Email NVarChar(50)
+	@CarID NVarChar(50)
 )
 AS
 --Kommentarer er til at teste for en specifik dag eventuelt i historisk data.
@@ -135,10 +140,10 @@ SELECT
     [Date_],
     [TimeSlotID],
     [ChargingPointID],
-    [UserID]
+    [CarID]
 FROM [El_Booking].[dbo].[Bookings]
 	WHERE
-		[UserID] = (SELECT [UserID] FROM [dbo].[Users] WHERE [Email] = @Email)
+		[CarID] = @CarID
 		AND
 		[Date_] >= GETDATE();--@DATEONLY;
 GO
@@ -208,8 +213,66 @@ IF @ChargingPointID IS NULL
 	Return -1;
 
 END;
-
+GO
 --Til at execute usp_GetAvailableChargingPoint.
 --DECLARE @Result INT;
 --EXECUTE usp_GetAvailableChargingPoint '2024-11-19', 2, @Result OUT;
 --PRINT @Result;
+
+CREATE OR ALTER PROC usp_AddCar 
+(
+	@LicensePlate NVarChar(10),
+	@Brand NVarChar(50),
+	@Model NVarChar(50),
+	@UserID INT,
+	@ScopeCarID int output
+)
+AS
+BEGIN TRANSACTION
+	INSERT INTO [dbo].[Cars]	([Brand], [Model], [LicensePlate], [UserID]) 
+	VALUES						(@Brand, @Model, @LicensePlate, @UserID);
+	set @ScopeCarID = (SELECT SCOPE_IDENTITY());
+	
+	IF @@ERROR <> 0
+		ROLLBACK TRANSACTION
+	ELSE
+		COMMIT TRANSACTION
+GO
+
+CREATE OR ALTER PROC usp_GetCarBy
+(
+	@UserID INT
+)
+AS
+BEGIN
+	SELECT 
+		[CarID],
+		[Brand],
+		[Model],
+		[LicensePlate]
+	FROM
+		[dbo].[Cars]
+	WHERE
+		[UserID] = @UserID
+END;
+GO
+
+CREATE OR ALTER PROC [dbo].[usp_UpdateCar]
+(
+	@CarID INT,
+	@Brand NVarChar(50),
+	@Model NVarChar(50),
+	@LicensePlate NVarChar(10)
+)
+AS
+BEGIN TRANSACTION
+
+UPDATE [dbo].[Cars]
+		SET Brand = @Brand, Model = @Model, LicensePlate = @LicensePlate 
+		WHERE CarID = @CarID;
+
+	IF @@ERROR <> 0
+		ROLLBACK TRANSACTION
+	ELSE
+		COMMIT TRANSACTION
+GO

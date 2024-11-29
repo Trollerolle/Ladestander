@@ -50,7 +50,7 @@ namespace El_Booking.ViewModel.BookingVM
 
         public Booking? GetBooking(User user)
         {
-            return _storer.BookingRepository.GetBy(user.Email);
+            return user.Car is not null ? _storer.BookingRepository.GetBy(user.Car.CarID.ToString()) : null;
         }
 
         public RelayCommand DeleteBookingCommand => new RelayCommand(

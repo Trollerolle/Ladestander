@@ -12,10 +12,11 @@ namespace El_Booking.Model.Repositories
     {
 		private App currentApp;
 		private string _connString => currentApp.ConnectionString;
-
-		public UserRepository()
+        readonly IRepository<Car> _carRepo;
+		public UserRepository(IRepository<Car> carRepo)
         {
 			currentApp = Application.Current as App;
+            _carRepo = carRepo;
         }
 
         public void Add(User user)
@@ -90,6 +91,8 @@ namespace El_Booking.Model.Repositories
                 {
                     if (reader.Read())
                     {
+
+                        
                         user = new User
                         (
                             userID: (int)reader["UserID"],
@@ -99,7 +102,19 @@ namespace El_Booking.Model.Repositories
                             lastName: (string)reader["LastName"],
                             password: null,
                             car: null
+
                         );
+                        try
+                        {
+
+                            int carID = (int)reader["CarID"];
+                            user.Car = ((CarRepository)_carRepo).GetBy(carID.ToString());
+
+                        }
+                        catch (Exception InvalidCastException)
+                        {
+
+                        }
                     }
                 }
             }

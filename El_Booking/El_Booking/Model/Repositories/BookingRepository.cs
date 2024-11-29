@@ -105,16 +105,16 @@ namespace El_Booking.Model.Repositories
             return fullTimeSlots;
         }
 
-        public Booking? GetBy(string userEmail)
+        public Booking? GetBy(string carID)
         {
             Booking? booking = null;
 
-            string query = "EXEC [dbo].[usp_GetBooking] @Email;";
+            string query = "EXEC [dbo].[usp_GetBooking] @CarID;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Email", userEmail);
+                command.Parameters.AddWithValue("@CarID", int.Parse(carID));
                 connection.Open();
 
                 using SqlDataReader reader = command.ExecuteReader();

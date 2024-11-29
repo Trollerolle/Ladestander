@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
@@ -23,7 +24,7 @@ namespace El_Booking.Model.Repositories
 		}
 		public void Add(Car car)
 		{
-			string query = "EXEC [dbo].[usp_AddCar] @LicensePlate, @Brand, @Model, @UserID;";
+			string query = "EXEC [dbo].[usp_AddCar] @LicensePlate, @Brand, @Model, @UserID, @ScopeCarID OUTPUT;";
 			int? userID = currentApp.CurrentUser.UserID;
 			using (SqlConnection connection = new SqlConnection(_connString))
 			{
@@ -33,9 +34,21 @@ namespace El_Booking.Model.Repositories
 				command.Parameters.AddWithValue("@Model", car.Model);
 				command.Parameters.AddWithValue("@UserID", userID);
 
+
+
+
+				SqlParameter scopeCarIDParam = new SqlParameter("@ScopeCarID", SqlDbType.Int)
+				{
+					Direction = ParameterDirection.Output
+				};
+				command.Parameters.Add(scopeCarIDParam);
+
 				connection.Open();
 				command.ExecuteNonQuery();
+
+				currentApp.CurrentUser.Car.CarID = (int)scopeCarIDParam.Value;
 			}
+
 		}
 
 		public void Delete(int id)
@@ -66,6 +79,7 @@ namespace El_Booking.Model.Repositories
 					{
 						car = new Car
 						(
+							carID: (int)reader["CarID"],
 							licensePlate: (string)reader["LicensePlate"],
 							brand: (string)reader["Brand"],
 							model: (string)reader["Model"]
@@ -79,14 +93,13 @@ namespace El_Booking.Model.Repositories
 
 		public void Update(Car car)
 		{
-			string query = "EXEC [dbo].[usp_UpdateCar] @LicensePlate, @Brand, @Model, @UserID;";
+			string query = "EXEC [dbo].[usp_UpdateCar] @CarID, @Brand, @Model, @LicensePlate;";
 			// Så skal vi have flere SP ud fra hver kombination af data der skal opdateres ? tjek update i UserRepo.
-			int? userID = currentApp.CurrentUser.UserID;
 
 			using (SqlConnection connection = new SqlConnection(_connString))
 			{
 				SqlCommand command = new SqlCommand(query, connection);
-				command.Parameters.AddWithValue("@UserID", userID);
+				command.Parameters.AddWithValue("@CarID", car.CarID);
 				command.Parameters.AddWithValue("@LicensePlate", car.LicensePlate);
 				command.Parameters.AddWithValue("@Brand", car.Brand);
 				command.Parameters.AddWithValue("@Model", car.Model);

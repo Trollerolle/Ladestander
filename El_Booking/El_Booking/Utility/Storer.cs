@@ -9,17 +9,17 @@ namespace El_Booking.Utility
 {
     public class Storer
     {
-        public readonly UserRepository UserRepository;
+        public UserRepository UserRepository { get; }
         public BookingRepository BookingRepository { get; }
         public TimeSlotRepository TimeSlotRepository { get; }
         public CarRepository CarRepository { get; }
 
         public Storer()
         {
-            UserRepository = new UserRepository();
+            CarRepository = new CarRepository();
+            UserRepository = new UserRepository(CarRepository);
 			TimeSlotRepository = new TimeSlotRepository();
 			BookingRepository = new BookingRepository(TimeSlotRepository);
-            CarRepository = new CarRepository();
 
         }
     }
