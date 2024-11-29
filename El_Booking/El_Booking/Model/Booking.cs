@@ -36,13 +36,6 @@ namespace El_Booking.Model
 			set { _bookingID = value; }
 		}
 
-		private string? _userEmail;
-		public string? UserEmail
-		{
-			get { return _userEmail; }
-			set { _userEmail = value; }
-		}
-
 		public Booking(TimeSlot timeSlot, int chargingPointID, DateOnly date, int bookingID)
 		{
 			this.BookingID = bookingID;

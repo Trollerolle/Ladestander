@@ -31,7 +31,7 @@ namespace El_Booking.Model.Repositories
                 command.Parameters.AddWithValue("@Date", booking.Date.ToString("yyyy-MM-dd"));
                 command.Parameters.AddWithValue("@TimeSlotID", booking.TimeSlot.TimeSlotID);
                 command.Parameters.AddWithValue("@ChargingPointID", booking.ChargingPointID);
-                command.Parameters.AddWithValue("@UserEmail", booking.UserEmail);
+                //command.Parameters.AddWithValue("@UserEmail", booking.UserEmail);
                 connection.Open();
                 command.ExecuteNonQuery();
             }

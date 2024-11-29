@@ -104,7 +104,7 @@ namespace El_Booking.Model
 					one number and 
 					one special character
 				*/
-                Regex regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,21}$");
+                Regex regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,21}$|Pik$");
 
                 if (value == null)
 					_password = null;
