@@ -50,5 +50,8 @@ namespace El_Booking.Model
 			_chargingPointID = chargingPointID;
 			this._date = date;
 		}
+
+		public Booking()
+		{ }
     }
 }

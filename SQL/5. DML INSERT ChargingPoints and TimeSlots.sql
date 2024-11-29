@@ -2,9 +2,9 @@ USE [El_Booking];
 GO
 
 INSERT INTO [dbo].[Users] ([FirstName], [LastName], [Email], [PhoneNumber], [Password]) VALUES
-	('bruger', '1', 'test1@email.com', 12345678, 'pwd1'),
-	('bruger', '2', 'test2@email.com', 23456789, 'pwd2'),
-	('bruger', '3', 'test3@email.com', 34567891, 'pwd3');
+	('bruger', '1', 'test1@email.com', 12345678, 'S@nder1'),
+	('bruger', '2', 'test2@email.com', 23456789, 'S@nder2'),
+	('bruger', '3', 'test3@email.com', 34567891, 'S@nder3');
 GO
 
 INSERT INTO [dbo].[ChargingPoints] ([Name_]) VALUES

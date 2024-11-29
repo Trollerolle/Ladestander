@@ -1,4 +1,5 @@
-﻿using System;
+﻿using El_Booking.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -22,36 +23,99 @@ namespace El_Booking.Model
 		public string Email
 		{
 			get { return _email; }
-			set { _email = ValidateEmail(value); }
+			set 
+			{
+                Regex regex = new Regex(@"^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$");
+
+                if (!regex.IsMatch(value))
+					throw new NotSupportedException("Not a valid email address");
+
+				else
+					_email = value;
+		    }
 		}
 
-		private string _telephoneNumber;
+        // Regex: https://learn.microsoft.com/da-dk/dotnet/standard/base-types/regular-expression-language-quick-reference
+
+        private string _telephoneNumber;
 		public string TelephoneNumber
 		{
 			get { return _telephoneNumber; }
-			set { _telephoneNumber = ValidatePhonenumber(value); }
-		}
+            set
+            {
+                Regex regex = new Regex(@"^(((\+|00)[0-9]{2,3})\s{1})?[1-9][0-9]{7,14}$");
 
-		private string _firstName;
+                if (!regex.IsMatch(value))
+                    throw new NotSupportedException("Not a valid Phonenumber address");
+
+                else
+                    _telephoneNumber = value;
+            }
+        }
+
+        private string _firstName;
 		public string FirstName
 		{
 			get { return _firstName; }
-			set { _firstName = value; }
-		}
+            set
+            {
+                if (value.Length > 50)
+                    throw new NotSupportedException("Too long First Name");
+
+                else
+				{
+					string[] names = value.Split(' ');
+					for (int i = 0; i < names.Length; i++) 
+						names[i] = names[i].FirstCharToUpper();
+
+					_firstName = String.Join(" ", names);
+				}
+            }
+        }
 
 		private string _lastName;
 		public string LastName
 		{
 			get { return _lastName; }
-			set { _lastName = value; }
-		}
+            set
+            {
+
+                if (value.Length > 50)
+                    throw new NotSupportedException("Too long Last Name");
+
+				else if (value.Split(' ').Length > 1)
+                    throw new NotSupportedException("Only one Last Name");
+
+                else
+                _lastName = value.FirstCharToUpper();
+            }
+        }
 
 		private string? _password;
 		public string? Password
 		{
 			get { return _password; }
-			set { _password = value; }
-		}
+            set
+            {
+				/*
+					Minimum 6 and maximum 21 characters,
+					at least one uppercase letter,
+					one lowercase letter,
+					one number and 
+					one special character
+				*/
+                Regex regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,21}$");
+
+                if (value == null)
+					_password = null;
+
+				else if (!regex.IsMatch(value))
+                    throw new NotSupportedException("Not a valid Password");
+                    
+                else
+					_password = value;
+            }
+        }
 
 		private Car? _Car;
 
@@ -77,32 +141,5 @@ namespace El_Booking.Model
 		public User() 
 		{ 
 		}
-
-        private string ValidatePhonenumber(string value)
-        {
-            if (!validPhonenumber(value))
-                throw new NotSupportedException("Not a valid Phonenumber");
-
-            return value;
-        }
-
-        private bool validPhonenumber(string value)
-        {
-            Regex regex = new Regex("^\\+?[1-9][0-9]{7,14}$");
-            return regex.IsMatch(value);
-        }
-
-        private string ValidateEmail(string value)
-        {
-            if (!validEmail(value))
-                throw new NotSupportedException("Not a valid email address");
-
-            return value;
-        }
-
-        private bool validEmail(string value)
-        {
-            return Regex.IsMatch(value, @"^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$");
-        }
     }
 }
