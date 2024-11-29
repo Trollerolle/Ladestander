@@ -45,7 +45,7 @@ namespace El_Booking.Commands
 
                 _storer.BookingRepository.Add(newBooking);
 
-                MessageBox.Show($" gennemført booking besked ", "Succes", MessageBoxButton.OK);
+                MessageBox.Show($"Din booking er gennemført. Gå til \"Din Booking\" for at se detaljer", "Succes", MessageBoxButton.OK);
 
             }
             catch (Exception ex)
@@ -57,12 +57,12 @@ namespace El_Booking.Commands
 
         public override bool CanExecute(object? parameter)
         {
-            if (
-                _bookingViewModel.SelectedDay is not null &&
-                _bookingViewModel.SelectedTimeSlot is not null &&
-                base.CanExecute(parameter)
-                )
-                return true;
+            //if (
+            //    _bookingViewModel.SelectedDay is not null &&
+            //    _bookingViewModel.SelectedTimeSlot is not null &&
+            //    base.CanExecute(parameter)
+            //    )
+            //    return true;
 
             return false;
         }

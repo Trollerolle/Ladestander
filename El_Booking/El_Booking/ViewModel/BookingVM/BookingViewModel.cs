@@ -15,6 +15,17 @@ namespace El_Booking.ViewModel.BookingVM
     public class BookingViewModel : BaseViewModel
     {
 
+        private object _selectedItem;
+        public object SelectedItem
+        {
+            get { return _selectedItem; }
+            set
+            {
+                _selectedItem = value;
+                OnPropertyChanged();
+            }
+        }
+
 		private readonly Storer _storer;
 
 		public BookingViewModel(Storer storer, DateTime? startingDate = null)
@@ -35,8 +46,6 @@ namespace El_Booking.ViewModel.BookingVM
 		}
 
 		const int numberOfChargers = 2; // antal ladere. Skal ændres til at være dynamisk, når ChargingPointRepository virker.
-
-        public Booking? booking; // Brugerens booking, hvis han har en.
         
         private DateOnly _mondayOfWeek; // Dato for mandagen i den valgte uge.
 
@@ -50,7 +59,6 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-
         private int _weekNr; // ugenummeret for den valgte uge
         public int WeekNr
         {
@@ -62,8 +70,8 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-        int? _selectedTimeSlot; // den ladetid, der er klikket på
-        public int? SelectedTimeSlot
+        TimeSlot? _selectedTimeSlot; // den ladetid, der er klikket på
+        public TimeSlot? SelectedTimeSlot
         {
             get { return _selectedTimeSlot; }
             set
@@ -73,8 +81,8 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-        int? _selectedDay; // den dag der er klikket på (man = 0, tirs = 1 osv.)
-        public int? SelectedDay
+        DateOnly _selectedDay; // den dag der er klikket på (man = 0, tirs = 1 osv.)
+        public DateOnly SelectedDay
         {
             get { return _selectedDay; }
             set

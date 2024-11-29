@@ -41,7 +41,7 @@ namespace El_Booking.ViewModel.BookingVM
                 DataContext = new YourBookingViewModel(storer)
             };
 
-            CurrentPage = UserPage_;
+            CurrentPage = BookingWeekPage_;
         }
 
         public RelayCommand SeeProfileCommand => new RelayCommand(

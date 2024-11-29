@@ -23,7 +23,10 @@ namespace El_Booking.Model.Repositories
 
         public void Add(Booking booking)
         {
-            string query = "EXEC [dbo].[usp_AddBooking] @Date, @TimeSlotStart, @ChargingPointID, @UserEmail;";
+
+            int carID = currentApp.CurrentUser.Car.CarID;
+
+            string query = "EXEC [dbo].[usp_AddBooking] @Date, @TimeSlotID, @ChargingPointID, @CarID;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
             {
@@ -31,7 +34,7 @@ namespace El_Booking.Model.Repositories
                 command.Parameters.AddWithValue("@Date", booking.Date.ToString("yyyy-MM-dd"));
                 command.Parameters.AddWithValue("@TimeSlotID", booking.TimeSlot.TimeSlotID);
                 command.Parameters.AddWithValue("@ChargingPointID", booking.ChargingPointID);
-                //command.Parameters.AddWithValue("@UserEmail", booking.UserEmail);
+                command.Parameters.AddWithValue("@CarID", carID);
                 connection.Open();
                 command.ExecuteNonQuery();
             }

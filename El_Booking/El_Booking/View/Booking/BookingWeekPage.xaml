@@ -27,8 +27,6 @@
             <Button Content="Forrige" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekBackwardCommand}"/>
             <Label Content="{Binding WeekNr}" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"/>
             <Button Content="Næste" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekForwardCommand}"/>
-
-
         </StackPanel>
 
         <!-- Grid for Days of Week Labels -->
@@ -118,25 +116,26 @@
             FontSize="14" />
         </Grid>
 
-
-
-        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding TimeSlotAvailabilityView}" 
-                AlternationCount="100" HeadersVisibility="None"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Grid.Row="2"
-                ColumnWidth="*"
-                RowHeight="50"
-                CanUserResizeRows="True"
-                CanUserAddRows="False"
-                >
+        <DataGrid
+            AutoGenerateColumns="False"
+            ItemsSource="{Binding TimeSlotAvailabilityView}" 
+            AlternationCount="100" 
+            HeadersVisibility="None"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Grid.Row="2"
+            ColumnWidth="*"
+            RowHeight="50"
+            CanUserResizeRows="True"
+            CanUserAddRows="False"
+            SelectedItem="{Binding SelectedItem}">
 
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="{Binding DataContext.DaysOfWeekDates[0], FallbackValue='Binding Error'}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid Height="Auto" Background="{Binding [0], Converter={StaticResource IntToColorConverter}}">
-                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" Background="{Binding [0], Converter={StaticResource IntToColorConverter}}">
+                                <TextBlock Width="70" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center">
                                     <TextBlock.Text>
                                         <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
                                             <!-- Bind to the row index -->
@@ -146,7 +145,10 @@
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
-                            </Grid>
+                                <Button 
+                                    Content="Bekræft">
+                                </Button>
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
