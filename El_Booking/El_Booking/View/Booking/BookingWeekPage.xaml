@@ -16,6 +16,40 @@
         <converters:TimeSlotLabelHelper x:Key="TimeSlotLabelHelper"/>
         <converters:SelectedCellHelper x:Key="SelectedCellHelper"/>
 
+        
+        <!-- Rectangle to see if cell is selected -->
+        <Style x:Key="HighlightedRectangleStyle" TargetType="Rectangle">
+            <Setter Property="Fill" Value="Aqua" />
+            <Setter Property="Width" Value="Auto" />
+            <Setter Property="Visibility">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource SelectedCellHelper}">
+                        <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
+                        <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex" />
+                        <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                        <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- TextBloc with timeslot start -->
+        <Style x:Key="TimeSlotTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Width" Value="70" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="Text">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
+                        <!-- Bind to the row index -->
+                        <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
+                        <!-- Bind to TimeSlotValues -->
+                        <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Border Background="{DynamicResource Background3}" CornerRadius="10">
@@ -142,28 +176,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid Background="{Binding [0], Converter={StaticResource IntToColorConverter}}">
-                                    <Rectangle Fill="Aqua" Width="auto">
-                                        <Rectangle.Visibility>
-                                            <MultiBinding Converter="{StaticResource SelectedCellHelper}">
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex"/>
-
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
-
-                                                <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
-                                                <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
-                                            </MultiBinding>
-                                        </Rectangle.Visibility>
-                                    </Rectangle>
-                                    <TextBlock Width="70" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center">
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                                <!-- Bind to the row index -->
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                                <!-- Bind to TimeSlotValues -->
-                                                <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
+                                    <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
+                                    <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -172,28 +186,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid Background="{Binding [1], Converter={StaticResource IntToColorConverter}}">
-                                    <Rectangle Fill="Aqua" Width="auto">
-                                        <Rectangle.Visibility>
-                                            <MultiBinding Converter="{StaticResource SelectedCellHelper}">
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex"/>
-
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
-
-                                                <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
-                                                <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
-                                            </MultiBinding>
-                                        </Rectangle.Visibility>
-                                    </Rectangle>
-                                    <TextBlock Width="70" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center">
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                                <!-- Bind to the row index -->
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                                <!-- Bind to TimeSlotValues -->
-                                                <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
+                                    <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
+                                    <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -202,28 +196,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid Background="{Binding [2], Converter={StaticResource IntToColorConverter}}">
-                                    <Rectangle Fill="Aqua" Width="auto">
-                                        <Rectangle.Visibility>
-                                            <MultiBinding Converter="{StaticResource SelectedCellHelper}">
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex"/>
-
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
-
-                                                <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
-                                                <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
-                                            </MultiBinding>
-                                        </Rectangle.Visibility>
-                                    </Rectangle>
-                                    <TextBlock Width="70" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center">
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                                <!-- Bind to the row index -->
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                                <!-- Bind to TimeSlotValues -->
-                                                <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
+                                    <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
+                                    <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -232,28 +206,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid Background="{Binding [3], Converter={StaticResource IntToColorConverter}}">
-                                    <Rectangle Fill="Aqua" Width="auto">
-                                        <Rectangle.Visibility>
-                                            <MultiBinding Converter="{StaticResource SelectedCellHelper}">
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex"/>
-
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
-
-                                                <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
-                                                <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
-                                            </MultiBinding>
-                                        </Rectangle.Visibility>
-                                    </Rectangle>
-                                    <TextBlock Width="70" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center">
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                                <!-- Bind to the row index -->
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                                <!-- Bind to TimeSlotValues -->
-                                                <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
+                                    <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
+                                    <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -262,28 +216,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid Background="{Binding [4], Converter={StaticResource IntToColorConverter}}">
-                                    <Rectangle Fill="Aqua" Width="auto">
-                                        <Rectangle.Visibility>
-                                            <MultiBinding Converter="{StaticResource SelectedCellHelper}">
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex"/>
-
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
-
-                                                <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
-                                                <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
-                                            </MultiBinding>
-                                        </Rectangle.Visibility>
-                                    </Rectangle>
-                                    <TextBlock Width="70" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center">
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                                <!-- Bind to the row index -->
-                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                                <!-- Bind to TimeSlotValues -->
-                                                <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
+                                    <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
+                                    <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
