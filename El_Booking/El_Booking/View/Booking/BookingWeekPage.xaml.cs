@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using El_Booking.Model.Repositories;
 using El_Booking.ViewModel;
+using El_Booking.ViewModel.BookingVM;
 
 namespace El_Booking.View.Booking
 {
@@ -36,6 +37,25 @@ namespace El_Booking.View.Booking
                 var columnIndex = cell.Column.DisplayIndex;
 
                 MessageBox.Show($"Selected cell at row index: {rowIndex}, {columnIndex}");
+            }
+        }
+
+        private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            var dataGrid = sender as DataGrid;
+            var viewModel = DataContext as BookingViewModel;
+
+            if (dataGrid != null && viewModel != null)
+            {
+                if (dataGrid.SelectedCells.Count > 0)
+                {
+                    var cellInfo = dataGrid.SelectedCells[0];
+                    // Get the row index of the selected cell
+                    var rowIndex = myDataGrid.Items.IndexOf(cellInfo.Item);
+                    var columnIndex = cellInfo.Column.DisplayIndex;
+
+                    viewModel.SelectedCellContent = [columnIndex, rowIndex];
+                }
             }
         }
     }

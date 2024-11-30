@@ -15,18 +15,18 @@ namespace El_Booking.ViewModel.BookingVM
     public class BookingViewModel : BaseViewModel
     {
 
-        private object _selectedItem;
-        public object SelectedItem
+        private int[]? _selectedCellContent = null;
+        public int[]? SelectedCellContent
         {
-            get { return _selectedItem; }
+            get => _selectedCellContent;
             set
             {
-                _selectedItem = value;
-                OnPropertyChanged();
+                _selectedCellContent = value;
+                OnPropertyChanged(); // Notify UI of changes
             }
         }
 
-		private readonly Storer _storer;
+        private readonly Storer _storer;
 
 		public BookingViewModel(Storer storer, DateTime? startingDate = null)
 		{

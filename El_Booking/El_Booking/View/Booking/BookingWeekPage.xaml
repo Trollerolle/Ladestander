@@ -14,6 +14,7 @@
     <Page.Resources>
         <converters:IntToColorConverter x:Key="IntToColorConverter" />
         <converters:TimeSlotLabelHelper x:Key="TimeSlotLabelHelper"/>
+        <converters:ShowButtonHelper x:Key="ShowButtonHelper"/>
     </Page.Resources>
 
 
@@ -23,6 +24,7 @@
             <RowDefinition Height="0.12*"/>
             <RowDefinition Height="0.64*"/>
         </Grid.RowDefinitions>
+        
         <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Button Content="Forrige" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekBackwardCommand}"/>
             <Label Content="{Binding WeekNr}" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"/>
@@ -117,6 +119,7 @@
         </Grid>
 
         <DataGrid
+            x:Name="myDataGrid"
             AutoGenerateColumns="False"
             ItemsSource="{Binding TimeSlotAvailabilityView}" 
             AlternationCount="100" 
@@ -128,7 +131,9 @@
             RowHeight="50"
             CanUserResizeRows="True"
             CanUserAddRows="False"
-            SelectedItem="{Binding SelectedItem}">
+            SelectionUnit="Cell"
+            SelectionMode="Single"
+            SelectedCellsChanged="DataGrid_SelectedCellsChanged">
 
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="{Binding DataContext.DaysOfWeekDates[0], FallbackValue='Binding Error'}">
@@ -145,8 +150,16 @@
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
-                                <Button 
-                                    Content="Bekræft">
+                                <Button Content="Bekræft">
+                                    <Button.Visibility>
+                                        <MultiBinding Converter="{StaticResource ShowButtonHelper}">
+                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex"/>
+
+                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
+
+                                            <Binding Path="DataContext.SelectedCellContent" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                        </MultiBinding>
+                                    </Button.Visibility>
                                 </Button>
                             </StackPanel>
                         </DataTemplate>
