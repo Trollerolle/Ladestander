@@ -9,7 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace El_Booking.Commands
 {
@@ -34,16 +33,19 @@ namespace El_Booking.Commands
         public override void Execute(object? parameter)
         {
 
+            IEnumerable<TimeSlot> timeSlots = _storer.TimeSlotRepository.GetAll();
+            DateOnly date = _bookingViewModel.MondayOfWeek.AddDays((int)_bookingViewModel.SelectedDay);
+
             try
             {
                 Booking newBooking = new Booking()
                 {
-                    TimeSlot = _bookingViewModel.SelectedTimeSlot,
+                    TimeSlot = timeSlots.ElementAt((int)_bookingViewModel.SelectedTimeSlot),
                     ChargingPointID = -1,
-                    Date = _bookingViewModel.SelectedDay,
+                    Date = date,
                 };
 
-                _storer.BookingRepository.Add(newBooking);
+                //_storer.BookingRepository.Add(newBooking);
 
                 MessageBox.Show($"Din booking er gennemført. Gå til \"Din Booking\" for at se detaljer", "Succes", MessageBoxButton.OK);
 
@@ -64,7 +66,7 @@ namespace El_Booking.Commands
             //    )
             //    return true;
 
-            return false;
+            return true;
         }
     }
 }

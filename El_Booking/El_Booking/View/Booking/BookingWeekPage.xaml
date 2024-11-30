@@ -29,6 +29,7 @@
             <Button Content="Forrige" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekBackwardCommand}"/>
             <Label Content="{Binding WeekNr}" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"/>
             <Button Content="Næste" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekForwardCommand}"/>
+            <Button x:Name="btnTest" Content="test" Command="{Binding MakeBookingCommand}"/>
         </StackPanel>
 
         <!-- Grid for Days of Week Labels -->
@@ -150,14 +151,20 @@
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
-                                <Button Content="Bekræft">
+                                <Button 
+                                    Content="Bekræft" 
+                                    Command="{Binding Path=DataContext.MakeBookingCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                    CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=DataGrid}}">           
                                     <Button.Visibility>
                                         <MultiBinding Converter="{StaticResource ShowButtonHelper}">
+                                            <!-- row of button -->
                                             <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex"/>
-
+                                            <!-- column of button -->
                                             <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
-
-                                            <Binding Path="DataContext.SelectedCellContent" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                            <!-- selected row / timeslot -->
+                                            <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                            <!-- selected column / day -->
+                                            <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
                                         </MultiBinding>
                                     </Button.Visibility>
                                 </Button>

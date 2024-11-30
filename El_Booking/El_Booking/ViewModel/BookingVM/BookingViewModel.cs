@@ -9,22 +9,17 @@ using System.Threading.Tasks;
 using El_Booking.Utility;
 using El_Booking.Commands;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+using El_Booking.View.Booking;
+using System.Windows;
+using System.Diagnostics;
 
 namespace El_Booking.ViewModel.BookingVM
 {
     public class BookingViewModel : BaseViewModel
     {
 
-        private int[]? _selectedCellContent = null;
-        public int[]? SelectedCellContent
-        {
-            get => _selectedCellContent;
-            set
-            {
-                _selectedCellContent = value;
-                OnPropertyChanged(); // Notify UI of changes
-            }
-        }
+        public ICommand MakeBookingCommand { get; }
 
         private readonly Storer _storer;
 
@@ -34,6 +29,8 @@ namespace El_Booking.ViewModel.BookingVM
 
 			_storer = storer;
 
+            MakeBookingCommand = new MakeBookingCommand(this, storer);
+            
 			// TimeSlotValues er dynamisk ud fra hvor mange TimeSlots der er i databasen.
 			TimeSlotValues = GenerateTimeSlotValues(_storer.TimeSlotRepository.GetAll());
 			TimeSlotAvailability = new bool[TimeSlotValues.Count, 5]; // 5 for antal dage i ugen
@@ -70,8 +67,8 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-        TimeSlot? _selectedTimeSlot; // den ladetid, der er klikket på
-        public TimeSlot? SelectedTimeSlot
+        int? _selectedTimeSlot; // den ladetid, der er klikket på
+        public int? SelectedTimeSlot
         {
             get { return _selectedTimeSlot; }
             set
@@ -81,8 +78,8 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-        DateOnly _selectedDay; // den dag der er klikket på (man = 0, tirs = 1 osv.)
-        public DateOnly SelectedDay
+        int? _selectedDay; // den dag der er klikket på (man = 0, tirs = 1 osv.)
+        public int? SelectedDay
         {
             get { return _selectedDay; }
             set
@@ -154,7 +151,6 @@ namespace El_Booking.ViewModel.BookingVM
 
         //public List<DateOnly> daysOfWeekDates = new List<DateOnly>();
         private ObservableCollection<string> _daysOfWeekDates = new ObservableCollection<string>();
-
         public ObservableCollection<string> DaysOfWeekDates
         {
             get { return _daysOfWeekDates; }
@@ -164,7 +160,6 @@ namespace El_Booking.ViewModel.BookingVM
                 OnPropertyChanged();
             }
         }
-
 
         public void SetDaysOfWeekDays()
         {
@@ -190,9 +185,6 @@ namespace El_Booking.ViewModel.BookingVM
             return MondayOfWeek <= (limit.AddDays(30));
         }
 
-
-
-
         void LoadFullTimeslots()
         {
             List<int[]> fullTimeSlots = _storer.BookingRepository.GetFullTimeSlotsForWeek(MondayOfWeek);
@@ -216,9 +208,5 @@ namespace El_Booking.ViewModel.BookingVM
                 OnPropertyChanged(nameof(TimeSlotValues));
             }
         }
-
-
-
-
     }
 }

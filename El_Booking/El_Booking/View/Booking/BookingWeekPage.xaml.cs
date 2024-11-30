@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,19 +27,10 @@ namespace El_Booking.View.Booking
         public BookingWeekPage()
         {
             InitializeComponent();
+            var viewModel = myDataGrid.DataContext as BookingViewModel;
         }
 
-        private void MyDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-        {
-            foreach (var cell in e.AddedCells)
-            {
-                // Get the row index of the selected cell
-                var rowIndex = myDataGrid.Items.IndexOf(cell.Item);
-                var columnIndex = cell.Column.DisplayIndex;
 
-                MessageBox.Show($"Selected cell at row index: {rowIndex}, {columnIndex}");
-            }
-        }
 
         private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
@@ -54,9 +46,20 @@ namespace El_Booking.View.Booking
                     var rowIndex = myDataGrid.Items.IndexOf(cellInfo.Item);
                     var columnIndex = cellInfo.Column.DisplayIndex;
 
-                    viewModel.SelectedCellContent = [columnIndex, rowIndex];
+                    viewModel.SelectedTimeSlot = rowIndex;
+                    viewModel.SelectedDay = columnIndex;
                 }
             }
+        }
+
+        private void Search_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show("Hello World");
+        }
+
+        private void Search_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true; // set to true or false
         }
     }
 }

@@ -35,12 +35,12 @@ namespace El_Booking.Utility
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            int? selectedRow = (int?)values[2];
+            int? selectedColumn = (int?)values[3];
 
-            int[]? selectedCells = (int[]?)values[2];
-
-            if (values[0] is int rowIndex && values[1] is int columIndex && selectedCells is not null)
+            if (values[0] is int rowIndex && values[1] is int columIndex && selectedRow is not null)
             {
-                if (rowIndex == selectedCells[1] && columIndex == selectedCells[0])
+                if (rowIndex == selectedRow && columIndex == selectedColumn)
                 {
                     return Visibility.Visible;
                 }
