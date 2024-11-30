@@ -27,10 +27,7 @@ namespace El_Booking.View.Booking
         public BookingWeekPage()
         {
             InitializeComponent();
-            var viewModel = myDataGrid.DataContext as BookingViewModel;
         }
-
-
 
         private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
@@ -50,16 +47,6 @@ namespace El_Booking.View.Booking
                     viewModel.SelectedDay = columnIndex;
                 }
             }
-        }
-
-        private void Search_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            MessageBox.Show("Hello World");
-        }
-
-        private void Search_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true; // set to true or false
         }
     }
 }

@@ -59,14 +59,14 @@ namespace El_Booking.Commands
 
         public override bool CanExecute(object? parameter)
         {
-            //if (
-            //    _bookingViewModel.SelectedDay is not null &&
-            //    _bookingViewModel.SelectedTimeSlot is not null &&
-            //    base.CanExecute(parameter)
-            //    )
-            //    return true;
+            if (
+                _bookingViewModel.SelectedDay is not null &&
+                _bookingViewModel.SelectedTimeSlot is not null &&
+                base.CanExecute(parameter)
+                )
+                return true;
 
-            return true;
+            return false;
         }
     }
 }

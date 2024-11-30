@@ -31,14 +31,15 @@ namespace El_Booking.Utility
         }
     }
 
-    public class ShowButtonHelper : IMultiValueConverter
+    public class SelectedCellHelper : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            int? selectedRow = (int?)values[2];
-            int? selectedColumn = (int?)values[3];
 
-            if (values[0] is int rowIndex && values[1] is int columIndex && selectedRow is not null)
+            int? selectedRow = (int?)values[2];
+            int ? selectedColumn = (int?)values[3];
+
+            if (values[0] is int rowIndex && values[1] is int columIndex && selectedColumn is not null)
             {
                 if (rowIndex == selectedRow && columIndex == selectedColumn)
                 {

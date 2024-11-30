@@ -14,239 +14,284 @@
     <Page.Resources>
         <converters:IntToColorConverter x:Key="IntToColorConverter" />
         <converters:TimeSlotLabelHelper x:Key="TimeSlotLabelHelper"/>
-        <converters:ShowButtonHelper x:Key="ShowButtonHelper"/>
+        <converters:SelectedCellHelper x:Key="SelectedCellHelper"/>
+
     </Page.Resources>
 
-
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.24*"/>
-            <RowDefinition Height="0.12*"/>
-            <RowDefinition Height="0.64*"/>
-        </Grid.RowDefinitions>
-        
-        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Content="Forrige" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekBackwardCommand}"/>
-            <Label Content="{Binding WeekNr}" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"/>
-            <Button Content="Næste" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekForwardCommand}"/>
-            <Button x:Name="btnTest" Content="test" Command="{Binding MakeBookingCommand}"/>
-        </StackPanel>
-
-        <!-- Grid for Days of Week Labels -->
-        <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-            <!-- Define 5 equal-width columns -->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+    <Border Background="{DynamicResource Background3}" CornerRadius="10">
+        <Grid Margin="10,0,10,10">
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="0.20*"/>
+                <RowDefinition Height="0.10*"/>
+                <RowDefinition Height="0.60*"/>
+                <RowDefinition Height="0.10*"/>
             </Grid.RowDefinitions>
 
-            <!-- Monday Label -->
-            <Label Content="Mandag" 
-            Grid.Column="0" 
-            Grid.Row="0"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14" FontWeight="Bold"/>
-            <Label Content="{Binding DaysOfWeekDates[0], StringFormat='{}{0:dd MMM}'}" 
-            Grid.Column="0" 
-            Grid.Row="1"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14" />
+            <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Button Content="Forrige" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekBackwardCommand}"/>
+                <Label Content="{Binding WeekNr}" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"/>
+                <Button Content="Næste" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekForwardCommand}"/>
+            </StackPanel>
 
-            <!-- Tuesday Label -->
-            <Label Content="Tirsdag" 
-            Grid.Column="1" 
-            Grid.Row="0"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14"  FontWeight="Bold"/>
-            <Label Content="{Binding DaysOfWeekDates[1], StringFormat='{}{0: MMM dd}'}" 
-            Grid.Column="1"  
-            Grid.Row="1"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14" />
+            <!-- Grid for Days of Week Labels -->
+            <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                <!-- Define 5 equal-width columns -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
 
-            <!-- Wednesday Label -->
-            <Label Content="Onsdag" 
-            Grid.Column="2" 
-            Grid.Row="0"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14"  FontWeight="Bold"/>
-            <Label Content="{Binding DaysOfWeekDates[2], StringFormat='{}{0: MMM dd}'}" 
-            Grid.Column="2"  
-            Grid.Row="1"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14" />
+                <!-- Monday Label -->
+                <Label Content="Mandag" 
+        Grid.Column="0" 
+        Grid.Row="0"
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center"
+        FontSize="14" FontWeight="Bold"/>
+                <Label Content="{Binding DaysOfWeekDates[0], StringFormat='{}{0:dd MMM}'}" 
+        Grid.Column="0" 
+        Grid.Row="1"
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center"
+        FontSize="14" />
 
-            <!-- Thursday Label -->
+                <!-- Tuesday Label -->
+                <Label Content="Tirsdag" 
+        Grid.Column="1" 
+        Grid.Row="0"
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center"
+        FontSize="14"  FontWeight="Bold"/>
+                <Label Content="{Binding DaysOfWeekDates[1], StringFormat='{}{0: MMM dd}'}" 
+        Grid.Column="1"  
+        Grid.Row="1"
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center"
+        FontSize="14" />
 
-            <Label Content="Torsdag" 
-            Grid.Column="3" 
-            Grid.Row="0"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14"  FontWeight="Bold"/>
-            <Label Content="{Binding DaysOfWeekDates[3], StringFormat='{}{0: MMM dd}'}" 
-            Grid.Column="3"  
-            Grid.Row="1"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14" />
+                <!-- Wednesday Label -->
+                <Label Content="Onsdag" 
+        Grid.Column="2" 
+        Grid.Row="0"
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center"
+        FontSize="14"  FontWeight="Bold"/>
+                <Label Content="{Binding DaysOfWeekDates[2], StringFormat='{}{0: MMM dd}'}" 
+        Grid.Column="2"  
+        Grid.Row="1"
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center"
+        FontSize="14" />
 
-            <!-- Friday Label -->
-            <Label Content="Fredag" 
-            Grid.Column="4" 
-            Grid.Row="0"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14"  FontWeight="Bold"/>
-            <Label Content="{Binding DaysOfWeekDates[4], StringFormat='{}{0: MMM dd}'}" 
-            Grid.Column="4"  
-            Grid.Row="1"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14" />
+                <!-- Thursday Label -->
+
+                <Label Content="Torsdag" 
+        Grid.Column="3" 
+        Grid.Row="0"
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center"
+        FontSize="14"  FontWeight="Bold"/>
+                <Label Content="{Binding DaysOfWeekDates[3], StringFormat='{}{0: MMM dd}'}" 
+        Grid.Column="3"  
+        Grid.Row="1"
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center"
+        FontSize="14" />
+
+                <!-- Friday Label -->
+                <Label Content="Fredag" 
+        Grid.Column="4" 
+        Grid.Row="0"
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center"
+        FontSize="14"  FontWeight="Bold"/>
+                <Label Content="{Binding DaysOfWeekDates[4], StringFormat='{}{0: MMM dd}'}" 
+        Grid.Column="4"  
+        Grid.Row="1"
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center"
+        FontSize="14" />
+            </Grid>
+
+            <DataGrid
+                x:Name="myDataGrid"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding TimeSlotAvailabilityView}" 
+                AlternationCount="100" 
+                HeadersVisibility="None"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Grid.Row="2"
+                ColumnWidth="*"
+                RowHeight="50"
+                CanUserResizeRows="True"
+                CanUserAddRows="False"
+                SelectionUnit="Cell"
+                SelectionMode="Single"
+                SelectedCellsChanged="DataGrid_SelectedCellsChanged">
+
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="{Binding DataContext.DaysOfWeekDates[0], FallbackValue='Binding Error'}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding [0], Converter={StaticResource IntToColorConverter}}">
+                                    <Rectangle Fill="Aqua" Width="auto">
+                                        <Rectangle.Visibility>
+                                            <MultiBinding Converter="{StaticResource SelectedCellHelper}">
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex"/>
+
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
+
+                                                <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                                <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                            </MultiBinding>
+                                        </Rectangle.Visibility>
+                                    </Rectangle>
+                                    <TextBlock Width="70" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
+                                                <!-- Bind to the row index -->
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
+                                                <!-- Bind to TimeSlotValues -->
+                                                <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[1], FallbackValue='Binding Error'}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding [1], Converter={StaticResource IntToColorConverter}}">
+                                    <Rectangle Fill="Aqua" Width="auto">
+                                        <Rectangle.Visibility>
+                                            <MultiBinding Converter="{StaticResource SelectedCellHelper}">
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex"/>
+
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
+
+                                                <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                                <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                            </MultiBinding>
+                                        </Rectangle.Visibility>
+                                    </Rectangle>
+                                    <TextBlock Width="70" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
+                                                <!-- Bind to the row index -->
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
+                                                <!-- Bind to TimeSlotValues -->
+                                                <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[2], FallbackValue='Binding Error'}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding [2], Converter={StaticResource IntToColorConverter}}">
+                                    <Rectangle Fill="Aqua" Width="auto">
+                                        <Rectangle.Visibility>
+                                            <MultiBinding Converter="{StaticResource SelectedCellHelper}">
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex"/>
+
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
+
+                                                <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                                <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                            </MultiBinding>
+                                        </Rectangle.Visibility>
+                                    </Rectangle>
+                                    <TextBlock Width="70" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
+                                                <!-- Bind to the row index -->
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
+                                                <!-- Bind to TimeSlotValues -->
+                                                <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[3], FallbackValue='Binding Error'}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding [3], Converter={StaticResource IntToColorConverter}}">
+                                    <Rectangle Fill="Aqua" Width="auto">
+                                        <Rectangle.Visibility>
+                                            <MultiBinding Converter="{StaticResource SelectedCellHelper}">
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex"/>
+
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
+
+                                                <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                                <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                            </MultiBinding>
+                                        </Rectangle.Visibility>
+                                    </Rectangle>
+                                    <TextBlock Width="70" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
+                                                <!-- Bind to the row index -->
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
+                                                <!-- Bind to TimeSlotValues -->
+                                                <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[4], FallbackValue='Binding Error'}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding [4], Converter={StaticResource IntToColorConverter}}">
+                                    <Rectangle Fill="Aqua" Width="auto">
+                                        <Rectangle.Visibility>
+                                            <MultiBinding Converter="{StaticResource SelectedCellHelper}">
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex"/>
+
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
+
+                                                <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                                <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                            </MultiBinding>
+                                        </Rectangle.Visibility>
+                                    </Rectangle>
+                                    <TextBlock Width="70" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
+                                                <!-- Bind to the row index -->
+                                                <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
+                                                <!-- Bind to TimeSlotValues -->
+                                                <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Button  Grid.Row="3" Width="370" Height="30" Content="Book den valgte ladetid" Command="{Binding MakeBookingCommand}" Margin="0,10,0,0"/>
         </Grid>
-
-        <DataGrid
-            x:Name="myDataGrid"
-            AutoGenerateColumns="False"
-            ItemsSource="{Binding TimeSlotAvailabilityView}" 
-            AlternationCount="100" 
-            HeadersVisibility="None"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Grid.Row="2"
-            ColumnWidth="*"
-            RowHeight="50"
-            CanUserResizeRows="True"
-            CanUserAddRows="False"
-            SelectionUnit="Cell"
-            SelectionMode="Single"
-            SelectedCellsChanged="DataGrid_SelectedCellsChanged">
-
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Header="{Binding DataContext.DaysOfWeekDates[0], FallbackValue='Binding Error'}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Background="{Binding [0], Converter={StaticResource IntToColorConverter}}">
-                                <TextBlock Width="70" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                            <!-- Bind to the row index -->
-                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                            <!-- Bind to TimeSlotValues -->
-                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                                <Button 
-                                    Content="Bekræft" 
-                                    Command="{Binding Path=DataContext.MakeBookingCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                    CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=DataGrid}}">           
-                                    <Button.Visibility>
-                                        <MultiBinding Converter="{StaticResource ShowButtonHelper}">
-                                            <!-- row of button -->
-                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex"/>
-                                            <!-- column of button -->
-                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
-                                            <!-- selected row / timeslot -->
-                                            <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
-                                            <!-- selected column / day -->
-                                            <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
-                                        </MultiBinding>
-                                    </Button.Visibility>
-                                </Button>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[1], FallbackValue='Binding Error'}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid Height="Auto" Background="{Binding [1], Converter={StaticResource IntToColorConverter}}">
-                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                            <!-- Bind to the row index -->
-                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                            <!-- Bind to TimeSlotValues -->
-                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[2], FallbackValue='Binding Error'}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid Height="Auto" Background="{Binding [2], Converter={StaticResource IntToColorConverter}}">
-                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                            <!-- Bind to the row index -->
-                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                            <!-- Bind to TimeSlotValues -->
-                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[3], FallbackValue='Binding Error'}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid Height="Auto" Background="{Binding [3], Converter={StaticResource IntToColorConverter}}">
-                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                            <!-- Bind to the row index -->
-                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                            <!-- Bind to TimeSlotValues -->
-                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[4], FallbackValue='Binding Error'}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid Height="Auto" Background="{Binding [4], Converter={StaticResource IntToColorConverter}}">
-                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                            <!-- Bind to the row index -->
-                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                            <!-- Bind to TimeSlotValues -->
-                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>
-
-
+    </Border>
 </Page>
