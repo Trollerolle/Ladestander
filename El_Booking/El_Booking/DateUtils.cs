@@ -9,8 +9,9 @@ namespace El_Booking
 {
     public static class DateUtils
     {
-        public static int GetIso8601WeekOfYear(DateTime time)
+        public static int GetIso8601WeekOfYear(DateOnly date)
         {
+            DateTime time = date.ToDateTime(new TimeOnly());
             // Seriously cheat.  If its Monday, Tuesday or Wednesday, then it'll 
             // be the same week# as whatever Thursday, Friday or Saturday are,
             // and we always get those right
@@ -24,10 +25,10 @@ namespace El_Booking
             return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         }
 
-        public static DateOnly StartOfWeek(this DateTime dt)
+        public static DateOnly StartOfWeek(this DateOnly dt)
         {
             int diff = (7 + (dt.DayOfWeek - DayOfWeek.Monday)) % 7;
-            return DateOnly.FromDateTime( dt.AddDays(-1 * diff).Date);
+            return dt.AddDays(-1 * diff);
         }
     }
 }

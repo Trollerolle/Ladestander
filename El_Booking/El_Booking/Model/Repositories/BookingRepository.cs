@@ -121,7 +121,7 @@ namespace El_Booking.Model.Repositories
 			int chargingPointID = (int)reader["ChargingPointID"];
             DateOnly date = DateOnly.FromDateTime((DateTime)reader["Date_"]);
 			int bookingID = (int)reader["BookingID"];
-            TimeSlot timeSlot = _storer.TimeSlots.First(ts => ts.TimeSlotID == timeSlotID);
+            TimeSlot timeSlot = _storer.TimeSlotRepository.GetAll().First(ts => ts.TimeSlotID == timeSlotID);
 
 			return new Booking(timeSlot, chargingPointID, date, bookingID);
         }

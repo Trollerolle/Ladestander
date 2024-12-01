@@ -33,7 +33,7 @@ namespace El_Booking.Commands
         public override void Execute(object? parameter)
         {
 
-            IEnumerable<TimeSlot> timeSlots = _storer.TimeSlots;
+            IEnumerable<TimeSlot> timeSlots = _storer.TimeSlotRepository.GetAll();
             DateOnly date = _bookingViewModel.MondayOfWeek.AddDays((int)_bookingViewModel.SelectedDay);
 
             try

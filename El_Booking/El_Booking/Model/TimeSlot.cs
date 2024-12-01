@@ -9,7 +9,6 @@ namespace El_Booking.Model
 	public class TimeSlot
 	{
 		private int _timeSlotID;
-
 		public int TimeSlotID
 		{
 			get { return _timeSlotID; }
@@ -17,7 +16,6 @@ namespace El_Booking.Model
 		}
 
 		private TimeOnly _timeSlotStart;
-
 		public TimeOnly TimeSlotStart
 		{
 			get { return _timeSlotStart; }
@@ -25,18 +23,25 @@ namespace El_Booking.Model
 		}
 
 		private TimeOnly _timeSlotEnd;
-
 		public TimeOnly TimeSlotEnd
 		{
 			get { return _timeSlotEnd; }
 			set { _timeSlotEnd = value; }
 		}
 
-		public TimeSlot(int timeSlotID, TimeOnly timeSlotStart, TimeOnly timeSlotEnd) 
+		private bool _full;
+		public bool Full
+		{
+			get { return _full; }
+			set { _full = value; }
+		}
+
+		public TimeSlot(int timeSlotID, TimeOnly timeSlotStart, TimeOnly timeSlotEnd, bool full) 
 		{ 
 			this.TimeSlotID = timeSlotID;
 			this.TimeSlotStart = timeSlotStart;
 			this.TimeSlotEnd = timeSlotEnd;
+			this.Full = full;
 		}
 	}
 }

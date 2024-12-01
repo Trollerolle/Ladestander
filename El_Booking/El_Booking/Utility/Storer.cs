@@ -12,15 +12,14 @@ namespace El_Booking.Utility
     {
         public UserRepository UserRepository { get; }
         public BookingRepository BookingRepository { get; }
-        public IEnumerable<TimeSlot> TimeSlots { get; }
+        public TimeSlotRepository TimeSlotRepository { get; }
         public CarRepository CarRepository { get; }
 
         public Storer()
         {
             CarRepository = new CarRepository();
             UserRepository = new UserRepository(this);
-
-			TimeSlots = new TimeSlotRepository().GetAll();
+			TimeSlotRepository = new TimeSlotRepository();
 			BookingRepository = new BookingRepository(this);
 
         }

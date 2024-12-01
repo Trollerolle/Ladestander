@@ -39,7 +39,7 @@ namespace El_Booking.Model.Repositories
 			using (SqlConnection connection = new SqlConnection(_connString))
 			{
 				SqlCommand command = new SqlCommand(query, connection);
-				connection.Open();
+                connection.Open();
 
 				using (SqlDataReader reader = command.ExecuteReader())
 				{
@@ -49,7 +49,8 @@ namespace El_Booking.Model.Repositories
 						(
 							timeSlotID: (int)reader["TimeSlotID"],
 							timeSlotStart: TimeOnly.FromTimeSpan((TimeSpan)reader["TimeSlotStart"]),
-							timeSlotEnd: TimeOnly.FromTimeSpan((TimeSpan)reader["TimeSlotEnd"])
+							timeSlotEnd: TimeOnly.FromTimeSpan((TimeSpan)reader["TimeSlotEnd"]),
+							full: false
 						)
                         );
 					}
@@ -58,6 +59,32 @@ namespace El_Booking.Model.Repositories
 
 			return timeSlots;
 		}
+
+		public List<int[]> GetFullTimeSlot(DateOnly monday)
+		{
+            List<int[]> fullTimeSlots = new List<int[]>();
+            string query = "EXECUTE usp_GetTimeSlots1 @Monday;";
+
+            using (SqlConnection connection = new SqlConnection(_connString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Monday", monday);
+                connection.Open();
+
+                using SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    int timeSlotID = (int)reader["TimeSlotID"];
+                    int day = (int)((DateTime)reader["Date_"]).DayOfWeek;
+
+                    int[] fullTimeSlot = [timeSlotID, day];
+
+                    fullTimeSlots.Add(fullTimeSlot);
+                }
+            }
+
+            return fullTimeSlots;
+        }
 
 		public TimeSlot GetBy(string parameter)
         {

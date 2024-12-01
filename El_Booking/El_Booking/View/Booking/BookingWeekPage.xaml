@@ -39,16 +39,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="TextAlignment" Value="Center" />
-            <Setter Property="Text">
-                <Setter.Value>
-                    <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                        <!-- Bind to the row index -->
-                        <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                        <!-- Bind to TimeSlotValues -->
-                        <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                    </MultiBinding>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Text" Value="{Binding MondayStart}"/>
         </Style>
     </Page.Resources>
 
@@ -157,7 +148,7 @@
             <DataGrid
                 x:Name="myDataGrid"
                 AutoGenerateColumns="False"
-                ItemsSource="{Binding TimeSlotAvailabilityView}" 
+                ItemsSource="{Binding CurrentTimeSlots}" 
                 AlternationCount="100" 
                 HeadersVisibility="None"
                 HorizontalAlignment="Stretch"
@@ -172,50 +163,50 @@
                 SelectedCellsChanged="DataGrid_SelectedCellsChanged">
 
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="{Binding DataContext.DaysOfWeekDates[0], FallbackValue='Binding Error'}">
+                    <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding [0], Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                <Grid Background="{Binding MondayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
                                     <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[1], FallbackValue='Binding Error'}">
+                    <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding [1], Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                <Grid Background="{Binding TuesdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
                                     <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[2], FallbackValue='Binding Error'}">
+                    <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding [2], Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                <Grid Background="{Binding WednesdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
                                     <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[3], FallbackValue='Binding Error'}">
+                    <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding [3], Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                <Grid Background="{Binding ThursdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
                                     <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[4], FallbackValue='Binding Error'}">
+                    <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding [4], Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                <Grid Background="{Binding FridayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
                                     <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>

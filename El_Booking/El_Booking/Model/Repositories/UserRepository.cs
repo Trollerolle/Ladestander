@@ -70,11 +70,6 @@ namespace El_Booking.Model.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
         public User? GetBy(string param)
         {
             User? user = null;
@@ -144,6 +139,11 @@ namespace El_Booking.Model.Repositories
                 connection.Open();
                 command.ExecuteNonQuery();
             }
+        }
+
+        public IEnumerable<User> GetAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }
