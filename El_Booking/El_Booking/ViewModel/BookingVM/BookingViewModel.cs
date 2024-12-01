@@ -32,7 +32,7 @@ namespace El_Booking.ViewModel.BookingVM
             MakeBookingCommand = new MakeBookingCommand(this, storer);
             
 			// TimeSlotValues er dynamisk ud fra hvor mange TimeSlots der er i databasen.
-			TimeSlotValues = GenerateTimeSlotValues(_storer.TimeSlotRepository.GetAll());
+			TimeSlotValues = GenerateTimeSlotValues(_storer.TimeSlots);
 			TimeSlotAvailability = new bool[TimeSlotValues.Count, 5]; // 5 for antal dage i ugen
 
 			WeekNr = DateUtils.GetIso8601WeekOfYear(today);
@@ -41,11 +41,8 @@ namespace El_Booking.ViewModel.BookingVM
 			LoadFullTimeslots();
             SetDaysOfWeekDays();
 		}
-
-		const int numberOfChargers = 2; // antal ladere. Skal ændres til at være dynamisk, når ChargingPointRepository virker.
         
         private DateOnly _mondayOfWeek; // Dato for mandagen i den valgte uge.
-
         public DateOnly MondayOfWeek
         {
             get { return _mondayOfWeek; }
@@ -101,14 +98,14 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-        public List<List<int>> TimeSlotAvailabilityView
+        public ObservableCollection<ObservableCollection<int>> TimeSlotAvailabilityView
         {
             get
             {
-                var result = new List<List<int>>();
+                var result = new ObservableCollection<ObservableCollection<int>>();
                 for (int i = 0; i < _timeSlotAvailability.GetLength(0); i++)
                 {
-                    var row = new List<int>();
+                    var row = new ObservableCollection<int>();
                     for (int j = 0; j < _timeSlotAvailability.GetLength(1); j++)
                     {
                         row.Add(_timeSlotAvailability[i, j] ? 1 : 0);
@@ -119,9 +116,9 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-        List<string> GenerateTimeSlotValues(IEnumerable<TimeSlot> timeSlots)
+        ObservableCollection<string> GenerateTimeSlotValues(IEnumerable<TimeSlot> timeSlots)
         {
-            List<string> timeSlotsParameter = new List<string>();
+            ObservableCollection<string> timeSlotsParameter = new ObservableCollection<string>();
             foreach (TimeSlot timeSlot in timeSlots)
             {
                 timeSlotsParameter.Add(timeSlot.TimeSlotStart.ToString(@"HH\:mm")); // Konverter til string
@@ -198,8 +195,8 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-        private List<string> _timeSlotValues;
-        public List<string> TimeSlotValues
+        private ObservableCollection<string> _timeSlotValues;
+        public ObservableCollection<string> TimeSlotValues
         {
             get { return _timeSlotValues; }
             set

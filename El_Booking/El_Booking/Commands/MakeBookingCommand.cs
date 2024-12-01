@@ -33,7 +33,7 @@ namespace El_Booking.Commands
         public override void Execute(object? parameter)
         {
 
-            IEnumerable<TimeSlot> timeSlots = _storer.TimeSlotRepository.GetAll();
+            IEnumerable<TimeSlot> timeSlots = _storer.TimeSlots;
             DateOnly date = _bookingViewModel.MondayOfWeek.AddDays((int)_bookingViewModel.SelectedDay);
 
             try
@@ -41,19 +41,17 @@ namespace El_Booking.Commands
                 Booking newBooking = new Booking()
                 {
                     TimeSlot = timeSlots.ElementAt((int)_bookingViewModel.SelectedTimeSlot),
-                    ChargingPointID = -1,
                     Date = date,
                 };
 
-                //_storer.BookingRepository.Add(newBooking);
+                _storer.BookingRepository.Add(newBooking);
 
                 MessageBox.Show($"Din booking er gennemført. Gå til \"Din Booking\" for at se detaljer", "Succes", MessageBoxButton.OK);
 
             }
             catch (Exception ex)
             {
-                throw ex;
-                //MessageBox.Show(" fejl besked som skal vises ", "Fejl", MessageBoxButton.OK);
+                MessageBox.Show(" fejl besked som skal vises ", "Fejl", MessageBoxButton.OK);
             }
         }
 

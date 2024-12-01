@@ -175,7 +175,7 @@
                     <DataGridTemplateColumn Header="{Binding DataContext.DaysOfWeekDates[0], FallbackValue='Binding Error'}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding [0], Converter={StaticResource IntToColorConverter}}">
+                                <Grid Background="{Binding [0], Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
                                     <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>
@@ -185,7 +185,7 @@
                     <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[1], FallbackValue='Binding Error'}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding [1], Converter={StaticResource IntToColorConverter}}">
+                                <Grid Background="{Binding [1], Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
                                     <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>
@@ -195,7 +195,7 @@
                     <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[2], FallbackValue='Binding Error'}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding [2], Converter={StaticResource IntToColorConverter}}">
+                                <Grid Background="{Binding [2], Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
                                     <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>
@@ -205,7 +205,7 @@
                     <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[3], FallbackValue='Binding Error'}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding [3], Converter={StaticResource IntToColorConverter}}">
+                                <Grid Background="{Binding [3], Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
                                     <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>
@@ -215,7 +215,7 @@
                     <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[4], FallbackValue='Binding Error'}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding [4], Converter={StaticResource IntToColorConverter}}">
+                                <Grid Background="{Binding [4], Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
                                     <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
                                 </Grid>

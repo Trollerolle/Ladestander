@@ -14,12 +14,10 @@ namespace El_Booking.Model.Repositories
     {
 		private App currentApp;
 		private string _connString => currentApp.ConnectionString;
-		public List<TimeSlot> timeSlots => GetAll().ToList();
 
         public TimeSlotRepository()
         {
 			currentApp = Application.Current as App;
-			//timeSlots = GetAll().ToList();
 		}
 
 		public void Add(TimeSlot entity)
@@ -63,34 +61,8 @@ namespace El_Booking.Model.Repositories
 
 		public TimeSlot GetBy(string parameter)
         {
-            TimeSlot timeSlot = null;
-
-            string query = "EXEC [dbo].[usp_GetTimeSlot] @Parameter;";
-
-            using (SqlConnection connection = new SqlConnection(_connString))
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Parameter", int.Parse(parameter));
-                connection.Open();
-
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        timeSlot = new TimeSlot
-                        (
-                            timeSlotID: (int)reader["TimeSlotID"],
-                            timeSlotStart: (TimeOnly)reader["TimeSlotStart"],
-							timeSlotEnd: (TimeOnly)reader["TimeSlotEnd"]
-
-						);
-                    }
-                }
-            }
-
-            return timeSlot;
+            throw new NotImplementedException();
         }
-
 
         public void Update(TimeSlot entity)
         {

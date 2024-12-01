@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using El_Booking.Utility;
 using Microsoft.Data.SqlClient;
 using Windows.System;
 
@@ -11,14 +13,14 @@ namespace El_Booking.Model.Repositories
 {
     public class BookingRepository : IRepository<Booking>
     {
-        private App currentApp;
+        private readonly App currentApp;
         private string _connString => currentApp.ConnectionString;
-        readonly IRepository<TimeSlot> _timeSlotRepo;
+        private readonly Storer _storer;
 
-        public BookingRepository( IRepository<TimeSlot> timeSlotRepo)
+        public BookingRepository(Storer storer)
         {
 			currentApp = Application.Current as App;
-            _timeSlotRepo = timeSlotRepo;
+            _storer = storer;
         }
 
         public void Add(Booking booking)
@@ -26,15 +28,15 @@ namespace El_Booking.Model.Repositories
 
             int carID = currentApp.CurrentUser.Car.CarID;
 
-            string query = "EXEC [dbo].[usp_AddBooking] @Date, @TimeSlotID, @ChargingPointID, @CarID;";
+            string query = "EXEC usp_AddBooking1 @Date, @TimeSlotID, @CarID;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Date", booking.Date.ToString("yyyy-MM-dd"));
                 command.Parameters.AddWithValue("@TimeSlotID", booking.TimeSlot.TimeSlotID);
-                command.Parameters.AddWithValue("@ChargingPointID", booking.ChargingPointID);
                 command.Parameters.AddWithValue("@CarID", carID);
+
                 connection.Open();
                 command.ExecuteNonQuery();
             }
@@ -53,31 +55,9 @@ namespace El_Booking.Model.Repositories
             }
         }
 
-        // bliver ikke pt. brugt
         public IEnumerable<Booking> GetAll()
         {
-            List<Booking> bookings = new List<Booking>();
-            DateOnly todaysDate = DateOnly.FromDateTime(DateTime.Today);
-
-            string query = "EXEC [dbo].usp_GetBookings;";
-
-            using (SqlConnection connection = new SqlConnection(_connString))
-            using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                connection.Open();
-
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        bookings.Add(
-                            InstantiateBooking(reader)
-                            );
-                    }
-                }
-            }
-
-            return bookings;
+            throw new NotImplementedException();
         }
 
         // bruges til at hente aktuelle bookinger for den uge der vises i BookingView
@@ -99,7 +79,7 @@ namespace El_Booking.Model.Repositories
                     int timeSlot = (int)reader["TimeSlotID"] -1; // -1 fordi C# indeks starter på 0
                     int day = (int)((DateTime)reader["Date_"]).DayOfWeek -1;
 
-                    int[] fullTimeSlot = new int[] { timeSlot, day };
+                    int[] fullTimeSlot = [timeSlot, day];
 
                     fullTimeSlots.Add(fullTimeSlot);
                 }
@@ -137,12 +117,11 @@ namespace El_Booking.Model.Repositories
 
         Booking InstantiateBooking(SqlDataReader reader)
         {
-            
             int timeSlotID = (int)reader["TimeSlotID"];
 			int chargingPointID = (int)reader["ChargingPointID"];
             DateOnly date = DateOnly.FromDateTime((DateTime)reader["Date_"]);
 			int bookingID = (int)reader["BookingID"];
-            TimeSlot timeSlot = ((TimeSlotRepository)_timeSlotRepo).timeSlots.Find(ts => ts.TimeSlotID == timeSlotID);
+            TimeSlot timeSlot = _storer.TimeSlots.First(ts => ts.TimeSlotID == timeSlotID);
 
 			return new Booking(timeSlot, chargingPointID, date, bookingID);
         }

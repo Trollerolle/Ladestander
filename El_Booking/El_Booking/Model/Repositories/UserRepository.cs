@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using El_Booking.Utility;
+using Microsoft.Data.SqlClient;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Windows;
@@ -10,13 +11,14 @@ namespace El_Booking.Model.Repositories
     // ændre til internal
     public class UserRepository : IRepository<User>
     {
-		private App currentApp;
+		private readonly App currentApp;
 		private string _connString => currentApp.ConnectionString;
-        readonly IRepository<Car> _carRepo;
-		public UserRepository(IRepository<Car> carRepo)
+        private readonly Storer _storer;
+
+		public UserRepository(Storer storer)
         {
 			currentApp = Application.Current as App;
-            _carRepo = carRepo;
+            _storer = storer;
         }
 
         public void Add(User user)
@@ -73,8 +75,6 @@ namespace El_Booking.Model.Repositories
             throw new NotImplementedException();
         }
 
-
-        // der skal findes en løsning på Car
         public User? GetBy(string param)
         {
             User? user = null;
@@ -108,7 +108,7 @@ namespace El_Booking.Model.Repositories
                         {
 
                             int carID = (int)reader["CarID"];
-                            user.Car = ((CarRepository)_carRepo).GetBy(carID.ToString());
+                            user.Car = _storer.CarRepository.GetBy(carID.ToString());
 
                         }
                         catch (Exception InvalidCastException)
