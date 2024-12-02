@@ -46,6 +46,9 @@ namespace El_Booking.Commands
 
                 //_storer.BookingRepository.Add(newBooking);
 
+                _bookingViewModel.HasBooking = true;
+                _bookingViewModel.ChangeWeek(0);
+
                 MessageBox.Show($"Din booking er gennemført. Gå til \"Din Booking\" for at se detaljer", "Succes", MessageBoxButton.OK);
 
             }

@@ -22,10 +22,8 @@ namespace El_Booking.ViewModel.BookingVM
         Page BookingWeekPage_ { get; }
         Page YourBookingPage_ { get; }
 
-        public MainBookingViewModel(Storer storer, Navigation navigation, DateTime? startingDate = null)
+        public MainBookingViewModel(Storer storer, Navigation navigation)
         {
-            DateTime today = startingDate ?? DateTime.Today; // til test, så datoen den starter på kan ændres. Ellers dd.
-
             LogOutCommand = new LogOutCommand(navigation, storer);
 
             UserPage_ = new UserPage()

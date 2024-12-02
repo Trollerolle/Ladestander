@@ -40,7 +40,12 @@ namespace El_Booking.ViewModel.BookingVM
 			WeekNr = DateUtils.GetIso8601WeekOfYear(_startingDate);
 			MondayOfWeek = _startingDate.StartOfWeek();
 
-			LoadCurrentTimeSlots(MondayOfWeek);
+			GetCurrentTimeSlots(MondayOfWeek);
+            GetCurrentDays(MondayOfWeek);
+
+            var CurrentApp = Application.Current as App;
+
+            HasBooking = CurrentApp.CurrentUser.Booking is null ? false : true;
 		}
 
         private ObservableCollection<TimeSlotViewModel> _currentTimeSlots;
@@ -54,7 +59,7 @@ namespace El_Booking.ViewModel.BookingVM
             }
         } 
 
-        void LoadCurrentTimeSlots(DateOnly monday)
+        private void GetCurrentTimeSlots(DateOnly monday)
         {
             IEnumerable<TimeSlot> availableTimeSlots = _storer.TimeSlotRepository.GetAll();
 
@@ -80,6 +85,27 @@ namespace El_Booking.ViewModel.BookingVM
 
             CurrentTimeSlots = new ObservableCollection<TimeSlotViewModel>(timeSlots);
 
+        }
+
+        private ObservableCollection<string> _currentDays;
+        public ObservableCollection<string> CurrentDays
+        {
+            get => _currentDays;
+            set
+            {
+                _currentDays = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void GetCurrentDays(DateOnly monday)
+        {
+            List<string> days = new List<string>();
+            
+            for (int i = 0; i < 5; i++)
+                days.Add(monday.AddDays(i).ToString("dd/MM")); // hvorfor formaterer den / som . ??
+
+            CurrentDays = new ObservableCollection<string>(days);
         }
 
         private int _weekNr; // ugenummeret for den valgte uge
@@ -115,6 +141,16 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
+        private bool _hasBooking;
+        public bool HasBooking 
+        {   get => _hasBooking;
+            set
+            {   
+                _hasBooking = value;
+                OnPropertyChanged();
+            }
+        }
+
         public RelayCommand ChangeWeekForwardCommand => new RelayCommand(
         execute => ChangeWeek(1),
         canExecute => NotMoreThanMonthInFuture()
@@ -132,7 +168,7 @@ namespace El_Booking.ViewModel.BookingVM
             SelectedDay = null;
             SelectedTimeSlot = null;
             WeekNr = DateUtils.GetIso8601WeekOfYear(MondayOfWeek);
-            LoadCurrentTimeSlots(MondayOfWeek) ;
+            GetCurrentTimeSlots(MondayOfWeek) ;
         }
 
         private bool NotLessThanCurrentWeek()

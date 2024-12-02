@@ -104,11 +104,11 @@ namespace El_Booking.Model.Repositories
 
                             int carID = (int)reader["CarID"];
                             user.Car = _storer.CarRepository.GetBy(carID.ToString());
+                            user.Booking = _storer.BookingRepository.GetBy(carID.ToString());
 
                         }
                         catch (Exception InvalidCastException)
                         {
-
                         }
                     }
                 }

@@ -60,34 +60,6 @@ namespace El_Booking.Model.Repositories
             throw new NotImplementedException();
         }
 
-        // bruges til at hente aktuelle bookinger for den uge der vises i BookingView
-        public List<int[]> GetFullTimeSlotsForWeek(DateOnly mondayOfWeek)
-        {
-
-            List<int[]> fullTimeSlots = new List<int[]>();
-            string query = "EXECUTE usp_GetFullTimeSlotsForWeek @Date;";
-
-            using (SqlConnection connection = new SqlConnection(_connString))
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Date", mondayOfWeek);
-                connection.Open();
-
-                using SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    int timeSlot = (int)reader["TimeSlotID"] -1; // -1 fordi C# indeks starter på 0
-                    int day = (int)((DateTime)reader["Date_"]).DayOfWeek -1;
-
-                    int[] fullTimeSlot = [timeSlot, day];
-
-                    fullTimeSlots.Add(fullTimeSlot);
-                }
-            }
-
-            return fullTimeSlots;
-        }
-
         public Booking? GetBy(string carID)
         {
             Booking? booking = null;
