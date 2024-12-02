@@ -76,7 +76,7 @@ namespace El_Booking.ViewModel.BookingVM
             };
             YourBookingPage_ = new YourBookingPage()
             {
-                DataContext = new YourBookingViewModel(storer, this)
+                DataContext = new YourBookingViewModel(this)
             };
 
             CurrentPage = BookingWeekPage_;

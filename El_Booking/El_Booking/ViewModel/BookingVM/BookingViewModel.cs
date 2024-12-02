@@ -13,6 +13,7 @@ using System.Windows.Input;
 using El_Booking.View.Booking;
 using System.Windows;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace El_Booking.ViewModel.BookingVM
 {
@@ -24,7 +25,9 @@ namespace El_Booking.ViewModel.BookingVM
         public DateOnly MondayOfWeek { get; set; } // Dato for mandagen i den valgte uge.
         private readonly DateOnly _startingDate;
         private readonly Storer _storer;
-        public MainBookingViewModel _mainBookingViewModel { get; set; }
+
+        public MainBookingViewModel MainBookingViewModel { get; }
+
 		public BookingViewModel(Storer storer, MainBookingViewModel mainBookingViewModel)
 		{
             _startingDate = DateOnly.FromDateTime(DateTime.Today.AddDays(-1));
@@ -32,7 +35,7 @@ namespace El_Booking.ViewModel.BookingVM
                 _startingDate = _startingDate.AddDays(2);
             else if (_startingDate.DayOfWeek == DayOfWeek.Sunday)
                 _startingDate = _startingDate.AddDays(1);
-            _mainBookingViewModel = mainBookingViewModel;
+            MainBookingViewModel = mainBookingViewModel;
             _storer = storer;
 
             MakeBookingCommand = new MakeBookingCommand(this, storer);
@@ -43,7 +46,14 @@ namespace El_Booking.ViewModel.BookingVM
 			GetCurrentTimeSlots(MondayOfWeek);
             GetCurrentDays(MondayOfWeek);
 
-		}
+            MainBookingViewModel.PropertyChanged += OnMainBookingViewModelPropertyChanged;
+
+        }
+
+        private void OnMainBookingViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged();
+        }
 
         private ObservableCollection<TimeSlotViewModel> _currentTimeSlots;
         public ObservableCollection<TimeSlotViewModel> CurrentTimeSlots
@@ -138,8 +148,7 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-        public bool HasBooking 
-        {   get => _mainBookingViewModel.CurrentBooking != null ? true : false; }
+        public bool HasBooking => MainBookingViewModel.CurrentBooking != null ? true : false;
 
         public RelayCommand ChangeWeekForwardCommand => new RelayCommand(
         execute => ChangeWeek(1),

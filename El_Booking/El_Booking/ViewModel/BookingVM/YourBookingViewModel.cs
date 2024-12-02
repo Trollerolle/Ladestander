@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,20 +16,23 @@ namespace El_Booking.ViewModel.BookingVM
 {
     public class YourBookingViewModel : BaseViewModel
     {
-        public MainBookingViewModel _mainBookingViewModel { get; set; }
-        public User CurrentUser => _mainBookingViewModel.CurrentUser;
+        public MainBookingViewModel MainBookingViewModel { get; }
 
-        public Booking? CurrentBooking => _mainBookingViewModel.CurrentBooking;
-        private readonly Storer _storer;
+        public User CurrentUser => MainBookingViewModel.CurrentUser;
 
-        public YourBookingViewModel(Storer storer, MainBookingViewModel mainBookingViewModel, DateTime? startingDate = null)
+        public Booking? CurrentBooking => MainBookingViewModel.CurrentBooking;
+
+        public YourBookingViewModel(MainBookingViewModel mainBookingViewModel)
         {
-            DateTime today = startingDate ?? DateTime.Today; // til test, så datoen den starter på kan ændres. Ellers dd.
-            _storer = storer;
-            _mainBookingViewModel = mainBookingViewModel;
+            MainBookingViewModel = mainBookingViewModel;
 
+            MainBookingViewModel.PropertyChanged += OnMainBookingViewModelPropertyChanged;
         }
 
+        private void OnMainBookingViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged();
+        }
 
         public RelayCommand DeleteBookingCommand => new RelayCommand(
                 execute => DeleteBooking(),
@@ -47,9 +51,7 @@ namespace El_Booking.ViewModel.BookingVM
             if (result == MessageBoxResult.Yes)
             {
 				//_bookingRepo.Delete(UsersBooking.BookingID);
-				_mainBookingViewModel.CurrentBooking = null;
-                
-                OnPropertyChanged();
+				MainBookingViewModel.CurrentBooking = null;
             }
         }
     }
