@@ -63,19 +63,20 @@ namespace El_Booking.Model.Repositories
 		public List<int[]> GetFullTimeSlot(DateOnly monday)
 		{
             List<int[]> fullTimeSlots = new List<int[]>();
-            string query = "EXECUTE usp_GetTimeSlots1 @Monday;";
+            string query = "EXECUTE usp_GetFullTimeSlotsForWeek @Date;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Monday", monday);
+                command.Parameters.AddWithValue("@Date", monday);
                 connection.Open();
 
                 using SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    int timeSlotID = (int)reader["TimeSlotID"];
-                    int day = (int)((DateTime)reader["Date_"]).DayOfWeek;
+					int day = (int)((DateTime)reader["Date_"]).DayOfWeek;
+					int timeSlotID = (int)reader["TimeSlotID"];
+
 
                     int[] fullTimeSlot = [timeSlotID, day];
 

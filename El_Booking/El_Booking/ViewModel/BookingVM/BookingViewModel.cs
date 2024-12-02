@@ -24,15 +24,15 @@ namespace El_Booking.ViewModel.BookingVM
         public DateOnly MondayOfWeek { get; set; } // Dato for mandagen i den valgte uge.
         private readonly DateOnly _startingDate;
         private readonly Storer _storer;
-
-		public BookingViewModel(Storer storer)
+        private readonly MainBookingViewModel _mainBookingViewModel;
+		public BookingViewModel(Storer storer, MainBookingViewModel mainBookingViewModel)
 		{
             _startingDate = DateOnly.FromDateTime(DateTime.Today.AddDays(-1));
             if (_startingDate.DayOfWeek == DayOfWeek.Saturday)
                 _startingDate = _startingDate.AddDays(2);
             else if (_startingDate.DayOfWeek == DayOfWeek.Sunday)
                 _startingDate = _startingDate.AddDays(1);
-
+            _mainBookingViewModel = mainBookingViewModel;
             _storer = storer;
 
             MakeBookingCommand = new MakeBookingCommand(this, storer);
@@ -141,15 +141,8 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-        private bool _hasBooking;
         public bool HasBooking 
-        {   get => _hasBooking;
-            set
-            {   
-                _hasBooking = value;
-                OnPropertyChanged();
-            }
-        }
+        {   get => _mainBookingViewModel.CurrentBooking != null ? true : false; }
 
         public RelayCommand ChangeWeekForwardCommand => new RelayCommand(
         execute => ChangeWeek(1),

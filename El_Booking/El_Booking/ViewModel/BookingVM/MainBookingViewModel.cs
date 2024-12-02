@@ -15,6 +15,16 @@ namespace El_Booking.ViewModel.BookingVM
 {
     public class MainBookingViewModel : BaseViewModel
     {
+        private Booking? _currentBooking;
+
+        public Booking? CurrentBooking
+        {
+            get { return _currentBooking; }
+            set { 
+                _currentBooking = value;
+                OnPropertyChanged();
+                }
+        }
 
         public ICommand LogOutCommand { get; }
 
@@ -32,11 +42,11 @@ namespace El_Booking.ViewModel.BookingVM
             };
             BookingWeekPage_ = new BookingWeekPage()
             {
-                DataContext = new BookingViewModel(storer)
+                DataContext = new BookingViewModel(storer, this)
             };
             YourBookingPage_ = new YourBookingPage()
             {
-                DataContext = new YourBookingViewModel(storer)
+                DataContext = new YourBookingViewModel(storer, this)
             };
 
             CurrentPage = BookingWeekPage_;

@@ -28,7 +28,7 @@ namespace El_Booking.Model.Repositories
 
             int carID = currentApp.CurrentUser.Car.CarID;
 
-            string query = "EXEC usp_AddBooking1 @Date, @TimeSlotID, @CarID;";
+            string query = "EXEC usp_AddBooking @Date, @TimeSlotID, @CarID;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
             {

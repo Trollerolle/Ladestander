@@ -15,13 +15,14 @@ namespace El_Booking.Commands
     public class MakeBookingCommand : CommandBase
     {
         private BookingViewModel _bookingViewModel { get; }
+        private YourBookingViewModel _yourBookingViewModel { get; set; }
         private Storer _storer { get; }
-
-        public MakeBookingCommand(BookingViewModel bookingViewModel, Storer storer)
+        private readonly MainBookingViewModel _mainBookingViewModel;
+        public MakeBookingCommand(BookingViewModel bookingViewModel, Storer storer, MainBookingViewModel mainBookingViewModel)
         {
             _bookingViewModel = bookingViewModel;
             _storer = storer;
-
+            _mainBookingViewModel = mainBookingViewModel;
             _bookingViewModel.PropertyChanged += OnViewModelPropertyChanged;
         }
 
@@ -44,12 +45,14 @@ namespace El_Booking.Commands
                     Date = date,
                 };
 
-                //_storer.BookingRepository.Add(newBooking);
+                _storer.BookingRepository.Add(newBooking);
 
-                _bookingViewModel.HasBooking = true;
+                _mainBookingViewModel.CurrentBooking = newBooking;
                 _bookingViewModel.ChangeWeek(0);
+				var CurrentApp = Application.Current as App;
+                //CurrentApp.CurrentUser.Booking = newBooking;
 
-                MessageBox.Show($"Din booking er gennemført. Gå til \"Din Booking\" for at se detaljer", "Succes", MessageBoxButton.OK);
+				MessageBox.Show($"Din booking er gennemført. Gå til \"Din Booking\" for at se detaljer", "Succes", MessageBoxButton.OK);
 
             }
             catch (Exception ex)

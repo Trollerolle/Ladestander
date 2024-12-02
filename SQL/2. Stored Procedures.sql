@@ -109,22 +109,52 @@ GO
 --EXEC usp_GetPlannedBookings @monday;
 
 -- usp_AddBooking 
-CREATE OR ALTER PROC usp_AddBooking 
+CREATE OR ALTER PROC usp_AddBooking
 (
 	@Date DATE,
 	@TimeSlotID INT,
-	@ChargingPointID INT,
-	@CarID NVarChar(50)
+	@CarID INT
 )
 AS
+DECLARE @ChargingPoint INT = 
+	(
+		SELECT TOP 1
+			[dbo].[ChargingPoints].[ChargingPointID]
+		FROM
+			[dbo].[ChargingPoints]
+			LEFT JOIN 
+				(SELECT [ChargingPointID] AS bcp FROM [dbo].[Bookings] WHERE [Date_] = @Date AND [TimeSlotID] = @TimeSlotID) AS Bookings_
+			ON 
+				[dbo].[ChargingPoints].[ChargingPointID] = Bookings_.bcp
+		WHERE
+			InService <> 0
+			AND 
+			bcp IS NULL
+		ORDER BY
+			[ChargingPointID]%2 DESC, [ChargingPointID] -- Hvis ulige tal ønskes: DESC, [ChargingPointID]
+	)
+
+DECLARE @msg NVARCHAR(100) = 'No available Charging Points on Date: ' + FORMAT(@Date, 'yyyy-MM-dd', 'en-US') + ', Time Slot: ' + CAST(@TimeslotID AS NVarChar(5));
+IF @ChargingPoint IS NULL
+	THROW 50001, @msg, 1;
+ELSE
+
 BEGIN TRANSACTION
 	INSERT INTO [dbo].[Bookings] ([Date_], [TimeSlotID], [ChargingPointID], [CarID]) VALUES
-	(@Date, @TimeSlotID, @ChargingPointID, @CarID);
+	(@Date, @TimeSlotID, @ChargingPoint, @CarID);
 
 	IF @@ERROR <> 0
 		ROLLBACK TRANSACTION
 	ELSE
-		COMMIT TRANSACTION
+		COMMIT TRANSACTION 
+GO
+
+EXEC sys.sp_addmessage
+	@msgnum = 50001,
+    @severity = 1,
+    @msgtext = N'(%s)',
+	@lang = 'us_english',
+	@replace = 'REPLACE';
 GO
 
 -- usp_GetBooking
