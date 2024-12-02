@@ -129,6 +129,8 @@ namespace El_Booking.ViewModel.BookingVM
         {
             MondayOfWeek = MondayOfWeek.AddDays(7 * difference);
 
+            SelectedDay = null;
+            SelectedTimeSlot = null;
             WeekNr = DateUtils.GetIso8601WeekOfYear(MondayOfWeek);
             LoadCurrentTimeSlots(MondayOfWeek) ;
         }

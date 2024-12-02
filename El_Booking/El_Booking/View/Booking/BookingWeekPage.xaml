@@ -15,19 +15,44 @@
         <converters:IntToColorConverter x:Key="IntToColorConverter" />
         <converters:TimeSlotLabelHelper x:Key="TimeSlotLabelHelper"/>
         <converters:SelectedCellHelper x:Key="SelectedCellHelper"/>
-
         
         <!-- Rectangle to see if cell is selected -->
         <Style x:Key="HighlightedRectangleStyle" TargetType="Rectangle">
-            <Setter Property="Fill" Value="Aqua" />
+            <Setter Property="Fill" Value="LightGreen" />
             <Setter Property="Width" Value="Auto" />
             <Setter Property="Visibility">
                 <Setter.Value>
-                    <MultiBinding Converter="{StaticResource SelectedCellHelper}">
-                        <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                        <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex" />
+                    <MultiBinding Converter="{StaticResource SelectedCellHelper}"  >
+                        <Binding Path="Column.DisplayIndex" RelativeSource="{RelativeSource AncestorType=DataGridCell}" />
                         <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
                         <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                        <Binding />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Button to confirm selected time slot-->
+        <Style x:Key="ConfirmButton" TargetType="Button">
+            <Setter Property="Content" Value="Bekræft"/>
+            <Setter Property="Command">
+                <Setter.Value>
+                    <Binding Path="DataContext.MakeBookingCommand" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Visibility">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource SelectedCellHelper}">
+
+                        <!-- column of button -->
+                        <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
+
+                        <!-- selected row / time slot -->
+                        <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+
+                        <!-- selected column / day -->
+                        <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                        <Binding />
                     </MultiBinding>
                 </Setter.Value>
             </Setter>
@@ -35,6 +60,7 @@
         
         <!-- TextBloc with timeslot start -->
         <Style x:Key="TimeSlotTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Black"/>
             <Setter Property="Width" Value="70" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -168,7 +194,10 @@
                             <DataTemplate>
                                 <Grid Background="{Binding MondayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
-                                    <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                        <Button Style="{StaticResource ConfirmButton}"/>
+                                    </StackPanel>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -178,7 +207,10 @@
                             <DataTemplate>
                                 <Grid Background="{Binding TuesdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
-                                    <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                        <Button Style="{StaticResource ConfirmButton}"/>
+                                    </StackPanel>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -188,7 +220,10 @@
                             <DataTemplate>
                                 <Grid Background="{Binding WednesdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
-                                    <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                        <Button Style="{StaticResource ConfirmButton}"/>
+                                    </StackPanel>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -198,7 +233,10 @@
                             <DataTemplate>
                                 <Grid Background="{Binding ThursdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
-                                    <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                        <Button Style="{StaticResource ConfirmButton}"/>
+                                    </StackPanel>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -208,7 +246,10 @@
                             <DataTemplate>
                                 <Grid Background="{Binding FridayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
-                                    <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                        <Button Style="{StaticResource ConfirmButton}"/>
+                                    </StackPanel>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

@@ -44,7 +44,7 @@ namespace El_Booking.Commands
                     Date = date,
                 };
 
-                _storer.BookingRepository.Add(newBooking);
+                //_storer.BookingRepository.Add(newBooking);
 
                 MessageBox.Show($"Din booking er gennemført. Gå til \"Din Booking\" for at se detaljer", "Succes", MessageBoxButton.OK);
 

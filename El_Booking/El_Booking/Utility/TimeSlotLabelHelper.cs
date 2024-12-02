@@ -36,16 +36,43 @@ namespace El_Booking.Utility
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
 
-            int? selectedRow = (int?)values[2];
-            int ? selectedColumn = (int?)values[3];
+            int columnIndex = (int)values[0];
 
-            if (values[0] is int rowIndex && values[1] is int columIndex && selectedColumn is not null)
+            int? selectedRow = (int?)values[1];
+            int ? selectedColumn = (int?)values[2];
+            
+            TimeSlotViewModel row = (TimeSlotViewModel)values[3];
+
+            bool dayIsFull = false;
+            switch (columnIndex)
             {
-                if (rowIndex == selectedRow && columIndex == selectedColumn)
+                case 0:
+                    dayIsFull = row.MondayFull;
+                    break;
+                case 1:
+                    dayIsFull = row.TuesdayFull;
+                    break;
+                case 2:
+                    dayIsFull = row.WednesdayFull;
+                    break;
+                case 3:
+                    dayIsFull = row.ThursdayFull;
+                    break;
+                case 4:
+                    dayIsFull = row.FridayFull;
+                    break;
+            }
+
+            if (!dayIsFull && selectedColumn is not null)
+            {
+
+                if (row.TimeSlotID -1 == selectedRow && columnIndex == selectedColumn)
                 {
                     return Visibility.Visible;
                 }
+
             }
+
             return Visibility.Collapsed;
         }
 
