@@ -17,18 +17,16 @@ namespace El_Booking.ViewModel.BookingVM
 
     public class UserViewModel : BaseViewModel
     {
-
-		public User_ _currentUser => _currentApp.CurrentUser;
-		public App _currentApp { get; init; }
+        public MainBookingViewModel MainBookingViewModel;
+		public User_ _currentUser => MainBookingViewModel.CurrentUser;
         public ICommand UpdateCarCommand { get; }
         public ICommand UpdateUserCommand { get; }
 
-		public UserViewModel(Storer storer)
+		public UserViewModel(Storer storer, MainBookingViewModel mainBookingViewModel)
         {
 			UpdateCarCommand = new UpdateCarCommand(this, storer);
 			UpdateUserCommand = new UpdateUserCommand(this, storer);
-
-            _currentApp = (App)Application.Current;
+            MainBookingViewModel = mainBookingViewModel;
         }
 
         public string UserEmail
@@ -49,8 +47,8 @@ namespace El_Booking.ViewModel.BookingVM
                 OnPropertyChanged();
             }
         }
-        public string? CarDetails => GetCarDetails(_currentUser.Car);
-        public string? LicensePlate => GetLicensePlate(_currentUser.Car);
+        public string? CarDetails => GetCarDetails(MainBookingViewModel.CurrentCar);
+        public string? LicensePlate => GetLicensePlate(MainBookingViewModel.CurrentCar);
 
         static string? GetLicensePlate(Car? car)
         {

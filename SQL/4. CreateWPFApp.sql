@@ -36,9 +36,6 @@ GRANT EXECUTE ON OBJECT::[dbo].[usp_Login]
     TO WPFApp;
 GO
 
-GRANT EXECUTE ON OBJECT::[dbo].[usp_GetCarBy]
-    TO WPFApp;
-GO
 
 
 -- opret et login til alle brugere til connectionstrig.
@@ -69,6 +66,10 @@ USE [El_Booking]
 
     -- usp_AddBooking 
 GRANT EXECUTE ON OBJECT::[dbo].[usp_AddBooking]
+    TO WPFAccount;
+GO
+
+GRANT EXECUTE ON OBJECT::[dbo].[usp_GetCarBy]
     TO WPFAccount;
 GO
 

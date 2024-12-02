@@ -18,11 +18,11 @@ namespace El_Booking.Commands
         private YourBookingViewModel _yourBookingViewModel { get; set; }
         private Storer _storer { get; }
         private readonly MainBookingViewModel _mainBookingViewModel;
-        public MakeBookingCommand(BookingViewModel bookingViewModel, Storer storer, MainBookingViewModel mainBookingViewModel)
+        public MakeBookingCommand(BookingViewModel bookingViewModel, Storer storer)
         {
             _bookingViewModel = bookingViewModel;
             _storer = storer;
-            _mainBookingViewModel = mainBookingViewModel;
+            _mainBookingViewModel = _bookingViewModel._mainBookingViewModel;
             _bookingViewModel.PropertyChanged += OnViewModelPropertyChanged;
         }
 
@@ -43,14 +43,13 @@ namespace El_Booking.Commands
                 {
                     TimeSlot = timeSlots.ElementAt((int)_bookingViewModel.SelectedTimeSlot),
                     Date = date,
+                    CarID = _mainBookingViewModel.CurrentCar.CarID
                 };
 
                 _storer.BookingRepository.Add(newBooking);
 
                 _mainBookingViewModel.CurrentBooking = newBooking;
                 _bookingViewModel.ChangeWeek(0);
-				var CurrentApp = Application.Current as App;
-                //CurrentApp.CurrentUser.Booking = newBooking;
 
 				MessageBox.Show($"Din booking er gennemført. Gå til \"Din Booking\" for at se detaljer", "Succes", MessageBoxButton.OK);
 

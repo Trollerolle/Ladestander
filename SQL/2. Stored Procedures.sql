@@ -34,23 +34,31 @@ CREATE OR ALTER PROC usp_GetUserBy
 )
 AS
 BEGIN
+DECLARE @Date_ DATE = GETDATE();
 	SELECT 
 		Users.[UserID],
 		Users.[FirstName],
 		Users.[LastName],
 		Users.[Email],
 		Users.[PhoneNumber],
-		Cars.[CarID]
+		Cars.[CarID],
+		B.[BookingID]
 	FROM
 		[dbo].[Users] 
 	LEFT JOIN
 		[dbo].[Cars]
 	ON
 		Users.UserID = Cars.UserID
+	LEFT JOIN
+		(SELECT CarID, BookingID From [dbo].[Bookings] WHERE Date_ >= @Date_) AS B
+	ON 
+		Cars.CarID = B.CarID
 	WHERE
 		[Email] = @Parameter
 		OR
 		[PhoneNumber] = @Parameter
+
+
 END;
 GO
 

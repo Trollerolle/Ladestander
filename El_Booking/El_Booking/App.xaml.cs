@@ -22,14 +22,6 @@ namespace El_Booking
         public string ConnectionString => Configuration.GetSection("ConnectionStrings")[Connection];
         public IConfigurationRoot Configuration { get; private set; }
 
-        private User _currentUser;
-
-        public User CurrentUser
-        {
-            get { return _currentUser; }
-            set { _currentUser = value; }
-        }
-
         private string _connection = "AppConnection";
 
         public string Connection
@@ -48,19 +40,6 @@ namespace El_Booking
             _connection = "AppConnection";
         }
 
-        public void SetCurrentUser(Model.User user)
-        {
-            CurrentUser = user;
-        }
-
-        public void ClearCurrentUser()
-        {
-            CurrentUser = null;
-        }
-        public void SetCurrentUsersCar(Model.Car car)
-        {
-            CurrentUser.Car = car;
-        }
         public App()
         {
 

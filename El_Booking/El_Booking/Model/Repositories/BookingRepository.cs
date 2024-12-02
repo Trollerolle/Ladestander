@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using El_Booking.Utility;
 using Microsoft.Data.SqlClient;
+using Windows.Devices.SmartCards;
 using Windows.System;
 
 namespace El_Booking.Model.Repositories
@@ -26,8 +27,6 @@ namespace El_Booking.Model.Repositories
         public void Add(Booking booking)
         {
 
-            int carID = currentApp.CurrentUser.Car.CarID;
-
             string query = "EXEC usp_AddBooking @Date, @TimeSlotID, @CarID;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
@@ -35,7 +34,7 @@ namespace El_Booking.Model.Repositories
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Date", booking.Date.ToString("yyyy-MM-dd"));
                 command.Parameters.AddWithValue("@TimeSlotID", booking.TimeSlot.TimeSlotID);
-                command.Parameters.AddWithValue("@CarID", carID);
+                command.Parameters.AddWithValue("@CarID", booking.CarID);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -94,8 +93,9 @@ namespace El_Booking.Model.Repositories
             DateOnly date = DateOnly.FromDateTime((DateTime)reader["Date_"]);
 			int bookingID = (int)reader["BookingID"];
             TimeSlot timeSlot = _storer.TimeSlotRepository.GetAll().First(ts => ts.TimeSlotID == timeSlotID);
+            int carID = (int)reader["CarID"];
 
-			return new Booking(timeSlot, chargingPointID, date, bookingID);
+			return new Booking(timeSlot, chargingPointID, date, bookingID, carID);
         }
     }
 }

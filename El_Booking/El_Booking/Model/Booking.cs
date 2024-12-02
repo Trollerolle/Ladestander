@@ -35,13 +35,16 @@ namespace El_Booking.Model
 			get { return _bookingID; }
 			set { _bookingID = value; }
 		}
+		public int CarID { get; set; }
 
-		public Booking(TimeSlot timeSlot, int chargingPointID, DateOnly date, int bookingID)
+		public Booking(TimeSlot timeSlot, int chargingPointID, DateOnly date, int bookingID, int carID)
 		{
-			this.BookingID = bookingID;
-			_timeSlot = timeSlot;
-			_chargingPointID = chargingPointID;
-			this._date = date;
+			BookingID = bookingID;
+			TimeSlot = timeSlot;
+			ChargingPointID = chargingPointID;
+			Date = date;
+			CarID = carID;
+
 		}
 
 		public Booking()

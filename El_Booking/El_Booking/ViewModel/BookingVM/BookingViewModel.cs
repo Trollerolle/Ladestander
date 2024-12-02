@@ -24,7 +24,7 @@ namespace El_Booking.ViewModel.BookingVM
         public DateOnly MondayOfWeek { get; set; } // Dato for mandagen i den valgte uge.
         private readonly DateOnly _startingDate;
         private readonly Storer _storer;
-        private readonly MainBookingViewModel _mainBookingViewModel;
+        public MainBookingViewModel _mainBookingViewModel { get; set; }
 		public BookingViewModel(Storer storer, MainBookingViewModel mainBookingViewModel)
 		{
             _startingDate = DateOnly.FromDateTime(DateTime.Today.AddDays(-1));
@@ -43,9 +43,6 @@ namespace El_Booking.ViewModel.BookingVM
 			GetCurrentTimeSlots(MondayOfWeek);
             GetCurrentDays(MondayOfWeek);
 
-            var CurrentApp = Application.Current as App;
-
-            HasBooking = CurrentApp.CurrentUser.Booking is null ? false : true;
 		}
 
         private ObservableCollection<TimeSlotViewModel> _currentTimeSlots;

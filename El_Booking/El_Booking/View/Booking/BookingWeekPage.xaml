@@ -156,7 +156,7 @@
                     <Style TargetType="DataGrid">
                         <Setter Property="IsEnabled" Value="True" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasBooking}" Value="True">
+                            <DataTrigger Binding="{Binding HasBooking, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                 <Setter Property="IsEnabled" Value="False" />
                             </DataTrigger>
                         </Style.Triggers>

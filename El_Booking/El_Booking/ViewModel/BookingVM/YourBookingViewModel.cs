@@ -15,53 +15,25 @@ namespace El_Booking.ViewModel.BookingVM
 {
     public class YourBookingViewModel : BaseViewModel
     {
+        public MainBookingViewModel _mainBookingViewModel { get; set; }
+        public User CurrentUser => _mainBookingViewModel.CurrentUser;
 
-        private Booking? _usersBooking;
-        public Booking? UsersBooking
-        {
-            get { return _usersBooking; }
-            set
-            {
-                _usersBooking = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private User _currentUser;
-
-        public User CurrentUser
-        {
-            get { return _currentUser; }
-            set { _currentUser = value; }
-        }
-
+        public Booking? CurrentBooking => _mainBookingViewModel.CurrentBooking;
         private readonly Storer _storer;
 
-        public YourBookingViewModel(Storer storer, DateTime? startingDate = null)
+        public YourBookingViewModel(Storer storer, MainBookingViewModel mainBookingViewModel, DateTime? startingDate = null)
         {
             DateTime today = startingDate ?? DateTime.Today; // til test, så datoen den starter på kan ændres. Ellers dd.
             _storer = storer;
+            _mainBookingViewModel = mainBookingViewModel;
 
-            var currentApp = Application.Current as App;
-            CurrentUser = currentApp?.CurrentUser;
-
-            UsersBooking = GetBooking(CurrentUser);
         }
 
-        public Booking? GetBooking(User user)
-        {
-            return user.Car is not null ? _storer.BookingRepository.GetBy(user.Car.CarID.ToString()) : null;
-        }
 
         public RelayCommand DeleteBookingCommand => new RelayCommand(
                 execute => DeleteBooking(),
-                canExecute => HasBooking()
+                canExecute => CurrentBooking is not null
                 );
-
-        bool HasBooking()
-        {
-            return UsersBooking != null;
-        }
 
         public void DeleteBooking()
         {
@@ -74,8 +46,9 @@ namespace El_Booking.ViewModel.BookingVM
 
             if (result == MessageBoxResult.Yes)
             {
-                //_bookingRepo.Delete(UsersBooking.BookingID);
-                UsersBooking = null;
+				//_bookingRepo.Delete(UsersBooking.BookingID);
+				_mainBookingViewModel.CurrentBooking = null;
+                
                 OnPropertyChanged();
             }
         }

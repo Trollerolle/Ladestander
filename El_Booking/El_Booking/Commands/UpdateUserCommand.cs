@@ -58,7 +58,7 @@ namespace El_Booking.Commands
 			try
 			{
 				_storer.UserRepository.Update(userToUpdate);
-				_userViewModel._currentApp.SetCurrentUser(userToUpdate);
+				_userViewModel.MainBookingViewModel.CurrentUser = userToUpdate;
 				_userViewModel.UserEmail = userToUpdate.Email;
 				_userViewModel.UserPhoneNumber = userToUpdate.TelephoneNumber;
 				ClearProfileFields();

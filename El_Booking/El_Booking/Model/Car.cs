@@ -12,13 +12,14 @@ namespace El_Booking.Model
 		public string Brand { get; set; }
         public string Model { get; set; }
         public int CarID { get; set; }
-
-        public Car(int carID, string licensePlate, string brand, string model) 
+        public int UserID { get; set; }
+        public Car(int carID, string licensePlate, string brand, string model, int userID) 
         {
             CarID = carID;
 			LicensePlate = licensePlate;
 			Brand = brand;
             Model = model;
+            UserID = userID;
 
         }
         public Car() 

@@ -15,6 +15,29 @@ namespace El_Booking.ViewModel.BookingVM
 {
     public class MainBookingViewModel : BaseViewModel
     {
+        private User _currentUser;
+
+        public User CurrentUser
+        {
+            get { return _currentUser; }
+            set {  
+                _currentUser = value;
+                OnPropertyChanged();
+                }
+        }
+
+        private Car? _currentCar;
+
+        public Car? CurrentCar
+        {
+            get { return _currentCar; }
+            set {
+				_currentCar = value;
+                OnPropertyChanged();
+                }
+        }
+
+
         private Booking? _currentBooking;
 
         public Booking? CurrentBooking
@@ -32,13 +55,20 @@ namespace El_Booking.ViewModel.BookingVM
         Page BookingWeekPage_ { get; }
         Page YourBookingPage_ { get; }
 
-        public MainBookingViewModel(Storer storer, Navigation navigation)
+        public MainBookingViewModel(Storer storer, Navigation navigation, User user)
         {
-            LogOutCommand = new LogOutCommand(navigation, storer);
+            LogOutCommand = new LogOutCommand(navigation, storer, this);
 
-            UserPage_ = new UserPage()
+            CurrentUser = user;
+
+            CurrentCar = user.CarID is not null ? storer.CarRepository.GetBy(user.UserID.ToString()) : null;
+
+			CurrentBooking = user.BookingID is not null ? storer.BookingRepository.GetBy(user.CarID.ToString()) : null;
+
+
+			UserPage_ = new UserPage()
             {
-                DataContext = new UserViewModel(storer)
+                DataContext = new UserViewModel(storer, this)
             };
             BookingWeekPage_ = new BookingWeekPage()
             {

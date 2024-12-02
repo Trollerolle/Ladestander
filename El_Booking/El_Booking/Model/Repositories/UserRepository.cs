@@ -2,7 +2,9 @@
 using Microsoft.Data.SqlClient;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using Windows.System;
 
@@ -87,29 +89,19 @@ namespace El_Booking.Model.Repositories
                     if (reader.Read())
                     {
 
-                        
+
                         user = new User
                         (
-                            userID: (int)reader["UserID"],
+                            userID: (int?)reader["UserID"],
                             email: (string)reader["Email"],
                             telephoneNumber: (string)reader["PhoneNumber"],
                             firstName: (string)reader["FirstName"],
                             lastName: (string)reader["LastName"],
                             password: null,
-                            car: null
+                            carID: reader["CarID"] is not DBNull ? (int?)reader["CarID"] : null,
+							bookingID: reader["BookingID"] is not DBNull ? (int?)reader["BookingID"] : null
 
-                        );
-                        try
-                        {
-
-                            int carID = (int)reader["CarID"];
-                            user.Car = _storer.CarRepository.GetBy(carID.ToString());
-                            user.Booking = _storer.BookingRepository.GetBy(carID.ToString());
-
-                        }
-                        catch (Exception InvalidCastException)
-                        {
-                        }
+						);
                     }
                 }
             }
