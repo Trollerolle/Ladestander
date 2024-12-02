@@ -103,7 +103,7 @@ namespace El_Booking.ViewModel.BookingVM
             List<string> days = new List<string>();
             
             for (int i = 0; i < 5; i++)
-                days.Add(monday.AddDays(i).ToString("dd/MM")); // hvorfor formaterer den / som . ??
+                days.Add(monday.AddDays(i).ToString("dd/MM/yyyy")); // hvorfor formaterer den / som . ??
 
             CurrentDays = new ObservableCollection<string>(days);
         }
@@ -182,17 +182,15 @@ namespace El_Booking.ViewModel.BookingVM
             DateOnly limit = DateOnly.FromDateTime(DateTime.Today);
             return MondayOfWeek <= (limit.AddDays(30));
         }
+
+        public int RowHeight { get; set; } = 252;
     }
 
     public class TimeSlotViewModel
     {
         public readonly int TimeSlotID;
 
-        public string MondayStart { get; set; }
-        public string TuesdayStart { get; set; }
-        public string WednesdayStart { get; set; }
-        public string ThursdayStart { get; set; }
-        public string FridayStart { get; set; }
+        public string StartTime { get; set; }
 
         public bool MondayFull { get; set; }
         public bool TuesdayFull { get; set; }
@@ -204,12 +202,7 @@ namespace El_Booking.ViewModel.BookingVM
         {
             TimeSlotID = timeSlot.TimeSlotID;
 
-            string startTime = timeSlot.TimeSlotStart.ToString("HH-mm");
-            MondayStart = startTime;
-            TuesdayStart = startTime;
-            WednesdayStart = startTime;
-            ThursdayStart = startTime;
-            FridayStart = startTime;
+            StartTime = timeSlot.TimeSlotStart.ToString("HH:mm");
 
             MondayFull = false;
             TuesdayFull = false;

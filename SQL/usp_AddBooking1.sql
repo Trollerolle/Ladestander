@@ -19,6 +19,8 @@ DECLARE @ChargingPoint INT =
 			InService <> 0
 			AND 
 			bcp IS NULL
+		ORDER BY
+			[ChargingPointID]%2, [ChargingPointID] -- Hvis ulige tal ønskes: DESC, [ChargingPointID]
 	)
 
 DECLARE @msg NVARCHAR(100) = 'No available Charging Points on Date: ' + FORMAT(@Date, 'yyyy-MM-dd', 'en-US') + ', Time Slot: ' + CAST(@TimeslotID AS NVarChar(5));
@@ -36,7 +38,7 @@ BEGIN TRANSACTION
 		COMMIT TRANSACTION 
 GO
 
-EXEC usp_AddBooking1 '2024-12-04', 2, 1
+EXEC usp_AddBooking1 '2024-12-10', 2, 1
 
 EXEC sys.sp_addmessage
 	@msgnum = 50001,

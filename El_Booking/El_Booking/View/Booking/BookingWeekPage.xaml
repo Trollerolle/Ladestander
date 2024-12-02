@@ -65,7 +65,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="TextAlignment" Value="Center" />
-            <Setter Property="Text" Value="{Binding MondayStart}"/>
+            <Setter Property="Text" Value="{Binding StartTime}"/>
         </Style>
         
         <!-- column headers -->
@@ -142,7 +142,7 @@
                 VerticalAlignment="Stretch"
                 Grid.Row="2"
                 RowHeight="50" 
-                Height="202"
+                Height="{Binding RowHeight}"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
                 IsReadOnly="True"
