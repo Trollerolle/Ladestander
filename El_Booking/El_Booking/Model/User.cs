@@ -117,12 +117,12 @@ namespace El_Booking.Model
             }
         }
 
-		private Car? _Car;
+		private Car? _car;
 
 		public Car? Car
 		{
-			get { return _Car; }
-			set { _Car = value; }
+			get { return _car; }
+			set { _car = value; }
 		}
 
 		// til oprettelse af bruger

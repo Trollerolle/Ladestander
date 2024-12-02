@@ -163,7 +163,7 @@ CREATE OR ALTER PROC [dbo].[usp_UpdateUser]
 AS
 BEGIN TRANSACTION
 
-	IF @Password <> null
+	IF @Password is not null
 		UPDATE [dbo].[Users]
 		SET FirstName = @FirstName, LastName = @LastName, Email = @Email, PhoneNumber = @PhoneNumber, Password = @Password
 		WHERE UserID = @UserID;
