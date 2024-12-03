@@ -83,7 +83,7 @@ namespace El_Booking.Model.Repositories
 							licensePlate: (string)reader["LicensePlate"],
 							brand: (string)reader["Brand"],
 							model: (string)reader["Model"],
-							userID: (int)reader["UserID"]
+							userID: int.Parse(parameter)
 						);
 					}
 				}

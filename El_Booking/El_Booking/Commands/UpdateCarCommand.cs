@@ -48,6 +48,7 @@ namespace El_Booking.Commands
 				else
 				{
 					_storer.CarRepository.Add(carToUpdate);
+					carToUpdate = _storer.CarRepository.GetBy(_userViewModel.MainBookingViewModel.CurrentUser.UserID.ToString());
 				}
 				_userViewModel.MainBookingViewModel.CurrentCar = carToUpdate;
 
