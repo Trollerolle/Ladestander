@@ -110,4 +110,31 @@ GROUP BY
 HAVING 
 	COUNT(*) = (SELECT COUNT(*) FROM ChargingPoints);
 GO
+
+CREATE OR ALTER VIEW ActiveBookings AS
+SELECT 
+    [BookingID],
+    [Date_],
+    Bookings.[TimeSlotID],
+    [ChargingPointID],
+    [CarID],
+	TimeSlots.TimeSlotEnd
+FROM [El_Booking].[dbo].[Bookings]
+	Left join dbo.TimeSlots
+	on dbo.Bookings.TimeSlotID = TimeSlots.TimeSlotID
+	WHERE
+		[Date_] >= convert(Date,GETDATE())--@DATEONLY;
+		AND
+		(
+			[Date_] >= convert(Date,GETDATE())
+			OR 
+			(
+			[Date_] >= convert(Date,GETDATE()) 
+			AND
+			TimeSlots.TimeSlotEnd >= convert(Time(0), dateadd(MINUTE, -15, GETDATE()))
+			)
+		);
+
+GO
+		
 ------------------------------------------------

@@ -49,7 +49,7 @@ namespace El_Booking.Commands
                 };
 
                 _storer.BookingRepository.Add(newBooking);
-
+                newBooking = _storer.BookingRepository.GetBy(newBooking.CarID.ToString());
                 _bookingViewModel.MainBookingViewModel.CurrentBooking = newBooking;
                 _bookingViewModel.ChangeWeek(0);
 

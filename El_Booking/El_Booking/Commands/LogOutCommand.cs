@@ -30,6 +30,8 @@ namespace El_Booking.Commands
         public override void Execute(object? parameter)
         {
             MainBookingViewModel = null;
+			var currentApp = Application.Current as App;
+			currentApp?.ClearConnection();
 			_navigation.CurrentViewModel = new LoginViewModel(_storer, _navigation);
         }
     }

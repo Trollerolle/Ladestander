@@ -22,10 +22,12 @@ namespace El_Booking.ViewModel.BookingVM
 
         public Booking? CurrentBooking => MainBookingViewModel.CurrentBooking;
 
-        public YourBookingViewModel(MainBookingViewModel mainBookingViewModel)
+        private readonly Storer _storer;
+
+        public YourBookingViewModel(Storer storer, MainBookingViewModel mainBookingViewModel)
         {
             MainBookingViewModel = mainBookingViewModel;
-
+            _storer = storer;
             MainBookingViewModel.PropertyChanged += OnMainBookingViewModelPropertyChanged;
         }
 
@@ -50,7 +52,7 @@ namespace El_Booking.ViewModel.BookingVM
 
             if (result == MessageBoxResult.Yes)
             {
-				//_bookingRepo.Delete(UsersBooking.BookingID);
+				_storer.BookingRepository.Delete(MainBookingViewModel.CurrentBooking.BookingID);
 				MainBookingViewModel.CurrentBooking = null;
             }
         }

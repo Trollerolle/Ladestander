@@ -172,24 +172,13 @@ AS
 --Kommentarer er til at teste for en specifik dag eventuelt i historisk data.
 --DECLARE @DATEONLY DATE = '20241119';
 SELECT TOP 1
-    [BookingID],
-    [Date_],
-    Bookings.[TimeSlotID],
-    [ChargingPointID],
-    [CarID],
-	TimeSlots.TimeSlotEnd
-FROM [El_Booking].[dbo].[Bookings]
-	Left join dbo.TimeSlots
-	on dbo.Bookings.TimeSlotID = TimeSlots.TimeSlotID
+    *
+FROM dbo.ActiveBookings
 	WHERE
 		[CarID] = @CarID
-		AND
-		[Date_] >= convert(Date,GETDATE())--@DATEONLY;
-		AND 
-		TimeSlots.TimeSlotEnd >= convert(Time(0), dateadd(MINUTE, -15, GETDATE()))
 	ORDER BY
 		BookingID DESC;
-		
+
 GO
 
 --EXECUTE usp_GetFullTimeSlotsForWeek '2024-10-14';
