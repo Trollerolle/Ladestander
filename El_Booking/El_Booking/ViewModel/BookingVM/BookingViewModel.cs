@@ -94,6 +94,17 @@ namespace El_Booking.ViewModel.BookingVM
 
         }
 
+        private void SetTimeSlotsAsPassed()
+        {
+
+            //CurrentDAy;
+            //CurrentTime //9:00 Kigger 9:10 
+
+            //timeSlots.Find(x => x.TimeSlotID == timeSlotID).SetDayFull(day);
+
+        }
+
+
         private ObservableCollection<string> _currentDays;
         public ObservableCollection<string> CurrentDays
         {
@@ -192,11 +203,11 @@ namespace El_Booking.ViewModel.BookingVM
 
         public string StartTime { get; set; }
 
-        public bool MondayFull { get; set; }
-        public bool TuesdayFull { get; set; }
-        public bool WednesdayFull { get; set; }
-        public bool ThursdayFull { get; set; }
-        public bool FridayFull { get; set; }
+        public int MondayFull { get; set; }
+        public int TuesdayFull { get; set; }
+        public int WednesdayFull { get; set; }
+        public int ThursdayFull { get; set; }
+        public int FridayFull { get; set; }
 
         public TimeSlotViewModel(TimeSlot timeSlot)
         {
@@ -204,11 +215,11 @@ namespace El_Booking.ViewModel.BookingVM
 
             StartTime = timeSlot.TimeSlotStart.ToString("HH:mm");
 
-            MondayFull = false;
-            TuesdayFull = false;
-            WednesdayFull = false;
-            ThursdayFull = false;
-            FridayFull = false;
+            MondayFull = 0;
+            TuesdayFull = 0;
+            WednesdayFull = 0;
+            ThursdayFull = 0;
+            FridayFull = 0;
         }
 
         public void SetDayFull(int day)
@@ -216,19 +227,63 @@ namespace El_Booking.ViewModel.BookingVM
             switch (day)
             {
                 case 0:
-                    MondayFull = true;
+                    MondayFull = 1;
                     break;
                 case 1:
-                    TuesdayFull = true;
+                    TuesdayFull = 1;
                     break;
                 case 2:
-                    WednesdayFull = true;
+                    WednesdayFull = 1;
                     break;
                 case 3:
-                    ThursdayFull = true;
+                    ThursdayFull = 1;
                     break;
                 case 4:
-                    FridayFull = true;
+                    FridayFull = 1;
+                    break;
+            }
+        }
+
+        public void SetPassedAsGrey(int day)
+        {
+            switch (day)
+            {
+                case 0:
+                    MondayFull = 2;
+                    break;
+                case 1:
+                    TuesdayFull = 2;
+                    break;
+                case 2:
+                    WednesdayFull = 2;
+                    break;
+                case 3:
+                    ThursdayFull = 2;
+                    break;
+                case 4:
+                    FridayFull = 2;
+                    break;
+            }
+        }
+
+        public void SetYoursAsOrange(int day)
+        {
+            switch (day)
+            {
+                case 0:
+                    MondayFull = 3;
+                    break;
+                case 1:
+                    TuesdayFull = 3;
+                    break;
+                case 2:
+                    WednesdayFull = 3;
+                    break;
+                case 3:
+                    ThursdayFull = 3;
+                    break;
+                case 4:
+                    FridayFull = 3;
                     break;
             }
         }
