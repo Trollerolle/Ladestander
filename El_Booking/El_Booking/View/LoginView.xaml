@@ -27,7 +27,7 @@
                 TextDecorations="Underline" 
                 HorizontalAlignment="Center"/>
             <TextBlock 
-                Text="Bruger" 
+                Text="E-mail" 
                 Margin="0,40,0,0"/>
             <TextBox 
                 Width="100" 
