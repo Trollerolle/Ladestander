@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,53 +16,28 @@ namespace El_Booking.ViewModel.BookingVM
 {
     public class YourBookingViewModel : BaseViewModel
     {
+        public MainBookingViewModel MainBookingViewModel { get; }
 
-        private Booking? _usersBooking;
-        public Booking? UsersBooking
+        public User CurrentUser => MainBookingViewModel.CurrentUser;
+
+        public Booking? CurrentBooking => MainBookingViewModel.CurrentBooking;
+
+        public YourBookingViewModel(MainBookingViewModel mainBookingViewModel)
         {
-            get { return _usersBooking; }
-            set
-            {
-                _usersBooking = value;
-                OnPropertyChanged();
-            }
+            MainBookingViewModel = mainBookingViewModel;
+
+            MainBookingViewModel.PropertyChanged += OnMainBookingViewModelPropertyChanged;
         }
 
-        private User _currentUser;
-
-        public User CurrentUser
+        private void OnMainBookingViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            get { return _currentUser; }
-            set { _currentUser = value; }
-        }
-
-        private readonly Storer _storer;
-
-        public YourBookingViewModel(Storer storer, DateTime? startingDate = null)
-        {
-            DateTime today = startingDate ?? DateTime.Today; // til test, så datoen den starter på kan ændres. Ellers dd.
-            _storer = storer;
-
-            var currentApp = Application.Current as App;
-            CurrentUser = currentApp?.CurrentUser;
-
-            UsersBooking = GetBooking(CurrentUser);
-        }
-
-        public Booking? GetBooking(User user)
-        {
-            return user.Car is not null ? _storer.BookingRepository.GetBy(user.Car.CarID.ToString()) : null;
+            OnPropertyChanged();
         }
 
         public RelayCommand DeleteBookingCommand => new RelayCommand(
                 execute => DeleteBooking(),
-                canExecute => HasBooking()
+                canExecute => CurrentBooking is not null
                 );
-
-        bool HasBooking()
-        {
-            return UsersBooking != null;
-        }
 
         public void DeleteBooking()
         {
@@ -74,9 +50,8 @@ namespace El_Booking.ViewModel.BookingVM
 
             if (result == MessageBoxResult.Yes)
             {
-                //_bookingRepo.Delete(UsersBooking.BookingID);
-                UsersBooking = null;
-                OnPropertyChanged();
+				//_bookingRepo.Delete(UsersBooking.BookingID);
+				MainBookingViewModel.CurrentBooking = null;
             }
         }
     }

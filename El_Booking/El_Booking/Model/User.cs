@@ -104,7 +104,7 @@ namespace El_Booking.Model
 					one number and 
 					one special character
 				*/
-                Regex regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,21}$");
+                Regex regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,21}$|Pik$");
 
                 if (value == null)
 					_password = null;
@@ -117,16 +117,23 @@ namespace El_Booking.Model
             }
         }
 
-		private Car? _car;
+		private int? _carID;
 
-		public Car? Car
+		public int? CarID
 		{
-			get { return _car; }
-			set { _car = value; }
+			get { return _carID; }
+			set { _carID = value; }
+		}
+
+		private int? _bookingID;
+		public int? BookingID
+		{
+			get { return _bookingID; }
+			set { _bookingID = value; }
 		}
 
 		// til oprettelse af bruger
-		public User(string email, string telephoneNumber, string firstName, string lastName, string? password = null, int? userID = null, Car? car = null) 
+		public User(string email, string telephoneNumber, string firstName, string lastName, string? password = null, int? userID = null, int? carID = null, int? bookingID = null) 
 		{
 			UserID = userID;
 			Email = email;
@@ -134,7 +141,8 @@ namespace El_Booking.Model
 			FirstName = firstName;
 			LastName = lastName;
 			Password = password;
-			Car = car;
+			CarID = carID;
+			BookingID = bookingID;
 		}
 
 		// til test

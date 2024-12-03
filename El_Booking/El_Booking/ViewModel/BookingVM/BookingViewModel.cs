@@ -9,47 +9,111 @@ using System.Threading.Tasks;
 using El_Booking.Utility;
 using El_Booking.Commands;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+using El_Booking.View.Booking;
+using System.Windows;
+using System.Diagnostics;
+using System.ComponentModel;
 
 namespace El_Booking.ViewModel.BookingVM
 {
     public class BookingViewModel : BaseViewModel
     {
 
-		private readonly Storer _storer;
+        public ICommand MakeBookingCommand { get; }
 
-		public BookingViewModel(Storer storer, DateTime? startingDate = null)
+        public DateOnly MondayOfWeek { get; set; } // Dato for mandagen i den valgte uge.
+        private readonly DateOnly _startingDate;
+        private readonly Storer _storer;
+
+        public MainBookingViewModel MainBookingViewModel { get; }
+
+		public BookingViewModel(Storer storer, MainBookingViewModel mainBookingViewModel)
 		{
-			DateTime today = startingDate ?? DateTime.Today; // til test, så datoen den starter på kan ændres. Ellers dd.
+            _startingDate = DateOnly.FromDateTime(DateTime.Today.AddDays(-1));
+            if (_startingDate.DayOfWeek == DayOfWeek.Saturday)
+                _startingDate = _startingDate.AddDays(2);
+            else if (_startingDate.DayOfWeek == DayOfWeek.Sunday)
+                _startingDate = _startingDate.AddDays(1);
+            MainBookingViewModel = mainBookingViewModel;
+            _storer = storer;
 
-			_storer = storer;
+            MakeBookingCommand = new MakeBookingCommand(this, storer);
 
-			// TimeSlotValues er dynamisk ud fra hvor mange TimeSlots der er i databasen.
-			TimeSlotValues = GenerateTimeSlotValues(_storer.TimeSlotRepository.GetAll());
-			TimeSlotAvailability = new bool[TimeSlotValues.Count, 5]; // 5 for antal dage i ugen
+			WeekNr = DateUtils.GetIso8601WeekOfYear(_startingDate);
+			MondayOfWeek = _startingDate.StartOfWeek();
 
-			WeekNr = DateUtils.GetIso8601WeekOfYear(today);
-			MondayOfWeek = today.StartOfWeek();
+			GetCurrentTimeSlots(MondayOfWeek);
+            GetCurrentDays(MondayOfWeek);
 
-			LoadFullTimeslots();
-            SetDaysOfWeekDays();
-		}
+            MainBookingViewModel.PropertyChanged += OnMainBookingViewModelPropertyChanged;
 
-		const int numberOfChargers = 2; // antal ladere. Skal ændres til at være dynamisk, når ChargingPointRepository virker.
+        }
 
-        public Booking? booking; // Brugerens booking, hvis han har en.
-        
-        private DateOnly _mondayOfWeek; // Dato for mandagen i den valgte uge.
-
-        public DateOnly MondayOfWeek
+        private void OnMainBookingViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            get { return _mondayOfWeek; }
-            set 
-            { 
-                _mondayOfWeek = value;
+            OnPropertyChanged();
+        }
+
+        private ObservableCollection<TimeSlotViewModel> _currentTimeSlots;
+        public ObservableCollection<TimeSlotViewModel> CurrentTimeSlots
+        {
+            get => _currentTimeSlots;
+            set
+            {
+                _currentTimeSlots = value;
+                OnPropertyChanged();
+            }
+        } 
+
+        private void GetCurrentTimeSlots(DateOnly monday)
+        {
+            IEnumerable<TimeSlot> availableTimeSlots = _storer.TimeSlotRepository.GetAll();
+
+            List<TimeSlotViewModel> timeSlots = new List<TimeSlotViewModel>();
+
+            foreach (TimeSlot timeSlot in availableTimeSlots)
+            {
+                timeSlots.Add(new TimeSlotViewModel(timeSlot));
+            }
+
+            List<int[]> fullSlots = _storer.TimeSlotRepository.GetFullTimeSlot(monday);
+
+            if (fullSlots.Count > 0)
+            {
+                foreach (int[] fullSlot in fullSlots)
+                {
+                    int timeSlotID = fullSlot[0];
+                    int day = fullSlot[1];
+
+                    timeSlots.Find(x => x.TimeSlotID == timeSlotID).SetDayFull(day);
+                }
+            }
+
+            CurrentTimeSlots = new ObservableCollection<TimeSlotViewModel>(timeSlots);
+
+        }
+
+        private ObservableCollection<string> _currentDays;
+        public ObservableCollection<string> CurrentDays
+        {
+            get => _currentDays;
+            set
+            {
+                _currentDays = value;
                 OnPropertyChanged();
             }
         }
 
+        private void GetCurrentDays(DateOnly monday)
+        {
+            List<string> days = new List<string>();
+            
+            for (int i = 0; i < 5; i++)
+                days.Add(monday.AddDays(i).ToString("dd/MM/yyyy")); // hvorfor formaterer den / som . ??
+
+            CurrentDays = new ObservableCollection<string>(days);
+        }
 
         private int _weekNr; // ugenummeret for den valgte uge
         public int WeekNr
@@ -84,46 +148,7 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-        private bool[,] _timeSlotAvailability; // false = ikke fyldt
-        public bool[,] TimeSlotAvailability
-        {
-            get { return _timeSlotAvailability; }
-            set
-            {
-                _timeSlotAvailability = value;
-                OnPropertyChanged(nameof(TimeSlotAvailability));
-                OnPropertyChanged(nameof(TimeSlotAvailabilityView));
-            }
-        }
-
-        public List<List<int>> TimeSlotAvailabilityView
-        {
-            get
-            {
-                var result = new List<List<int>>();
-                for (int i = 0; i < _timeSlotAvailability.GetLength(0); i++)
-                {
-                    var row = new List<int>();
-                    for (int j = 0; j < _timeSlotAvailability.GetLength(1); j++)
-                    {
-                        row.Add(_timeSlotAvailability[i, j] ? 1 : 0);
-                    }
-                    result.Add(row);
-                }
-                return result;
-            }
-        }
-
-        List<string> GenerateTimeSlotValues(IEnumerable<TimeSlot> timeSlots)
-        {
-            List<string> timeSlotsParameter = new List<string>();
-            foreach (TimeSlot timeSlot in timeSlots)
-            {
-                timeSlotsParameter.Add(timeSlot.TimeSlotStart.ToString(@"HH\:mm")); // Konverter til string
-            }
-            return timeSlotsParameter;
-        }
-
+        public bool HasBooking => MainBookingViewModel.CurrentBooking != null ? true : false;
 
         public RelayCommand ChangeWeekForwardCommand => new RelayCommand(
         execute => ChangeWeek(1),
@@ -139,78 +164,72 @@ namespace El_Booking.ViewModel.BookingVM
         {
             MondayOfWeek = MondayOfWeek.AddDays(7 * difference);
 
-            WeekNr = DateUtils.GetIso8601WeekOfYear(MondayOfWeek.ToDateTime(new TimeOnly()));
-            SetDaysOfWeekDays();
-            LoadFullTimeslots() ;
+            SelectedDay = null;
+            SelectedTimeSlot = null;
+            WeekNr = DateUtils.GetIso8601WeekOfYear(MondayOfWeek);
+            GetCurrentTimeSlots(MondayOfWeek) ;
         }
 
-        //public List<DateOnly> daysOfWeekDates = new List<DateOnly>();
-        private ObservableCollection<string> _daysOfWeekDates = new ObservableCollection<string>();
-
-        public ObservableCollection<string> DaysOfWeekDates
-        {
-            get { return _daysOfWeekDates; }
-            set 
-            { 
-                _daysOfWeekDates = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        public void SetDaysOfWeekDays()
-        {
-            DaysOfWeekDates.Insert(0, MondayOfWeek.ToShortDateString());
-            
-            for (int i = 1; i < 5; i++) //i starter på 1 fordi vi har puttet mandag ind
-            {
-                DaysOfWeekDates.Insert(i, MondayOfWeek.AddDays(i).ToShortDateString());
-            }
-            OnPropertyChanged(nameof(DaysOfWeekDates));
-            
-        }
-
-        public bool NotLessThanCurrentWeek()
+        private bool NotLessThanCurrentWeek()
         {
             DateTime currentDay = DateTime.Today;
             return MondayOfWeek > currentDay.StartOfWeek();
         }
 
-        public bool NotMoreThanMonthInFuture()
+        private bool NotMoreThanMonthInFuture()
         {
             DateOnly limit = DateOnly.FromDateTime(DateTime.Today);
             return MondayOfWeek <= (limit.AddDays(30));
         }
 
+        public int RowHeight { get; set; } = 252;
+    }
 
+    public class TimeSlotViewModel
+    {
+        public readonly int TimeSlotID;
 
+        public string StartTime { get; set; }
 
-        void LoadFullTimeslots()
+        public bool MondayFull { get; set; }
+        public bool TuesdayFull { get; set; }
+        public bool WednesdayFull { get; set; }
+        public bool ThursdayFull { get; set; }
+        public bool FridayFull { get; set; }
+
+        public TimeSlotViewModel(TimeSlot timeSlot)
         {
-            List<int[]> fullTimeSlots = _storer.BookingRepository.GetFullTimeSlotsForWeek(MondayOfWeek);
+            TimeSlotID = timeSlot.TimeSlotID;
 
-            foreach (int[] fullTimeSlot in fullTimeSlots)
-            {
-                int day = fullTimeSlot[0];
-                int timeSlot = fullTimeSlot[1];
+            StartTime = timeSlot.TimeSlotStart.ToString("HH:mm");
 
-                TimeSlotAvailability[day, timeSlot] = true;
-            }
+            MondayFull = false;
+            TuesdayFull = false;
+            WednesdayFull = false;
+            ThursdayFull = false;
+            FridayFull = false;
         }
 
-        private List<string> _timeSlotValues;
-        public List<string> TimeSlotValues
+        public void SetDayFull(int day)
         {
-            get { return _timeSlotValues; }
-            set
+            switch (day)
             {
-                _timeSlotValues = value;
-                OnPropertyChanged(nameof(TimeSlotValues));
+                case 0:
+                    MondayFull = true;
+                    break;
+                case 1:
+                    TuesdayFull = true;
+                    break;
+                case 2:
+                    WednesdayFull = true;
+                    break;
+                case 3:
+                    ThursdayFull = true;
+                    break;
+                case 4:
+                    FridayFull = true;
+                    break;
             }
         }
-
-
-
-
     }
 }

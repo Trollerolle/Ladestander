@@ -153,5 +153,13 @@ namespace El_BookingTest
             u1.Password = pwd;
             Assert.AreEqual(pwd, u1.Password);
         }
+
+        [TestMethod]
+        public void SetPassword_Pik_SetsPassword()
+        {
+            var pwd = "Pik";
+            u1.Password = pwd;
+            Assert.AreEqual(pwd, u1.Password);
+        }
     }
 }

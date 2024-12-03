@@ -36,9 +36,6 @@ GRANT EXECUTE ON OBJECT::[dbo].[usp_Login]
     TO WPFApp;
 GO
 
-GRANT EXECUTE ON OBJECT::[dbo].[usp_GetCarBy]
-    TO WPFApp;
-GO
 
 
 -- opret et login til alle brugere til connectionstrig.
@@ -72,6 +69,10 @@ GRANT EXECUTE ON OBJECT::[dbo].[usp_AddBooking]
     TO WPFAccount;
 GO
 
+GRANT EXECUTE ON OBJECT::[dbo].[usp_GetCarBy]
+    TO WPFAccount;
+GO
+
     -- usp_GetBooking 
 GRANT EXECUTE ON OBJECT::[dbo].[usp_GetBooking]
     TO WPFAccount;
@@ -102,5 +103,9 @@ GRANT EXECUTE ON OBJECT::[dbo].[usp_AddCar]
 GO
 
 GRANT EXECUTE ON OBJECT::[dbo].[usp_UpdateCar]
+	TO WPFAccount;
+GO
+
+GRANT EXECUTE ON OBJECT::[dbo].[usp_DeleteBooking]
 	TO WPFAccount;
 GO

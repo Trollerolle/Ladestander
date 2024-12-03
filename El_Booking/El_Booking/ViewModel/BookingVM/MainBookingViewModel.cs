@@ -15,6 +15,39 @@ namespace El_Booking.ViewModel.BookingVM
 {
     public class MainBookingViewModel : BaseViewModel
     {
+        private User _currentUser;
+
+        public User CurrentUser
+        {
+            get { return _currentUser; }
+            set {  
+                _currentUser = value;
+                OnPropertyChanged();
+                }
+        }
+
+        private Car? _currentCar;
+
+        public Car? CurrentCar
+        {
+            get { return _currentCar; }
+            set {
+				_currentCar = value;
+                OnPropertyChanged();
+                }
+        }
+
+
+        private Booking? _currentBooking;
+
+        public Booking? CurrentBooking
+        {
+            get { return _currentBooking; }
+            set { 
+                _currentBooking = value;
+                OnPropertyChanged();
+                }
+        }
 
         public ICommand LogOutCommand { get; }
 
@@ -22,26 +55,31 @@ namespace El_Booking.ViewModel.BookingVM
         Page BookingWeekPage_ { get; }
         Page YourBookingPage_ { get; }
 
-        public MainBookingViewModel(Storer storer, Navigation navigation, DateTime? startingDate = null)
+        public MainBookingViewModel(Storer storer, Navigation navigation, User user)
         {
-            DateTime today = startingDate ?? DateTime.Today; // til test, så datoen den starter på kan ændres. Ellers dd.
+            LogOutCommand = new LogOutCommand(navigation, storer, this);
 
-            LogOutCommand = new LogOutCommand(navigation, storer);
+            CurrentUser = user;
 
-            UserPage_ = new UserPage()
+            CurrentCar = user.CarID is not null ? storer.CarRepository.GetBy(user.UserID.ToString()) : null;
+
+			CurrentBooking = user.BookingID is not null ? storer.BookingRepository.GetBy(user.CarID.ToString()) : null;
+
+
+			UserPage_ = new UserPage()
             {
-                DataContext = new UserViewModel(storer)
+                DataContext = new UserViewModel(storer, this)
             };
             BookingWeekPage_ = new BookingWeekPage()
             {
-                DataContext = new BookingViewModel(storer)
+                DataContext = new BookingViewModel(storer, this)
             };
             YourBookingPage_ = new YourBookingPage()
             {
-                DataContext = new YourBookingViewModel(storer)
+                DataContext = new YourBookingViewModel(this)
             };
 
-            CurrentPage = UserPage_;
+            CurrentPage = BookingWeekPage_;
         }
 
         public RelayCommand SeeProfileCommand => new RelayCommand(

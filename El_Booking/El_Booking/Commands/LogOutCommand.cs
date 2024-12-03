@@ -2,6 +2,7 @@
 using El_Booking.Model.Repositories;
 using El_Booking.Utility;
 using El_Booking.ViewModel;
+using El_Booking.ViewModel.BookingVM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,19 +19,17 @@ namespace El_Booking.Commands
 
         private readonly Navigation _navigation;
         private readonly Storer _storer;
-
-        public LogOutCommand(Navigation navigation, Storer storer)
+        public MainBookingViewModel MainBookingViewModel { get; set; }
+        public LogOutCommand(Navigation navigation, Storer storer, MainBookingViewModel mainBookingViewModel)
         {
             _navigation = navigation;
             _storer = storer;
+            MainBookingViewModel = mainBookingViewModel;
         }
 
         public override void Execute(object? parameter)
         {
-            var currentApp = Application.Current as App;
-            currentApp?.ClearCurrentUser();
-			currentApp?.ClearConnection();
-
+            MainBookingViewModel = null;
 			_navigation.CurrentViewModel = new LoginViewModel(_storer, _navigation);
         }
     }

@@ -1,4 +1,5 @@
-﻿using El_Booking.Model.Repositories;
+﻿using El_Booking.Model;
+using El_Booking.Model.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,9 @@ namespace El_Booking.Utility
         public Storer()
         {
             CarRepository = new CarRepository();
-            UserRepository = new UserRepository(CarRepository);
+            UserRepository = new UserRepository(this);
 			TimeSlotRepository = new TimeSlotRepository();
-			BookingRepository = new BookingRepository(TimeSlotRepository);
+			BookingRepository = new BookingRepository(this);
 
         }
     }

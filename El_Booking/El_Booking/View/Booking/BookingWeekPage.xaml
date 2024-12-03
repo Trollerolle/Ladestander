@@ -14,217 +14,223 @@
     <Page.Resources>
         <converters:IntToColorConverter x:Key="IntToColorConverter" />
         <converters:TimeSlotLabelHelper x:Key="TimeSlotLabelHelper"/>
+        <converters:SelectedCellHelper x:Key="SelectedCellHelper"/>
+        
+        <!-- Rectangle to see if cell is selected -->
+        <Style x:Key="HighlightedRectangleStyle" TargetType="Rectangle">
+            <Setter Property="Fill" Value="LightGreen" />
+            <Setter Property="Width" Value="Auto" />
+            <Setter Property="Visibility">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource SelectedCellHelper}"  >
+                        <Binding Path="Column.DisplayIndex" RelativeSource="{RelativeSource AncestorType=DataGridCell}" />
+                        <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                        <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                        <Binding />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Button to confirm selected time slot-->
+        <Style x:Key="ConfirmButton" TargetType="Button">
+            <Setter Property="Content" Value="Bekræft"/>
+            <Setter Property="Command">
+                <Setter.Value>
+                    <Binding Path="DataContext.MakeBookingCommand" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Visibility">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource SelectedCellHelper}">
+
+                        <!-- column of button -->
+                        <Binding RelativeSource="{RelativeSource AncestorType=DataGridCell}" Path="Column.DisplayIndex"/>
+
+                        <!-- selected row / time slot -->
+                        <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+
+                        <!-- selected column / day -->
+                        <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                        <Binding />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- TextBloc with timeslot start -->
+        <Style x:Key="TimeSlotTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Width" Value="70" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="Text" Value="{Binding StartTime}"/>
+        </Style>
+        
+        <!-- column headers -->
+        <Style x:Key="ColumnHeader" TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
     </Page.Resources>
 
-
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.24*"/>
-            <RowDefinition Height="0.12*"/>
-            <RowDefinition Height="0.64*"/>
-        </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Content="Forrige" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekBackwardCommand}"/>
-            <Label Content="{Binding WeekNr}" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"/>
-            <Button Content="Næste" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekForwardCommand}"/>
-
-
-        </StackPanel>
-
-        <!-- Grid for Days of Week Labels -->
-        <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-            <!-- Define 5 equal-width columns -->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+    <Border Background="{DynamicResource Background3}" CornerRadius="10">
+        <Grid Margin="10,0,10,10">
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="34*"/>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="66*"/>
             </Grid.RowDefinitions>
 
-            <!-- Monday Label -->
-            <Label Content="Mandag" 
-            Grid.Column="0" 
-            Grid.Row="0"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14" FontWeight="Bold"/>
-            <Label Content="{Binding DaysOfWeekDates[0], StringFormat='{}{0:dd MMM}'}" 
-            Grid.Column="0" 
-            Grid.Row="1"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14" />
+            <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Button Content="Forrige" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekBackwardCommand}"/>
+                <Label Content="{Binding WeekNr}" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"/>
+                <Button Content="Næste" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekForwardCommand}"/>
+            </StackPanel>
 
-            <!-- Tuesday Label -->
-            <Label Content="Tirsdag" 
-            Grid.Column="1" 
-            Grid.Row="0"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14"  FontWeight="Bold"/>
-            <Label Content="{Binding DaysOfWeekDates[1], StringFormat='{}{0: MMM dd}'}" 
-            Grid.Column="1"  
-            Grid.Row="1"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14" />
+            <!-- Grid for Days of Week Labels -->
+            <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                <!-- Define 5 equal-width columns -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <!-- Wednesday Label -->
-            <Label Content="Onsdag" 
-            Grid.Column="2" 
-            Grid.Row="0"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14"  FontWeight="Bold"/>
-            <Label Content="{Binding DaysOfWeekDates[2], StringFormat='{}{0: MMM dd}'}" 
-            Grid.Column="2"  
-            Grid.Row="1"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14" />
+                 <!-- Monday Label -->
+                <StackPanel Grid.Column="0">
+                    <Label Content="Mandag" FontWeight="Bold" Style="{StaticResource ColumnHeader}"/>
+                    <Label Content="{Binding CurrentDays[0]}" Style="{StaticResource ColumnHeader}"/>
+                </StackPanel>
+                
 
-            <!-- Thursday Label -->
+                <!-- Tuesday Label -->
+                <StackPanel Grid.Column="1">
+                    <Label Content="Tirsdag" FontWeight="Bold" Style="{StaticResource ColumnHeader}"/>
+                    <Label Content="{Binding CurrentDays[1]}" Style="{StaticResource ColumnHeader}"/>
+                </StackPanel>
 
-            <Label Content="Torsdag" 
-            Grid.Column="3" 
-            Grid.Row="0"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14"  FontWeight="Bold"/>
-            <Label Content="{Binding DaysOfWeekDates[3], StringFormat='{}{0: MMM dd}'}" 
-            Grid.Column="3"  
-            Grid.Row="1"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14" />
+                <!-- Wednesday Label -->
+                <StackPanel Grid.Column="2">
+                    <Label Content="Onsdag" FontWeight="Bold" Style="{StaticResource ColumnHeader}"/>
+                    <Label Content="{Binding CurrentDays[2]}" Style="{StaticResource ColumnHeader}"/>
+                </StackPanel>
 
-            <!-- Friday Label -->
-            <Label Content="Fredag" 
-            Grid.Column="4" 
-            Grid.Row="0"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14"  FontWeight="Bold"/>
-            <Label Content="{Binding DaysOfWeekDates[4], StringFormat='{}{0: MMM dd}'}" 
-            Grid.Column="4"  
-            Grid.Row="1"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            FontSize="14" />
-        </Grid>
+                <!-- Thursday Label -->
+                <StackPanel Grid.Column="3">
+                    <Label Content="Torsdag" FontWeight="Bold" Style="{StaticResource ColumnHeader}"/>
+                    <Label Content="{Binding CurrentDays[3]}" Style="{StaticResource ColumnHeader}"/>
+                </StackPanel>
 
-
-
-        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding TimeSlotAvailabilityView}" 
-                AlternationCount="100" HeadersVisibility="None"
+                <!-- Friday Label -->
+                <StackPanel Grid.Column="4">
+                    <Label Content="Fredag" FontWeight="Bold" Style="{StaticResource ColumnHeader}"/>
+                    <Label Content="{Binding CurrentDays[4]}" Style="{StaticResource ColumnHeader}"/>
+                </StackPanel>
+            </Grid>
+            
+            <DataGrid
+                x:Name="myDataGrid"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding CurrentTimeSlots}" 
+                HeadersVisibility="None"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Grid.Row="2"
-                ColumnWidth="*"
-                RowHeight="50"
-                CanUserResizeRows="True"
-                CanUserAddRows="False"
-                >
+                RowHeight="50" 
+                Height="{Binding RowHeight}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                IsReadOnly="True"
+                SelectionUnit="Cell"
+                SelectionMode="Single"
+                SelectedCellsChanged="DataGrid_SelectedCellsChanged">
+                
+            <!-- Height og RowHeight er ikke dynamisk ift. antallet af timeslots / rows -->
 
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Header="{Binding DataContext.DaysOfWeekDates[0], FallbackValue='Binding Error'}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid Height="Auto" Background="{Binding [0], Converter={StaticResource IntToColorConverter}}">
-                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                            <!-- Bind to the row index -->
-                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                            <!-- Bind to TimeSlotValues -->
-                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[1], FallbackValue='Binding Error'}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid Height="Auto" Background="{Binding [1], Converter={StaticResource IntToColorConverter}}">
-                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                            <!-- Bind to the row index -->
-                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                            <!-- Bind to TimeSlotValues -->
-                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[2], FallbackValue='Binding Error'}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid Height="Auto" Background="{Binding [2], Converter={StaticResource IntToColorConverter}}">
-                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                            <!-- Bind to the row index -->
-                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                            <!-- Bind to TimeSlotValues -->
-                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[3], FallbackValue='Binding Error'}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid Height="Auto" Background="{Binding [3], Converter={StaticResource IntToColorConverter}}">
-                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                            <!-- Bind to the row index -->
-                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                            <!-- Bind to TimeSlotValues -->
-                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{Binding DaysOfWeekDates[4], FallbackValue='Binding Error'}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid Height="Auto" Background="{Binding [4], Converter={StaticResource IntToColorConverter}}">
-                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource TimeSlotLabelHelper}">
-                                            <!-- Bind to the row index -->
-                                            <Binding RelativeSource="{RelativeSource AncestorType=DataGridRow}" Path="AlternationIndex" />
-                                            <!-- Bind to TimeSlotValues -->
-                                            <Binding Path="DataContext.TimeSlotValues" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>
+                <DataGrid.Style>
+                    <Style TargetType="DataGrid">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasBooking, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Style>
 
-
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding MondayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                    <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                        <Button Style="{StaticResource ConfirmButton}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding TuesdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                    <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                        <Button Style="{StaticResource ConfirmButton}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding WednesdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                    <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                        <Button Style="{StaticResource ConfirmButton}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding ThursdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                    <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                        <Button Style="{StaticResource ConfirmButton}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding FridayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                    <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
+                                        <Button Style="{StaticResource ConfirmButton}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Border>
 </Page>

@@ -1,7 +1,10 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using El_Booking.Utility;
+using Microsoft.Data.SqlClient;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using Windows.System;
 
@@ -10,13 +13,14 @@ namespace El_Booking.Model.Repositories
     // ændre til internal
     public class UserRepository : IRepository<User>
     {
-		private App currentApp;
+		private readonly App currentApp;
 		private string _connString => currentApp.ConnectionString;
-        readonly IRepository<Car> _carRepo;
-		public UserRepository(IRepository<Car> carRepo)
+        private readonly Storer _storer;
+
+		public UserRepository(Storer storer)
         {
 			currentApp = Application.Current as App;
-            _carRepo = carRepo;
+            _storer = storer;
         }
 
         public void Add(User user)
@@ -68,13 +72,6 @@ namespace El_Booking.Model.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        // der skal findes en løsning på Car
         public User? GetBy(string param)
         {
             User? user = null;
@@ -92,29 +89,19 @@ namespace El_Booking.Model.Repositories
                     if (reader.Read())
                     {
 
-                        
+
                         user = new User
                         (
-                            userID: (int)reader["UserID"],
+                            userID: (int?)reader["UserID"],
                             email: (string)reader["Email"],
                             telephoneNumber: (string)reader["PhoneNumber"],
                             firstName: (string)reader["FirstName"],
                             lastName: (string)reader["LastName"],
                             password: null,
-                            car: null
+                            carID: reader["CarID"] is not DBNull ? (int?)reader["CarID"] : null,
+							bookingID: reader["BookingID"] is not DBNull ? (int?)reader["BookingID"] : null
 
-                        );
-                        try
-                        {
-
-                            int carID = (int)reader["CarID"];
-                            user.Car = ((CarRepository)_carRepo).GetBy(carID.ToString());
-
-                        }
-                        catch (Exception InvalidCastException)
-                        {
-
-                        }
+						);
                     }
                 }
             }
@@ -144,6 +131,11 @@ namespace El_Booking.Model.Repositories
                 connection.Open();
                 command.ExecuteNonQuery();
             }
+        }
+
+        public IEnumerable<User> GetAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }

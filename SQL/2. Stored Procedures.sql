@@ -34,23 +34,31 @@ CREATE OR ALTER PROC usp_GetUserBy
 )
 AS
 BEGIN
+DECLARE @Date_ DATE = GETDATE();
 	SELECT 
 		Users.[UserID],
 		Users.[FirstName],
 		Users.[LastName],
 		Users.[Email],
 		Users.[PhoneNumber],
-		Cars.[CarID]
+		Cars.[CarID],
+		B.[BookingID]
 	FROM
 		[dbo].[Users] 
 	LEFT JOIN
 		[dbo].[Cars]
 	ON
 		Users.UserID = Cars.UserID
+	LEFT JOIN
+		(SELECT CarID, BookingID From [dbo].[Bookings] WHERE Date_ >= @Date_) AS B
+	ON 
+		Cars.CarID = B.CarID
 	WHERE
 		[Email] = @Parameter
 		OR
 		[PhoneNumber] = @Parameter
+
+
 END;
 GO
 
@@ -109,22 +117,52 @@ GO
 --EXEC usp_GetPlannedBookings @monday;
 
 -- usp_AddBooking 
-CREATE OR ALTER PROC usp_AddBooking 
+CREATE OR ALTER PROC usp_AddBooking
 (
 	@Date DATE,
 	@TimeSlotID INT,
-	@ChargingPointID INT,
-	@CarID NVarChar(50)
+	@CarID INT
 )
 AS
+DECLARE @ChargingPoint INT = 
+	(
+		SELECT TOP 1
+			[dbo].[ChargingPoints].[ChargingPointID]
+		FROM
+			[dbo].[ChargingPoints]
+			LEFT JOIN 
+				(SELECT [ChargingPointID] AS bcp FROM [dbo].[Bookings] WHERE [Date_] = @Date AND [TimeSlotID] = @TimeSlotID) AS Bookings_
+			ON 
+				[dbo].[ChargingPoints].[ChargingPointID] = Bookings_.bcp
+		WHERE
+			InService <> 0
+			AND 
+			bcp IS NULL
+		ORDER BY
+			[ChargingPointID]%2 DESC, [ChargingPointID] -- Hvis ulige tal ønskes: DESC, [ChargingPointID]
+	)
+
+DECLARE @msg NVARCHAR(100) = 'No available Charging Points on Date: ' + FORMAT(@Date, 'yyyy-MM-dd', 'en-US') + ', Time Slot: ' + CAST(@TimeslotID AS NVarChar(5));
+IF @ChargingPoint IS NULL
+	THROW 50001, @msg, 1;
+ELSE
+
 BEGIN TRANSACTION
 	INSERT INTO [dbo].[Bookings] ([Date_], [TimeSlotID], [ChargingPointID], [CarID]) VALUES
-	(@Date, @TimeSlotID, @ChargingPointID, @CarID);
+	(@Date, @TimeSlotID, @ChargingPoint, @CarID);
 
 	IF @@ERROR <> 0
 		ROLLBACK TRANSACTION
 	ELSE
-		COMMIT TRANSACTION
+		COMMIT TRANSACTION 
+GO
+
+EXEC sys.sp_addmessage
+	@msgnum = 50001,
+    @severity = 1,
+    @msgtext = N'(%s)',
+	@lang = 'us_english',
+	@replace = 'REPLACE';
 GO
 
 -- usp_GetBooking
@@ -135,17 +173,25 @@ CREATE OR ALTER   PROC [dbo].[usp_GetBooking]
 AS
 --Kommentarer er til at teste for en specifik dag eventuelt i historisk data.
 --DECLARE @DATEONLY DATE = '20241119';
-SELECT 
+SELECT TOP 1
     [BookingID],
     [Date_],
-    [TimeSlotID],
+    Bookings.[TimeSlotID],
     [ChargingPointID],
-    [CarID]
+    [CarID],
+	TimeSlots.TimeSlotEnd
 FROM [El_Booking].[dbo].[Bookings]
+	Left join dbo.TimeSlots
+	on dbo.Bookings.TimeSlotID = TimeSlots.TimeSlotID
 	WHERE
 		[CarID] = @CarID
 		AND
-		[Date_] >= GETDATE();--@DATEONLY;
+		[Date_] >= convert(Date,GETDATE())--@DATEONLY;
+		AND 
+		TimeSlots.TimeSlotEnd >= convert(Time(0), dateadd(MINUTE, -15, GETDATE()))
+	ORDER BY
+		BookingID DESC;
+		
 GO
 
 --EXECUTE usp_GetFullTimeSlotsForWeek '2024-10-14';
@@ -276,3 +322,17 @@ UPDATE [dbo].[Cars]
 	ELSE
 		COMMIT TRANSACTION
 GO
+
+CREATE OR ALTER PROC [dbo].[usp_DeleteBooking]
+(
+	@BookingID INT
+)
+AS 
+BEGIN TRANSACTION
+
+DELETE FROM Bookings WHERE BookingID = @BookingID;
+
+	IF @@ERROR <> 0
+		ROLLBACK TRANSACTION
+	ELSE
+		COMMIT TRANSACTION

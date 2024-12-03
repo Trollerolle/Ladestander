@@ -4,6 +4,7 @@ using El_Booking.Model.Repositories;
 using El_Booking.Utility;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Text;
@@ -17,18 +18,22 @@ namespace El_Booking.ViewModel.BookingVM
 
     public class UserViewModel : BaseViewModel
     {
-
-		public User_ _currentUser => _currentApp.CurrentUser;
-		public App _currentApp { get; init; }
+        public MainBookingViewModel MainBookingViewModel { get; }
+		public User_ _currentUser => MainBookingViewModel.CurrentUser;
         public ICommand UpdateCarCommand { get; }
         public ICommand UpdateUserCommand { get; }
 
-		public UserViewModel(Storer storer)
+		public UserViewModel(Storer storer, MainBookingViewModel mainBookingViewModel)
         {
+            MainBookingViewModel = mainBookingViewModel;
 			UpdateCarCommand = new UpdateCarCommand(this, storer);
 			UpdateUserCommand = new UpdateUserCommand(this, storer);
+            MainBookingViewModel.PropertyChanged += OnMainBookingViewModelPropertyChanged;
+        }
 
-            _currentApp = (App)Application.Current;
+        private void OnMainBookingViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged();
         }
 
         public string UserEmail
@@ -49,8 +54,8 @@ namespace El_Booking.ViewModel.BookingVM
                 OnPropertyChanged();
             }
         }
-        public string? CarDetails => GetCarDetails(_currentUser.Car);
-        public string? LicensePlate => GetLicensePlate(_currentUser.Car);
+        public string? CarDetails => GetCarDetails(MainBookingViewModel.CurrentCar);
+        public string? LicensePlate => GetLicensePlate(MainBookingViewModel.CurrentCar);
 
         static string? GetLicensePlate(Car? car)
         {

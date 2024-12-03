@@ -33,7 +33,7 @@ namespace El_Booking.Commands
 		public override void Execute(object? parameter)
 		{
 
-			Car carToUpdate = _userViewModel._currentUser.Car is not null ? _userViewModel._currentUser.Car : new Car();
+			Car carToUpdate = _userViewModel.MainBookingViewModel.CurrentCar is not null ? _userViewModel.MainBookingViewModel.CurrentCar : new Car() { UserID = (int)_userViewModel.MainBookingViewModel.CurrentUser.UserID };
 
 			try
 			{
@@ -41,7 +41,7 @@ namespace El_Booking.Commands
 				carToUpdate.Brand = _userViewModel.NewCarBrand;
 				carToUpdate.Model = _userViewModel.NewCarModel;
 				carToUpdate.LicensePlate = _userViewModel.NewLicensePlate;
-				if (_userViewModel._currentUser.Car != null)
+				if (_userViewModel.MainBookingViewModel.CurrentCar != null)
 				{
 					_storer.CarRepository.Update(carToUpdate);
 				}
@@ -49,7 +49,7 @@ namespace El_Booking.Commands
 				{
 					_storer.CarRepository.Add(carToUpdate);
 				}
-				_userViewModel._currentUser.Car = carToUpdate;
+				_userViewModel.MainBookingViewModel.CurrentCar = carToUpdate;
 
 			}
 			catch (Exception)

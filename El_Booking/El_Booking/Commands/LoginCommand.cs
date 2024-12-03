@@ -43,10 +43,10 @@ namespace El_Booking.Commands
 
             if (_storer.UserRepository.Login(email, password))
             {
-                LogUserIn(email);
+				User loggedInUser = _storer.UserRepository.GetBy(email);
 				var currentApp = Application.Current as App;
                 currentApp?.SetCurrentConnection("BookingConnection");
-				_navigation.CurrentViewModel = new MainBookingViewModel(_storer, _navigation);
+				_navigation.CurrentViewModel = new MainBookingViewModel(_storer, _navigation, loggedInUser);
             }
 
             else
@@ -63,15 +63,5 @@ namespace El_Booking.Commands
             // https://www.youtube.com/watch?v=DNez3wIpHeE&list=PLA8ZIAm2I03hS41Fy4vFpRw8AdYNBXmNm&index=4
         }
 
-        void LogUserIn(string email)
-        {
-            try
-            {
-                User loggedInUser = _storer.UserRepository.GetBy(email);
-                var currentApp = Application.Current as App;
-                currentApp?.SetCurrentUser(loggedInUser);
-            }
-            catch { throw; }
-        }
     }
 }

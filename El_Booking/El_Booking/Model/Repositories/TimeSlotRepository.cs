@@ -14,12 +14,10 @@ namespace El_Booking.Model.Repositories
     {
 		private App currentApp;
 		private string _connString => currentApp.ConnectionString;
-		public List<TimeSlot> timeSlots => GetAll().ToList();
 
         public TimeSlotRepository()
         {
 			currentApp = Application.Current as App;
-			//timeSlots = GetAll().ToList();
 		}
 
 		public void Add(TimeSlot entity)
@@ -41,7 +39,7 @@ namespace El_Booking.Model.Repositories
 			using (SqlConnection connection = new SqlConnection(_connString))
 			{
 				SqlCommand command = new SqlCommand(query, connection);
-				connection.Open();
+                connection.Open();
 
 				using (SqlDataReader reader = command.ExecuteReader())
 				{
@@ -51,7 +49,8 @@ namespace El_Booking.Model.Repositories
 						(
 							timeSlotID: (int)reader["TimeSlotID"],
 							timeSlotStart: TimeOnly.FromTimeSpan((TimeSpan)reader["TimeSlotStart"]),
-							timeSlotEnd: TimeOnly.FromTimeSpan((TimeSpan)reader["TimeSlotEnd"])
+							timeSlotEnd: TimeOnly.FromTimeSpan((TimeSpan)reader["TimeSlotEnd"]),
+							full: false
 						)
                         );
 					}
@@ -61,36 +60,37 @@ namespace El_Booking.Model.Repositories
 			return timeSlots;
 		}
 
-		public TimeSlot GetBy(string parameter)
-        {
-            TimeSlot timeSlot = null;
-
-            string query = "EXEC [dbo].[usp_GetTimeSlot] @Parameter;";
+		public List<int[]> GetFullTimeSlot(DateOnly monday)
+		{
+            List<int[]> fullTimeSlots = new List<int[]>();
+            string query = "EXECUTE usp_GetFullTimeSlotsForWeek @Date;";
 
             using (SqlConnection connection = new SqlConnection(_connString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Parameter", int.Parse(parameter));
+                command.Parameters.AddWithValue("@Date", monday);
                 connection.Open();
 
-                using (SqlDataReader reader = command.ExecuteReader())
+                using SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    if (reader.Read())
-                    {
-                        timeSlot = new TimeSlot
-                        (
-                            timeSlotID: (int)reader["TimeSlotID"],
-                            timeSlotStart: (TimeOnly)reader["TimeSlotStart"],
-							timeSlotEnd: (TimeOnly)reader["TimeSlotEnd"]
+					int day = (int)((DateTime)reader["Date_"]).DayOfWeek;
+					int timeSlotID = (int)reader["TimeSlotID"];
 
-						);
-                    }
+
+                    int[] fullTimeSlot = [timeSlotID, day];
+
+                    fullTimeSlots.Add(fullTimeSlot);
                 }
             }
 
-            return timeSlot;
+            return fullTimeSlots;
         }
 
+		public TimeSlot GetBy(string parameter)
+        {
+            throw new NotImplementedException();
+        }
 
         public void Update(TimeSlot entity)
         {
