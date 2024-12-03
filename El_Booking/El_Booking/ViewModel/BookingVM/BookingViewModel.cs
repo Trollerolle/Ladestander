@@ -168,6 +168,7 @@ namespace El_Booking.ViewModel.BookingVM
             SelectedTimeSlot = null;
             WeekNr = DateUtils.GetIso8601WeekOfYear(MondayOfWeek);
             GetCurrentTimeSlots(MondayOfWeek) ;
+            GetCurrentDays(MondayOfWeek) ;
         }
 
         private bool NotLessThanCurrentWeek()
