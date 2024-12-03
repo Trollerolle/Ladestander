@@ -19,15 +19,15 @@
         <!-- Rectangle to see if cell is selected -->
         <Style x:Key="HighlightedRectangleStyle" TargetType="Rectangle">
             <Setter Property="Fill" Value="LightGreen" />
-            <Setter Property="Width" Value="Auto" />
-            <Setter Property="Visibility">
+			<Setter Property="Width" Value="Auto" />
+			<Setter Property="Visibility">
                 <Setter.Value>
                     <MultiBinding Converter="{StaticResource SelectedCellHelper}"  >
                         <Binding Path="Column.DisplayIndex" RelativeSource="{RelativeSource AncestorType=DataGridCell}" />
                         <Binding Path="DataContext.SelectedTimeSlot" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
                         <Binding Path="DataContext.SelectedDay" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
-                        <Binding />
-                    </MultiBinding>
+						<Binding />
+					</MultiBinding>
                 </Setter.Value>
             </Setter>
         </Style>
@@ -35,7 +35,7 @@
         <!-- Button to confirm selected time slot-->
         <Style x:Key="ConfirmButton" TargetType="Button">
             <Setter Property="Content" Value="Bekræft"/>
-            <Setter Property="Command">
+			<Setter Property="Command">
                 <Setter.Value>
                     <Binding Path="DataContext.MakeBookingCommand" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
                 </Setter.Value>
@@ -61,7 +61,7 @@
         <!-- TextBloc with timeslot start -->
         <Style x:Key="TimeSlotTextBlockStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="Width" Value="70" />
+            <Setter Property="Width" Value="auto" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="TextAlignment" Value="Center" />
@@ -139,9 +139,9 @@
                 ItemsSource="{Binding CurrentTimeSlots}" 
                 HeadersVisibility="None"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
+                VerticalAlignment="Center"
                 Grid.Row="2"
-                RowHeight="50" 
+                RowHeight="50"
                 Height="{Binding RowHeight}"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -150,82 +150,75 @@
                 SelectionMode="Single"
                 SelectedCellsChanged="DataGrid_SelectedCellsChanged">
                 
-            <!-- Height og RowHeight er ikke dynamisk ift. antallet af timeslots / rows -->
+            <!-- Height er ikke dynamisk ift. rows -->
 
                 <DataGrid.Style>
                     <Style TargetType="DataGrid">
-                        <Setter Property="IsEnabled" Value="True" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasBooking, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
+						<Setter Property="Width" Value="auto" />
+						<Setter Property="IsEnabled" Value="True" />
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding HasBooking, UpdateSourceTrigger=PropertyChanged}"
+										 Value="True">
+								<Setter Property="IsEnabled"
+										Value="False" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
                 </DataGrid.Style>
 
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding MondayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
-                                    <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
-                                        <Button Style="{StaticResource ConfirmButton}"/>
-                                    </StackPanel>
+								<Grid Background="{Binding MondayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+									<Rectangle Style="{StaticResource HighlightedRectangleStyle}" />
+									<TextBlock Style="{StaticResource TimeSlotTextBlockStyle}" HorizontalAlignment="Center"/>
+                                    <Button Style="{StaticResource ConfirmButton}" HorizontalAlignment="Right"/>                            
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding TuesdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+								<Grid Background="{Binding TuesdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
-                                        <Button Style="{StaticResource ConfirmButton}"/>
-                                    </StackPanel>
-                                </Grid>
+									<TextBlock Style="{StaticResource TimeSlotTextBlockStyle}" HorizontalAlignment="Center"/>
+                                    <Button Style="{StaticResource ConfirmButton}" HorizontalAlignment="Right"/>                                   
+								</Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding WednesdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+								<Grid Background="{Binding WednesdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
-                                        <Button Style="{StaticResource ConfirmButton}"/>
-                                    </StackPanel>
-                                </Grid>
+									<TextBlock Style="{StaticResource TimeSlotTextBlockStyle}" HorizontalAlignment="Center"/>
+                                    <Button Style="{StaticResource ConfirmButton}" HorizontalAlignment="Right"/>                                   
+								</Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding ThursdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+								<Grid Background="{Binding ThursdayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
-                                        <Button Style="{StaticResource ConfirmButton}"/>
-                                    </StackPanel>
-                                </Grid>
+									<TextBlock Style="{StaticResource TimeSlotTextBlockStyle}" HorizontalAlignment="Center"/>
+                                    <Button Style="{StaticResource ConfirmButton}" HorizontalAlignment="Right"/>                                   
+								</Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding FridayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+								<Grid Background="{Binding FridayFull, Converter={StaticResource IntToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Rectangle Style="{StaticResource HighlightedRectangleStyle}"/>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <TextBlock Style="{StaticResource TimeSlotTextBlockStyle}"/>
-                                        <Button Style="{StaticResource ConfirmButton}"/>
-                                    </StackPanel>
-                                </Grid>
+									<TextBlock Style="{StaticResource TimeSlotTextBlockStyle}" HorizontalAlignment="Center"/>
+                                    <Button Style="{StaticResource ConfirmButton}" HorizontalAlignment="Right"/>   
+								</Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

@@ -7,9 +7,13 @@
     xmlns:local="clr-namespace:El_Booking.View.Booking"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Frame x:Name="Main" Margin="0,0,0,35" NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}"/>
-        <StackPanel Orientation="Horizontal" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Center" >
+	<Grid Margin="12">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="50" />
+		</Grid.RowDefinitions>
+        <Frame x:Name="Main" NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}" Grid.Row="0"/>
+        <StackPanel Orientation="Horizontal" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" Margin="0,0,0,8">
             <Button Content="Booking" Margin="0,0,0,0" Width="85" Command="{Binding SeeBookingWeekCommand}"/>
             <Button Content="Din Booking" Margin="10,0,0,0" Width="85" Command="{Binding SeeYourBookingCommand}"/>
             <Button Content="Profil" Margin="10,0,0,0" Width="85" Command="{Binding SeeProfileCommand}"/>
