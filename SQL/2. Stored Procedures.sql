@@ -188,7 +188,7 @@ FROM [El_Booking].[dbo].[Bookings]
 		AND
 		[Date_] >= convert(Date,GETDATE())--@DATEONLY;
 		AND 
-		TimeSlots.TimeSlotEnd <= convert(Time(0), dateadd(MINUTE, -15, GETDATE()))
+		TimeSlots.TimeSlotEnd >= convert(Time(0), dateadd(MINUTE, -15, GETDATE()))
 	ORDER BY
 		BookingID DESC;
 		
