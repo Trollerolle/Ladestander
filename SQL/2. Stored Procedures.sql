@@ -135,8 +135,6 @@ DECLARE @ChargingPoint INT =
 			ON 
 				[dbo].[ChargingPoints].[ChargingPointID] = Bookings_.bcp
 		WHERE
-			InService <> 0
-			AND 
 			bcp IS NULL
 		ORDER BY
 			[ChargingPointID]%2 DESC, [ChargingPointID] -- Hvis ulige tal ønskes: DESC, [ChargingPointID]

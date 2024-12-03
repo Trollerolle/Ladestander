@@ -55,8 +55,7 @@ GO
 CREATE TABLE ChargingPoints 
 (
 	ChargingPointID INT IDENTITY(1,1) PRIMARY KEY,
-	Name_ NVarChar(50) NOT NULL UNIQUE,
-	InService BIT DEFAULT 1
+	Name_ NVarChar(50) NOT NULL UNIQUE
 )
 GO
 
