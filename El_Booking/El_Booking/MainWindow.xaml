@@ -12,9 +12,9 @@
 
     xmlns:local="clr-namespace:El_Booking"
     mc:Ignorable="d"
-    Title="MainWindow" Height="550" Width="1000" ResizeMode="CanMinimize">
+    Title="El Booking" Height="550" Width="1000" ResizeMode="CanMinimize" >
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Background="Red">
+        <Grid Background="{DynamicResource Background2}">
             <Grid.Resources>
                 <DataTemplate DataType="{x:Type vms:LoginViewModel}">
                     <views:LoginView/>
