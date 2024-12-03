@@ -11,6 +11,7 @@ using El_Booking.ViewModel.BookingVM;
 using Windows.ApplicationModel.Store;
 using El_Booking.Model;
 using System.ComponentModel;
+using El_Booking.View.Booking;
 
 namespace El_Booking.Commands
 {
@@ -47,7 +48,10 @@ namespace El_Booking.Commands
 					userToUpdate.TelephoneNumber = _userViewModel.NewPhoneNumber;
 
 				if (_userViewModel.NewPassword != null)
-					userToUpdate.Password = _userViewModel.NewPassword;
+				{
+                    userToUpdate.Password = _userViewModel.NewPassword;
+                }
+					
 			}
 			catch (NotSupportedException ex)
 			{
@@ -67,6 +71,17 @@ namespace El_Booking.Commands
 			{
 				throw;
 			}
+		}
+
+		bool CheckCurrentPassword()
+		{
+			CheckPasswordView checkPwdView = new CheckPasswordView();
+			checkPwdView.ShowDialog();
+			if (checkPwdView.Success)
+			{
+				return _userViewModel.NewPassword == checkPwdView.Password;
+			}
+			
 		}
 
 		public override bool CanExecute(object? parameter)
