@@ -173,17 +173,25 @@ CREATE OR ALTER   PROC [dbo].[usp_GetBooking]
 AS
 --Kommentarer er til at teste for en specifik dag eventuelt i historisk data.
 --DECLARE @DATEONLY DATE = '20241119';
-SELECT 
+SELECT TOP 1
     [BookingID],
     [Date_],
-    [TimeSlotID],
+    Bookings.[TimeSlotID],
     [ChargingPointID],
-    [CarID]
+    [CarID],
+	TimeSlots.TimeSlotEnd
 FROM [El_Booking].[dbo].[Bookings]
+	Left join dbo.TimeSlots
+	on dbo.Bookings.TimeSlotID = TimeSlots.TimeSlotID
 	WHERE
 		[CarID] = @CarID
 		AND
-		[Date_] >= GETDATE();--@DATEONLY;
+		[Date_] >= convert(Date,GETDATE())--@DATEONLY;
+		AND 
+		TimeSlots.TimeSlotEnd <= convert(Time(0), dateadd(MINUTE, -15, GETDATE()))
+	ORDER BY
+		BookingID DESC;
+		
 GO
 
 --EXECUTE usp_GetFullTimeSlotsForWeek '2024-10-14';
@@ -314,3 +322,17 @@ UPDATE [dbo].[Cars]
 	ELSE
 		COMMIT TRANSACTION
 GO
+
+CREATE OR ALTER PROC [dbo].[usp_DeleteBooking]
+(
+	@BookingID INT
+)
+AS 
+BEGIN TRANSACTION
+
+DELETE FROM Bookings WHERE BookingID = @BookingID;
+
+	IF @@ERROR <> 0
+		ROLLBACK TRANSACTION
+	ELSE
+		COMMIT TRANSACTION

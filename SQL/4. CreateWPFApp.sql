@@ -105,3 +105,7 @@ GO
 GRANT EXECUTE ON OBJECT::[dbo].[usp_UpdateCar]
 	TO WPFAccount;
 GO
+
+GRANT EXECUTE ON OBJECT::[dbo].[usp_DeleteBooking]
+	TO WPFAccount;
+GO

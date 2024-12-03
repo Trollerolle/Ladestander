@@ -25,6 +25,7 @@ namespace El_Booking.ViewModel.BookingVM
 
 		public UserViewModel(Storer storer, MainBookingViewModel mainBookingViewModel)
         {
+            MainBookingViewModel = mainBookingViewModel;
 			UpdateCarCommand = new UpdateCarCommand(this, storer);
 			UpdateUserCommand = new UpdateUserCommand(this, storer);
             MainBookingViewModel.PropertyChanged += OnMainBookingViewModelPropertyChanged;
