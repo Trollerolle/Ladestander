@@ -37,11 +37,13 @@
 		<StackPanel HorizontalAlignment="Left"
 					VerticalAlignment="Top"
 					Margin="249,100,0,0">
-			<Label Content="{Binding CurrentBooking.Date, FallbackValue=Du har ingen aktuel booking}"
+			<Label Content="{Binding CurrentBooking.Date, FallbackValue=Du har ingen aktuel booking}" ContentStringFormat="dd/MM/yyyy"
 				   Margin="0,30,0,0" />
-			<Label Content="{Binding CurrentBooking.TimeSlot.TimeSlotStart, FallbackValue=Du har ingen aktuel booking}"
+			<Label Content="{Binding CurrentBooking.TimeSlot.TimeSlotStart, FallbackValue=Du har ingen aktuel booking}" 
+				   ContentStringFormat="hh:mm"
 				   Margin="0,30,0,0" />
 			<Label Content="{Binding CurrentBooking.TimeSlot.TimeSlotEnd, FallbackValue=Du har ingen aktuel booking}"
+				   ContentStringFormat="hh:mm"
 				   Margin="0,30,0,0" />
 			<Label Content="{Binding CurrentBooking.ChargingPointID, FallbackValue=Du har ingen aktuel booking}"
 				   Margin="0,30,0,0" />
