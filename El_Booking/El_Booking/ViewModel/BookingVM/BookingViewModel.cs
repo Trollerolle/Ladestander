@@ -52,7 +52,8 @@ namespace El_Booking.ViewModel.BookingVM
 
         private void OnMainBookingViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            OnPropertyChanged();
+			GetCurrentTimeSlots(MondayOfWeek);
+			OnPropertyChanged();
         }
 
         private ObservableCollection<TimeSlotViewModel> _currentTimeSlots;
@@ -193,8 +194,7 @@ namespace El_Booking.ViewModel.BookingVM
             DateOnly limit = DateOnly.FromDateTime(DateTime.Today);
             return MondayOfWeek <= (limit.AddDays(30));
         }
-
-        public int RowHeight { get; set; } = 252;
+		public int RowHeight => (CurrentTimeSlots.Count * 50) + 2;
     }
 
     public class TimeSlotViewModel
