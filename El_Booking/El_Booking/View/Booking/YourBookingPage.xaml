@@ -9,52 +9,101 @@
 	  d:DesignWidth="800"
 	  Title="YourBooking">
 
+	<Page.Resources>
+		<Style x:Key="TextBlockStyler"
+			   TargetType="TextBlock">
+			<Setter Property="FontWeight"
+					Value="Bold" />
+			<Setter Property="VerticalAlignment"
+					Value="Center"/>
+			<Setter Property="DockPanel.Dock"
+					Value="Left" />
+		</Style>
+		
+		<Style x:Key="LabelStyler"
+			   TargetType="Label">
+			<Setter Property="HorizontalAlignment"
+					Value="right" />
+			<Setter Property="DockPanel.Dock"
+					Value="right" />
+			<Setter Property="MinHeight"
+					Value="26" />
+		</Style>
+		
+		<Style x:Key="DockPanelStyler"
+			   TargetType="DockPanel">
+			<Setter Property="Width"
+					Value="165" />
+			<Setter Property="VerticalAlignment"
+					Value="Center" />
+			<Setter Property="DockPanel.Dock"
+					Value="Left" />
+			<Setter Property="Margin"
+					Value="0,0,0,20" />
+		</Style>
+
+	</Page.Resources>
 	<Grid Background="White">
-		<Label Content="DIN BOOKING"
-			   HorizontalAlignment="Center"
-			   Margin="0,30,0,0"
-			   VerticalAlignment="Top"
-			   FontSize="30" />
+		<Grid Margin="215,30,215,30">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="75.4" />
+				<RowDefinition Height="94.25" />
+				<RowDefinition Height="207.35" />
+			</Grid.RowDefinitions>
+			<Border Grid.Row="0"
+					Background="{DynamicResource Background1}"
+					CornerRadius="8,8,0,0">
+				<TextBlock Grid.Row="0"
+						   Text="Din Booking"
+						   FontSize="32"
+						   HorizontalAlignment="Center"
+						   VerticalAlignment="Center" />
+			</Border>
+			<Border Grid.Row="1"
+					Margin="0"
+					Background="{DynamicResource Background2}">
+				<DockPanel Style="{StaticResource DockPanelStyler}">
+					<TextBlock Text="Dato: "
+							   Style="{StaticResource TextBlockStyler}"/>
+					<Label Content="{Binding CurrentBooking.Date, FallbackValue=Ingen aktuel booking.}"
+						   ContentStringFormat="dd/MM/yyyy" Style="{StaticResource LabelStyler}"/>
+				</DockPanel>
+			</Border>
+			<Border Grid.Row="2"
+					Margin="0"
+					Background="{DynamicResource Background1}"
+					CornerRadius="0,0,8,8">
+				<StackPanel Margin="0,0,0,20"
+							Height="180"
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center">
+					<DockPanel Style="{StaticResource DockPanelStyler}">
+						<TextBlock Text="Start tid: "
+								   Style="{StaticResource TextBlockStyler}"/>
+						<Label Content="{Binding CurrentBooking.TimeSlot.TimeSlotStart}"
+							   ContentStringFormat="HH:mm"
+							   Style="{StaticResource LabelStyler}" />
+					</DockPanel>
+					<DockPanel Style="{StaticResource DockPanelStyler}">
+						<TextBlock Text="Slut tid: "
+								   Style="{StaticResource TextBlockStyler}"/>
+						<Label Content="{Binding CurrentBooking.TimeSlot.TimeSlotEnd}"
+							   ContentStringFormat="HH:mm"
+							   Style="{StaticResource LabelStyler}" />
+					</DockPanel>
+					<DockPanel Style="{StaticResource DockPanelStyler}">
+						<TextBlock Text="Ladestander nr.: "
+								   Style="{StaticResource TextBlockStyler}"/>
+						<Label Content="{Binding CurrentBooking.ChargingPointID}"
+							   Style="{StaticResource LabelStyler}"/>
+					</DockPanel>
+					<Button Margin="0,10,0,10"
+							Width="173.51666666666668"
+							Content="Slet Booking"
+							Command="{Binding DeleteBookingCommand}" />
+				</StackPanel>
 
-		<StackPanel HorizontalAlignment="Left"
-					VerticalAlignment="Center"
-					Height="250"
-					Margin="100,10,0,0">
-			<TextBlock Text="Dato: "
-					   Margin="0,30,0,0"
-					   HorizontalAlignment="Right" />
-			<TextBlock Text="Start tid: "
-					   Margin="0,40,0,0"
-					   HorizontalAlignment="Right" />
-			<TextBlock Text="Slut tid: "
-					   Margin="0,40,0,0"
-					   HorizontalAlignment="Right" />
-			<TextBlock Text="Ladestander nr.: "
-					   Margin="0,40,0,0"
-					   HorizontalAlignment="Right" />
-		</StackPanel>
-
-		<StackPanel HorizontalAlignment="Left"
-					VerticalAlignment="Top"
-					Margin="249,100,0,0">
-			<Label Content="{Binding CurrentBooking.Date, FallbackValue=Du har ingen aktuel booking}" ContentStringFormat="dd/MM/yyyy"
-				   Margin="0,30,0,0" />
-			<Label Content="{Binding CurrentBooking.TimeSlot.TimeSlotStart, FallbackValue=Du har ingen aktuel booking}" 
-				   ContentStringFormat="HH:mm"
-				   Margin="0,30,0,0" />
-			<Label Content="{Binding CurrentBooking.TimeSlot.TimeSlotEnd, FallbackValue=Du har ingen aktuel booking}"
-				   ContentStringFormat="HH:mm"
-				   Margin="0,30,0,0" />
-			<Label Content="{Binding CurrentBooking.ChargingPointID, FallbackValue=Du har ingen aktuel booking}"
-				   Margin="0,30,0,0" />
-		</StackPanel>
-
-		<Button Content="Slet Booking"
-				HorizontalAlignment="Left"
-				Margin="537,225,0,0"
-				VerticalAlignment="Top"
-				Width="108"
-				FontSize="18"
-				Command="{Binding DeleteBookingCommand}" />
+			</Border>
+		</Grid>
 	</Grid>
 </Page>

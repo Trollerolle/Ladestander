@@ -202,7 +202,7 @@ namespace El_Booking.ViewModel.BookingVM
         {
             TimeSlotID = timeSlot.TimeSlotID;
 
-            StartTime = timeSlot.TimeSlotStart.ToString("HH:mm");
+            StartTime = $"{timeSlot.TimeSlotStart.ToString("HH:mm")} - {timeSlot.TimeSlotEnd.ToString("HH:mm")}";
 
             MondayFull = false;
             TuesdayFull = false;
