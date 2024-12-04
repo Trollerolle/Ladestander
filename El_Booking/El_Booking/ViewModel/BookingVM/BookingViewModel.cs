@@ -126,31 +126,9 @@ namespace El_Booking.ViewModel.BookingVM
             int? closestTimeSlotID = _nearestTimeSlot?.TimeSlotID; // Sætter det ID der er tættest til en int
 
 
-
-
-            // Listen er af int[] som er: [TimeSlotID, Day]
-            List<int[]> passedSlots = new List<int[]>();
-
-            if (closestTimeSlotID.HasValue)
-            {
-                for (int day = 1; day <= currentDayAsInt; day++) // Loop indtil idag (currentDayAsInt)
-                {
-                    foreach (var timeSlot in CurrentTimeSlots)
-                    {
-                        int timeSlotID = timeSlot.TimeSlotID;
-
-                        // Tilføj time slot hvis:
-                        // Det er en tidligere dag end i dag OR
-                        // Det ER i dag og timeSLOT idet er mindreend eller lig med nuværende klokkeslet
-                        if (day < currentDayAsInt || (day == currentDayAsInt && timeSlotID <= closestTimeSlotID))
-                        {
-                            passedSlots.Add(new int[] { timeSlotID, day });
-                        }
-                    }
-                }
-            }
-
-            
+            //// Listen er af int[] som er: [TimeSlotID, Day]
+            //List<int[]> passedSlots = new List<int[]>();
+                     
 
             for (int day = 0; day <= currentDayAsInt; day++) // Kør fra mandag til idag
             {
@@ -166,7 +144,15 @@ namespace El_Booking.ViewModel.BookingVM
             }
             OnPropertyChanged(nameof(CurrentTimeSlots)); 
 
-    }
+        }
+
+        private void SetTimeSlotsAsYours()
+        {
+            //int bookingTimeSlotID = User.Booking.TimeSlotID;
+            //int bookingDate = (int)User.Booking.Date; //date parsed til int
+
+
+        }
 
 
         private ObservableCollection<string> _currentDays;
