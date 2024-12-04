@@ -1,6 +1,7 @@
 ﻿using El_Booking.Model;
 using El_Booking.Model.Repositories;
 using El_Booking.ViewModel;
+using El_Booking.ViewModel.BookingVM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,22 @@ namespace El_Booking.View.Booking
         public UserPage()
         {
             InitializeComponent();
+        }
+
+        private void pwdBox1_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext != null)
+            {
+                ((UserViewModel)this.DataContext).NewPassword = ((PasswordBox)sender).Password;
+            }
+        }
+
+        private void pwdBox2_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext != null)
+            {
+                ((UserViewModel)this.DataContext).NewPasswordAgain = ((PasswordBox)sender).Password;
+            }
         }
     }
 }
