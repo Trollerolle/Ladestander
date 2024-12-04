@@ -109,3 +109,8 @@ GO
 GRANT EXECUTE ON OBJECT::[dbo].[usp_DeleteBooking]
 	TO WPFAccount;
 GO
+
+    -- usp_Login for at verificere at update password.
+GRANT EXECUTE ON OBJECT::[dbo].[usp_Login]
+    TO WPFAccount;
+GO
