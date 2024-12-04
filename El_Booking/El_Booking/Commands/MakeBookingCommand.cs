@@ -53,7 +53,9 @@ namespace El_Booking.Commands
                 _bookingViewModel.MainBookingViewModel.CurrentBooking = newBooking;
                 _bookingViewModel.ChangeWeek(0);
 
-				MessageBox.Show($"Din booking er gennemført. Gå til \"Din Booking\" for at se detaljer", "Succes", MessageBoxButton.OK);
+				// Fjernet " Gå til \"Din Booking\" for at se detaljer" fra beskeden og sat den til at skifte til bookingen efter OK.
+				MessageBox.Show($"Din booking er gennemført.", "Succes", MessageBoxButton.OK); 
+				_bookingViewModel.MainBookingViewModel.SeeYourBookingCommand.Execute(parameter);
 
             }
             catch (Exception ex)
