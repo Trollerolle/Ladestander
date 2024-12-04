@@ -21,7 +21,6 @@ namespace El_Booking.View.Booking
     public partial class CheckPasswordView : Window
     {
 
-        public bool Success { get; private set; }
         public string CurrentPassword { get; private set; }
 
         public CheckPasswordView()
@@ -32,13 +31,11 @@ namespace El_Booking.View.Booking
         private void btnConfirm_Click(object sender, RoutedEventArgs e)
         {
             CurrentPassword = this.pwdCurrentPassword.Password;
-            Success = true;
             Close();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            Success = false;
             Close();
         }
 

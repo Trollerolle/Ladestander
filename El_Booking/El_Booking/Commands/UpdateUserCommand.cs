@@ -81,7 +81,7 @@ namespace El_Booking.Commands
 			CheckPasswordView checkPwdView = new CheckPasswordView();
 			checkPwdView.ShowDialog();
 
-            if (checkPwdView.Success)
+            if (!string.IsNullOrEmpty(checkPwdView.CurrentPassword))
 			{
 				return _storer.UserRepository.Login(_userViewModel._currentUser.Email, checkPwdView.CurrentPassword);
             }
