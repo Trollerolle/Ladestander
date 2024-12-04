@@ -99,6 +99,7 @@ namespace El_Booking.ViewModel.BookingVM
         }
 
 
+        //Prop til SetTimeslotsAsPassed som bruges til at gemme den
         private TimeSlotViewModel _nearestTimeSlot;
         public TimeSlotViewModel NearestTimeSlot
         {
@@ -106,86 +107,64 @@ namespace El_Booking.ViewModel.BookingVM
             set
             {
                 _nearestTimeSlot = value;
-                OnPropertyChanged(); // Notify UI if you're using data binding
+                OnPropertyChanged(); 
             }
         }
 
         private void SetTimeSlotsAsPassed()
         {
 
-            int currentDayAsInt = (int)DateTime.Now.DayOfWeek+1;
+            int currentDayAsInt = (int)DateTime.Now.DayOfWeek;
 
-            // Get the current time
-            TimeSpan currentTime = DateTime.Now.TimeOfDay;
+            TimeSpan currentTime = TimeSpan.Parse("07:00:00"); 
 
-            // Find the nearest time slot that is less than or equal to the current time
-            var NearestTimeSlot = CurrentTimeSlots
-                .Where(slot => TimeSpan.Parse(slot.StartTime) <= currentTime) // Filter time slots <= current time
-                .OrderByDescending(slot => TimeSpan.Parse(slot.StartTime))    // Order by descending time
-                .FirstOrDefault();                                           // Get the closest one
+            NearestTimeSlot = CurrentTimeSlots
+            .Where(slot => TimeSpan.Parse(slot.StartTime) <= currentTime) // Kun time slots som er <= current time
+            .OrderByDescending(slot => TimeSpan.Parse(slot.StartTime))    // Sorter efter højeste først. (Hvis du kigger klokken 13, kan det være 6 12 eller 9, IKKE 15 som bliver sorteret til 12, 9, 6)
+            .FirstOrDefault();                                           // Vælg første, ( 12 )
 
-            int? closestTimeSlotID = _nearestTimeSlot?.TimeSlotID; // Finder og sætter det ID der er tættest under
+            int? closestTimeSlotID = _nearestTimeSlot?.TimeSlotID; // Sætter det ID der er tættest til en int
 
 
 
 
-            // Populate fullSlots with arrays [TimeSlotID, Day]
-            List<int[]> fullSlots = new List<int[]>();
+            // Listen er af int[] som er: [TimeSlotID, Day]
+            List<int[]> passedSlots = new List<int[]>();
 
             if (closestTimeSlotID.HasValue)
             {
-                for (int day = 1; day <= currentDayAsInt; day++) // Loop from Monday to the current day
+                for (int day = 1; day <= currentDayAsInt; day++) // Loop indtil idag (currentDayAsInt)
                 {
                     foreach (var timeSlot in CurrentTimeSlots)
                     {
                         int timeSlotID = timeSlot.TimeSlotID;
 
-                        // Add the time slot to fullSlots only if:
-                        // 1. It's a previous day OR
-                        // 2. It's the current day and the time slot ID is <= the nearest one
+                        // Tilføj time slot hvis:
+                        // Det er en tidligere dag end i dag OR
+                        // Det ER i dag og timeSLOT idet er mindreend eller lig med nuværende klokkeslet
                         if (day < currentDayAsInt || (day == currentDayAsInt && timeSlotID <= closestTimeSlotID))
                         {
-                            fullSlots.Add(new int[] { timeSlotID, day });
+                            passedSlots.Add(new int[] { timeSlotID, day });
                         }
                     }
                 }
             }
 
-            // Mark the corresponding time slots as full based on fullSlots
-            if (fullSlots.Count > 0)
-            {
-                foreach (int[] fullSlot in fullSlots)
-                {
-                    int timeSlotID = fullSlot[0];
-                    int day = fullSlot[1];
+            
 
-                    // Set the respective day as full in the time slot
-                    var timeSlot = CurrentTimeSlots.FirstOrDefault(x => x.TimeSlotID == timeSlotID);
-                    if (timeSlot != null)
+            for (int day = 0; day <= currentDayAsInt; day++) // Kør fra mandag til idag
+            {
+                foreach (var timeSlot in CurrentTimeSlots) // For hver timeslot
+                {
+                    // hvis dagen er mindre end idag, ELLER dagen ER idag OG timeslottet er mindre end eller lig closestTimeSlot
+                    if (day < currentDayAsInt || (day == currentDayAsInt && timeSlot.TimeSlotID <= closestTimeSlotID))
                     {
+                        // Sæt til grå
                         timeSlot.SetPassedAsGrey(day);
                     }
                 }
             }
-
-            for (int day = 1; day <= currentDayAsInt; day++) // Loop from Monday to current day
-            {
-                foreach (var timeSlot in CurrentTimeSlots)
-                {
-                    int timeSlotID = timeSlot.TimeSlotID;
-
-                    if (day < currentDayAsInt || (day == currentDayAsInt && timeSlotID <= closestTimeSlotID))
-                    {
-                        // Mark the time slot as passed (grey)
-                        timeSlot.SetPassedAsGrey(day);
-                    }
-                }
-            }
-            OnPropertyChanged(nameof(CurrentTimeSlots)); // Notify the UI of the changes
-        
-        //CurrentTimeSlot = CurrentTime //9:00 Kigger 9:10 
-
-        //timeSlots.Find(x => x.TimeSlotID == timePassedAsGrey(day);
+            OnPropertyChanged(nameof(CurrentTimeSlots)); 
 
     }
 
