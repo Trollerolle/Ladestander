@@ -45,6 +45,7 @@ namespace El_Booking.ViewModel.BookingVM
 
 			GetCurrentTimeSlots(MondayOfWeek);
             GetCurrentDays(MondayOfWeek);
+            SetTimeSlotsAsPassed();
 
             MainBookingViewModel.PropertyChanged += OnMainBookingViewModelPropertyChanged;
 
@@ -53,7 +54,9 @@ namespace El_Booking.ViewModel.BookingVM
         private void OnMainBookingViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
 			GetCurrentTimeSlots(MondayOfWeek);
-			OnPropertyChanged();
+            SetTimeSlotsAsPassed();
+
+            OnPropertyChanged();
         }
 
         private ObservableCollection<TimeSlotViewModel> _currentTimeSlots;
@@ -95,15 +98,96 @@ namespace El_Booking.ViewModel.BookingVM
 
         }
 
+
+        private TimeSlotViewModel _nearestTimeSlot;
+        public TimeSlotViewModel NearestTimeSlot
+        {
+            get => _nearestTimeSlot;
+            set
+            {
+                _nearestTimeSlot = value;
+                OnPropertyChanged(); // Notify UI if you're using data binding
+            }
+        }
+
         private void SetTimeSlotsAsPassed()
         {
 
-            //CurrentDAy;
-            //CurrentTime //9:00 Kigger 9:10 
+            int currentDayAsInt = (int)DateTime.Now.DayOfWeek+1;
 
-            //timeSlots.Find(x => x.TimeSlotID == timeSlotID).SetDayFull(day);
+            // Get the current time
+            TimeSpan currentTime = DateTime.Now.TimeOfDay;
 
-        }
+            // Find the nearest time slot that is less than or equal to the current time
+            var NearestTimeSlot = CurrentTimeSlots
+                .Where(slot => TimeSpan.Parse(slot.StartTime) <= currentTime) // Filter time slots <= current time
+                .OrderByDescending(slot => TimeSpan.Parse(slot.StartTime))    // Order by descending time
+                .FirstOrDefault();                                           // Get the closest one
+
+            int? closestTimeSlotID = _nearestTimeSlot?.TimeSlotID; // Finder og sætter det ID der er tættest under
+
+
+
+
+            // Populate fullSlots with arrays [TimeSlotID, Day]
+            List<int[]> fullSlots = new List<int[]>();
+
+            if (closestTimeSlotID.HasValue)
+            {
+                for (int day = 1; day <= currentDayAsInt; day++) // Loop from Monday to the current day
+                {
+                    foreach (var timeSlot in CurrentTimeSlots)
+                    {
+                        int timeSlotID = timeSlot.TimeSlotID;
+
+                        // Add the time slot to fullSlots only if:
+                        // 1. It's a previous day OR
+                        // 2. It's the current day and the time slot ID is <= the nearest one
+                        if (day < currentDayAsInt || (day == currentDayAsInt && timeSlotID <= closestTimeSlotID))
+                        {
+                            fullSlots.Add(new int[] { timeSlotID, day });
+                        }
+                    }
+                }
+            }
+
+            // Mark the corresponding time slots as full based on fullSlots
+            if (fullSlots.Count > 0)
+            {
+                foreach (int[] fullSlot in fullSlots)
+                {
+                    int timeSlotID = fullSlot[0];
+                    int day = fullSlot[1];
+
+                    // Set the respective day as full in the time slot
+                    var timeSlot = CurrentTimeSlots.FirstOrDefault(x => x.TimeSlotID == timeSlotID);
+                    if (timeSlot != null)
+                    {
+                        timeSlot.SetPassedAsGrey(day);
+                    }
+                }
+            }
+
+            for (int day = 1; day <= currentDayAsInt; day++) // Loop from Monday to current day
+            {
+                foreach (var timeSlot in CurrentTimeSlots)
+                {
+                    int timeSlotID = timeSlot.TimeSlotID;
+
+                    if (day < currentDayAsInt || (day == currentDayAsInt && timeSlotID <= closestTimeSlotID))
+                    {
+                        // Mark the time slot as passed (grey)
+                        timeSlot.SetPassedAsGrey(day);
+                    }
+                }
+            }
+            OnPropertyChanged(nameof(CurrentTimeSlots)); // Notify the UI of the changes
+        
+        //CurrentTimeSlot = CurrentTime //9:00 Kigger 9:10 
+
+        //timeSlots.Find(x => x.TimeSlotID == timePassedAsGrey(day);
+
+    }
 
 
         private ObservableCollection<string> _currentDays;
@@ -181,6 +265,7 @@ namespace El_Booking.ViewModel.BookingVM
             WeekNr = DateUtils.GetIso8601WeekOfYear(MondayOfWeek);
             GetCurrentTimeSlots(MondayOfWeek) ;
             GetCurrentDays(MondayOfWeek) ;
+            SetTimeSlotsAsPassed();
         }
 
         private bool NotLessThanCurrentWeek()
