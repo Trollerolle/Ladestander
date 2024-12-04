@@ -49,7 +49,10 @@ namespace El_Booking.Commands
 
 				if (_userViewModel.NewPassword != null)
 				{
-                    userToUpdate.Password = _userViewModel.NewPassword;
+					if (CheckCurrentPassword())
+						userToUpdate.Password = _userViewModel.NewPassword;
+					else
+						throw new NotSupportedException("Your old password didn't match");
                 }
 					
 			}
@@ -73,18 +76,21 @@ namespace El_Booking.Commands
 			}
 		}
 
-		bool CheckCurrentPassword()
+		private bool CheckCurrentPassword()
 		{
 			CheckPasswordView checkPwdView = new CheckPasswordView();
 			checkPwdView.ShowDialog();
-			if (checkPwdView.Success)
+
+            if (checkPwdView.Success)
 			{
-				return _userViewModel.NewPassword == checkPwdView.Password;
-			}
+				return _storer.UserRepository.Login(_userViewModel._currentUser.Email, checkPwdView.CurrentPassword);
+            }
+			
+			return false;
 			
 		}
 
-		public override bool CanExecute(object? parameter)
+        public override bool CanExecute(object? parameter)
 		{
 			if (string.IsNullOrWhiteSpace(_userViewModel.NewEmail) &&
 				string.IsNullOrWhiteSpace(_userViewModel.NewPhoneNumber) &&

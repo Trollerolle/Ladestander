@@ -21,18 +21,31 @@ namespace El_Booking.View.Booking
     public partial class CheckPasswordView : Window
     {
 
-        public bool Success { get; }
+        public bool Success { get; private set; }
+        public string CurrentPassword { get; private set; }
+
         public CheckPasswordView()
         {
             InitializeComponent();
         }
 
+        private void btnConfirm_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentPassword = this.pwdCurrentPassword.Password;
+            Success = true;
+            Close();
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            Success = false;
+            Close();
+        }
+
         private void pwdBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (this.DataContext != null)
-            {
-                ((LoginViewModel)this.DataContext).EnteredPassword = ((PasswordBox)sender).Password;
-            }
+            if (!string.IsNullOrWhiteSpace(pwdCurrentPassword.Password))
+                btnConfirm.IsEnabled = true;
         }
     }
 }
