@@ -50,8 +50,11 @@ namespace El_Booking.ViewModel.BookingVM
 
             if (MainBookingViewModel.CurrentBooking != null)
             {
-                SetTimeSlotsAsYours();
-            } 
+                if (MainBookingViewModel.CurrentBooking.Date >= MondayOfWeek && MainBookingViewModel.CurrentBooking.Date <= MondayOfWeek.AddDays(5))
+                {
+                    SetTimeSlotsAsYours();
+                }
+            }
 
             MainBookingViewModel.PropertyChanged += OnMainBookingViewModelPropertyChanged;
 
@@ -60,10 +63,18 @@ namespace El_Booking.ViewModel.BookingVM
         private void OnMainBookingViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
 			GetCurrentTimeSlots(MondayOfWeek);
-            SetTimeSlotsAsPassed();
+
+            if (DateOnly.FromDateTime(DateTime.Today) >= MondayOfWeek)
+            { 
+                SetTimeSlotsAsPassed();
+            }
+
             if (MainBookingViewModel.CurrentBooking != null)
             {
-                SetTimeSlotsAsYours();
+                if (MainBookingViewModel.CurrentBooking.Date >= MondayOfWeek && MainBookingViewModel.CurrentBooking.Date <= MondayOfWeek.AddDays(5))
+                {
+                    SetTimeSlotsAsYours();
+                }
             }
 
             OnPropertyChanged();
@@ -248,10 +259,18 @@ namespace El_Booking.ViewModel.BookingVM
             WeekNr = DateUtils.GetIso8601WeekOfYear(MondayOfWeek);
             GetCurrentTimeSlots(MondayOfWeek) ;
             GetCurrentDays(MondayOfWeek) ;
-            SetTimeSlotsAsPassed();
+
+            if (DateOnly.FromDateTime(DateTime.Today) >= MondayOfWeek)
+            {
+                SetTimeSlotsAsPassed();
+            }
+
             if (MainBookingViewModel.CurrentBooking != null)
             {
-                SetTimeSlotsAsYours();
+                if (MainBookingViewModel.CurrentBooking.Date >= MondayOfWeek && MainBookingViewModel.CurrentBooking.Date <= MondayOfWeek.AddDays(5))
+                {
+                    SetTimeSlotsAsYours();
+                }
             };
         }
 
