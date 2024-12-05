@@ -47,7 +47,11 @@ namespace El_Booking.ViewModel.BookingVM
             GetCurrentDays(MondayOfWeek);
 
             SetTimeSlotsAsPassed();
-            SetTimeSlotsAsYours();
+
+            if (MainBookingViewModel.CurrentBooking != null)
+            {
+                SetTimeSlotsAsYours();
+            } 
 
             MainBookingViewModel.PropertyChanged += OnMainBookingViewModelPropertyChanged;
 
@@ -57,7 +61,10 @@ namespace El_Booking.ViewModel.BookingVM
         {
 			GetCurrentTimeSlots(MondayOfWeek);
             SetTimeSlotsAsPassed();
-            SetTimeSlotsAsYours();
+            if (MainBookingViewModel.CurrentBooking != null)
+            {
+                SetTimeSlotsAsYours();
+            }
 
             OnPropertyChanged();
         }
@@ -117,12 +124,14 @@ namespace El_Booking.ViewModel.BookingVM
         private void SetTimeSlotsAsPassed()
         {
 
-            int currentDayAsInt = (int)DateTime.Now.DayOfWeek;
+            int currentDayAsInt = (int)DateTime.Now.DayOfWeek-1;
 
-            TimeSpan currentTime = TimeSpan.Parse("07:00:00"); //Skal ændres tilbage til idag
+            var Tid = DateTimeOffset.Now;
+
+            TimeOnly currentTime = TimeOnly.FromDateTime(DateTime.Now); //Skal ændres tilbage til idag
 
             NearestTimeSlot = CurrentTimeSlots
-            .Where(slot => TimeSpan.Parse(slot.StartTime) <= currentTime) // Kun time slots som er <= current time
+            .Where(slot => TimeOnly.Parse(slot.StartTime) <= currentTime) // Kun time slots som er <= current time
             .OrderByDescending(slot => TimeSpan.Parse(slot.StartTime))    // Sorter efter højeste først. (Hvis du kigger klokken 13, kan det være 6 12 eller 9, IKKE 15 som bliver sorteret til 12, 9, 6)
             .FirstOrDefault();                                           // Vælg første, ( 12 )
 
@@ -138,7 +147,7 @@ namespace El_Booking.ViewModel.BookingVM
                 foreach (var timeSlot in CurrentTimeSlots) // For hver timeslot
                 {
                     // hvis dagen er mindre end idag, ELLER dagen ER idag OG timeslottet er mindre end eller lig closestTimeSlot
-                    if (day < currentDayAsInt || (day == currentDayAsInt && timeSlot.TimeSlotID <= closestTimeSlotID))
+                    if (day < currentDayAsInt || (day == currentDayAsInt && timeSlot.TimeSlotID < closestTimeSlotID))
                     {
                         // Sæt til grå
                         timeSlot.SetPassedAsGrey(day);
@@ -151,8 +160,8 @@ namespace El_Booking.ViewModel.BookingVM
 
         private void SetTimeSlotsAsYours()
         {
-            int bookingTimeSlotID = 2;//User.Booking.TimeSlotID;
-            int bookingDate = 4;//(int)User.Booking.Date; //date parsed til int
+            int bookingTimeSlotID = MainBookingViewModel.CurrentBooking.TimeSlot.TimeSlotID; //2;//User.Booking.TimeSlotID;
+            int bookingDate = (int)MainBookingViewModel.CurrentBooking.Date.DayOfWeek-1;//4;//(int)User.Booking.Date; //date parsed til int
 
             //CurrentTimeSlots.Find(x => x.TimeSlotID == bookingTimeSlotID).SetYoursAsOrange(bookingDate);
             var timeSlot = CurrentTimeSlots.FirstOrDefault(x => x.TimeSlotID == bookingTimeSlotID);
@@ -240,7 +249,10 @@ namespace El_Booking.ViewModel.BookingVM
             GetCurrentTimeSlots(MondayOfWeek) ;
             GetCurrentDays(MondayOfWeek) ;
             SetTimeSlotsAsPassed();
-            SetTimeSlotsAsYours();
+            if (MainBookingViewModel.CurrentBooking != null)
+            {
+                SetTimeSlotsAsYours();
+            };
         }
 
         private bool NotLessThanCurrentWeek()
