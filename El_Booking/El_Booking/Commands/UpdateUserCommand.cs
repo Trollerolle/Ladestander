@@ -69,10 +69,12 @@ namespace El_Booking.Commands
 				_userViewModel.UserEmail = userToUpdate.Email;
 				_userViewModel.UserPhoneNumber = userToUpdate.TelephoneNumber;
 				ClearProfileFields();
+
+				MessageBox.Show($"Din bruger er nu opdateret", "Succes", MessageBoxButton.OK);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				throw;
+				MessageBox.Show($"Din bruger blev ikke opdateret", "Fejl", MessageBoxButton.OK);
 			}
 		}
 

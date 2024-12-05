@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
+using System.Windows;
 using El_Booking.Model;
 using El_Booking.Utility;
 using El_Booking.ViewModel;
@@ -35,7 +37,7 @@ namespace El_Booking.Commands
 
 			Car carToUpdate = _userViewModel.MainBookingViewModel.CurrentCar is not null ? _userViewModel.MainBookingViewModel.CurrentCar : new Car() { UserID = (int)_userViewModel.MainBookingViewModel.CurrentUser.UserID };
 
-			try
+			try 
 			{
 
 				carToUpdate.Brand = _userViewModel.NewCarBrand;
@@ -52,10 +54,13 @@ namespace El_Booking.Commands
 				}
 				_userViewModel.MainBookingViewModel.CurrentCar = carToUpdate;
 
+				MessageBox.Show($"Din bil er nu opdateret", "Succes", MessageBoxButton.OK);
+
+				 
 			}
 			catch (Exception)
 			{
-				throw;
+				MessageBox.Show($"Din bil blev ikke opdateret", "Fejl", MessageBoxButton.OK);
 			}
 			finally
 			{
