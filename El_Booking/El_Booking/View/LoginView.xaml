@@ -7,15 +7,16 @@
     xmlns:local="clr-namespace:El_Booking.View"
     mc:Ignorable="d"
     d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.Background>
-            <ImageBrush
-                Stretch="None"
-                ImageSource="Background1.png"
-                AlignmentY="Top"
-                AlignmentX="Center"/>
-        </Grid.Background>
-        <StackPanel 
+	<Border CornerRadius="10"
+			Margin="10,10,10,60">
+		<Border.Background>
+			<ImageBrush Stretch="Fill"
+						ImageSource="Background1.png"
+						AlignmentY="Top"
+						AlignmentX="Center" />
+		</Border.Background>
+		<Grid >
+			<StackPanel 
             Grid.Column="0" 
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
@@ -54,4 +55,5 @@
                 Command="{Binding NavigateForgotPasswordCommand}"/>
         </StackPanel>
     </Grid>
+	</Border>
 </UserControl>
