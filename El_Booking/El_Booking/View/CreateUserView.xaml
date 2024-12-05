@@ -19,7 +19,7 @@
 		<Grid>
 			<Grid HorizontalAlignment="Left"
 				  VerticalAlignment="Center"
-				  Width="300"
+				  Width="400"
 				  Margin="100,0,0,50">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="auto" />
@@ -45,17 +45,17 @@
 
 					<TextBlock Text="Email" />
 					<TextBox x:Name="tbEmail"
-							 Width="100"
+							 Width="150"
 							 Text="{Binding EnteredEmail, UpdateSourceTrigger=PropertyChanged}" />
 
 					<TextBlock Text="Fornavn"
 							   Margin="0,10,0,0" />
-					<TextBox Width="100"
+					<TextBox Width="150"
 							 Text="{Binding EnteredFirstName, UpdateSourceTrigger=PropertyChanged}" />
 
 					<TextBlock Text="Kodeord"
 							   Margin="0,10,0,0" />
-					<PasswordBox Width="100"
+					<PasswordBox Width="150"
 								 MaxLength="21"
 								 PasswordChanged="pwdBox1_PasswordChanged" />
 
@@ -70,18 +70,18 @@
 							VerticalAlignment="Center">
 					<TextBlock Text="Telefonnummer" />
 					<TextBox x:Name="tbPhone"
-							 Width="100"
+							 Width="150"
 							 Text="{Binding EnteredPhoneNumber, UpdateSourceTrigger=PropertyChanged}"
 							 PreviewTextInput="PhonenumberValidation" />
 
 					<TextBlock Text="Efternavn"
 							   Margin="0,10,0,0" />
-					<TextBox Width="100"
+					<TextBox Width="150"
 							 Text="{Binding EnteredLastName, UpdateSourceTrigger=PropertyChanged}" />
 
 					<TextBlock Text="Gentag Kodeord"
 							   Margin="0,10,0,0" />
-					<PasswordBox Width="100"
+					<PasswordBox Width="150"
 								 MaxLength="21"
 								 PasswordChanged="pwdBox2_PasswordChanged" />
 

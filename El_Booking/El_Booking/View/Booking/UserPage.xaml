@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="UserPage">
-
+	<Border Background="{DynamicResource Background3}" CornerRadius="10">
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -15,10 +15,7 @@
             <ColumnDefinition Width="50*"/>
         </Grid.ColumnDefinitions>
         
-        <!-- baggrund -->
-        <Rectangle Grid.ColumnSpan="2" Height="auto" Width="auto" Fill="{DynamicResource Background3}"/>
-
-        <!-- profilside -->
+		<!-- profilside -->
         <Grid Grid.Column="0" Margin="30,30,15,30">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20*"/>
@@ -106,4 +103,5 @@
             </Border>
         </Grid>
     </Grid>
+	</Border>
 </Page>

@@ -43,8 +43,9 @@
 		</Style>
 
 	</Page.Resources>
-	<Grid Background="White">
-		<Grid Margin="215,30,215,30">
+	<Border Background="{DynamicResource Background3}"
+			CornerRadius="10">
+		<Grid Margin="260,30,260,30">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="75.4" />
 				<RowDefinition Height="94.25" />
@@ -105,5 +106,5 @@
 
 			</Border>
 		</Grid>
-	</Grid>
+	</Border>
 </Page>
