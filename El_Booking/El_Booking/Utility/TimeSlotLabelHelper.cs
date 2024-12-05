@@ -43,7 +43,7 @@ namespace El_Booking.Utility
             
             TimeSlotViewModel row = (TimeSlotViewModel)values[3];
 
-            bool dayIsFull = false;
+            int dayIsFull = 0;
             switch (columnIndex)
             {
                 case 0:
@@ -63,7 +63,7 @@ namespace El_Booking.Utility
                     break;
             }
 
-            if (!dayIsFull && selectedColumn is not null)
+            if (dayIsFull == 0 && selectedColumn is not null)
             {
 
                 if (row.TimeSlotID -1 == selectedRow && columnIndex == selectedColumn)

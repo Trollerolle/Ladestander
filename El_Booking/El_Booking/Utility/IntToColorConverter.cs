@@ -15,9 +15,30 @@ namespace El_Booking.Utility
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool full)
+            if (value is int full)
             {
-                return full ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Green);
+                switch (value)
+                {
+                    
+                    case 1:
+                        return new SolidColorBrush(Colors.Red);
+                        break;
+                    
+                    case 2:
+                        return new SolidColorBrush(Colors.Gray);
+                        break;
+
+                    case 3:
+                        return new SolidColorBrush(Colors.Orange);
+                        break;
+                    default:
+                        return new SolidColorBrush(Colors.Green);
+                        break;
+
+                }
+                
+                
+                //return full ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Green);
             }
             return DependencyProperty.UnsetValue;
         }
