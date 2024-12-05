@@ -65,7 +65,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="TextAlignment" Value="Center" />
-            <Setter Property="Text" Value="{Binding StartTime}"/>
+            <Setter Property="Text" Value="{Binding Time}"/>
         </Style>
         
         <!-- column headers -->

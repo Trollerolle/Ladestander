@@ -142,8 +142,8 @@ namespace El_Booking.ViewModel.BookingVM
             TimeOnly currentTime = TimeOnly.FromDateTime(DateTime.Now); //Skal ændres tilbage til idag
 
             NearestTimeSlot = CurrentTimeSlots
-            .Where(slot => TimeOnly.Parse(slot.StartTime) <= currentTime) // Kun time slots som er <= current time
-            .OrderByDescending(slot => TimeSpan.Parse(slot.StartTime))    // Sorter efter højeste først. (Hvis du kigger klokken 13, kan det være 6 12 eller 9, IKKE 15 som bliver sorteret til 12, 9, 6)
+            .Where(slot => slot.StartTime <= currentTime) // Kun time slots som er <= current time
+            .OrderByDescending(slot => slot.StartTime)    // Sorter efter højeste først. (Hvis du kigger klokken 13, kan det være 6 12 eller 9, IKKE 15 som bliver sorteret til 12, 9, 6)
             .FirstOrDefault();                                           // Vælg første, ( 12 )
 
             int? closestTimeSlotID = _nearestTimeSlot?.TimeSlotID; // Sætter det ID der er tættest til en int
@@ -292,7 +292,8 @@ namespace El_Booking.ViewModel.BookingVM
     {
         public readonly int TimeSlotID;
 
-        public string StartTime { get; set; }
+        public string Time { get; set; }
+        public TimeOnly StartTime { get; set; }
 
         public int MondayFull { get; set; }
         public int TuesdayFull { get; set; }
@@ -304,7 +305,8 @@ namespace El_Booking.ViewModel.BookingVM
         {
             TimeSlotID = timeSlot.TimeSlotID;
 
-            StartTime = $"{timeSlot.TimeSlotStart.ToString("HH:mm")} - {timeSlot.TimeSlotEnd.ToString("HH:mm")}";
+            Time = $"{timeSlot.TimeSlotStart.ToString("HH:mm")} - {timeSlot.TimeSlotEnd.ToString("HH:mm")}";
+            StartTime = timeSlot.TimeSlotStart;
 
             MondayFull = 0;
             TuesdayFull = 0;
