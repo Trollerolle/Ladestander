@@ -8,22 +8,22 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows;
 
-namespace El_Booking.Utility
+namespace El_Booking.View.Converters
 {
 
     public class IntToColorConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is int full)
             {
                 switch (value)
                 {
-                    
+
                     case 1:
                         return new SolidColorBrush(Colors.Red);
                         break;
-                    
+
                     case 2:
                         return new SolidColorBrush(Colors.Gray);
                         break;
@@ -36,8 +36,8 @@ namespace El_Booking.Utility
                         break;
 
                 }
-                
-                
+
+
                 //return full ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Green);
             }
             return DependencyProperty.UnsetValue;

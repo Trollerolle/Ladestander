@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:El_Booking.View.Booking"
       
-      xmlns:converters="clr-namespace:El_Booking.Utility"
+      xmlns:converters="clr-namespace:El_Booking.View.Converters"
       
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
