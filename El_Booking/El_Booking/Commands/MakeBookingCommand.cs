@@ -15,10 +15,8 @@ namespace El_Booking.Commands
     public class MakeBookingCommand : CommandBase
     {
         private BookingViewModel _bookingViewModel { get; }
-        private YourBookingViewModel _yourBookingViewModel { get; set; }
         private Storer _storer { get; }
 
-        //private readonly MainBookingViewModel _mainBookingViewModel;
 
         public MakeBookingCommand(BookingViewModel bookingViewModel, Storer storer)
         {
@@ -53,7 +51,6 @@ namespace El_Booking.Commands
                 _bookingViewModel.MainBookingViewModel.CurrentBooking = newBooking;
                 _bookingViewModel.ChangeWeek(0);
 
-				// Fjernet " Gå til \"Din Booking\" for at se detaljer" fra beskeden og sat den til at skifte til bookingen efter OK.
 				MessageBox.Show($"Din booking er gennemført.", "Succes", MessageBoxButton.OK); 
 				_bookingViewModel.MainBookingViewModel.SeeYourBookingCommand.Execute(parameter);
 

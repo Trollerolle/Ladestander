@@ -15,9 +15,7 @@ using System.Windows.Shapes;
 
 namespace El_Booking.View.Booking
 {
-    /// <summary>
-    /// Interaction logic for CheckPasswordView.xaml
-    /// </summary>
+ 
     public partial class CheckPasswordView : Window
     {
 

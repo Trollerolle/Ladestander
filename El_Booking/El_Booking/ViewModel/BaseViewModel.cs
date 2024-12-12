@@ -12,8 +12,6 @@ namespace El_Booking.ViewModel
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        // Notifies View når properties ændres
-
         protected void OnPropertyChanged(string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

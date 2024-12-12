@@ -29,19 +29,12 @@ namespace El_Booking.Model
 			set { _timeSlotEnd = value; }
 		}
 
-		private bool _full;
-		public bool Full
-		{
-			get { return _full; }
-			set { _full = value; }
-		}
 
-		public TimeSlot(int timeSlotID, TimeOnly timeSlotStart, TimeOnly timeSlotEnd, bool full) 
+		public TimeSlot(int timeSlotID, TimeOnly timeSlotStart, TimeOnly timeSlotEnd) 
 		{ 
 			this.TimeSlotID = timeSlotID;
 			this.TimeSlotStart = timeSlotStart;
 			this.TimeSlotEnd = timeSlotEnd;
-			this.Full = full;
 		}
 	}
 }

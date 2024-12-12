@@ -19,9 +19,7 @@ using El_Booking.ViewModel.BookingVM;
 
 namespace El_Booking.View.Booking
 {
-    /// <summary>
-    /// Interaction logic for BookingWeek.xaml
-    /// </summary>
+
     public partial class BookingWeekPage : Page
     {
         public BookingWeekPage()

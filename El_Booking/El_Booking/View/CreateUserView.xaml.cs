@@ -17,22 +17,12 @@ using System.Windows.Shapes;
 
 namespace El_Booking.View
 {
-    /// <summary>
-    /// Interaction logic for CreateUserView1.xaml
-    /// </summary>
+
     public partial class CreateUserView : UserControl
     {
         public CreateUserView()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click_Back(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void Button_Click_CreateUser(object sender, RoutedEventArgs e)
-        {
         }
 
         private void pwdBox1_PasswordChanged(object sender, RoutedEventArgs e)

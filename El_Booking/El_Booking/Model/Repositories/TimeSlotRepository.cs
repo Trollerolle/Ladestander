@@ -49,8 +49,7 @@ namespace El_Booking.Model.Repositories
 						(
 							timeSlotID: (int)reader["TimeSlotID"],
 							timeSlotStart: TimeOnly.FromTimeSpan((TimeSpan)reader["TimeSlotStart"]),
-							timeSlotEnd: TimeOnly.FromTimeSpan((TimeSpan)reader["TimeSlotEnd"]),
-							full: false
+							timeSlotEnd: TimeOnly.FromTimeSpan((TimeSpan)reader["TimeSlotEnd"])
 						)
                         );
 					}
@@ -74,7 +73,8 @@ namespace El_Booking.Model.Repositories
                 using SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-					int day = (int)((DateTime)reader["Date_"]).DayOfWeek-1; //-1 fordi søndag er nul og vi læser 3. (3-1 = 2) I vores array er onsdag = 2 da mandag er 0. Men dayesOfWeek er mandag 1
+                    //-1 fordi søndag er nul og vi læser 3. (3-1 = 2) I vores array er onsdag = 2 da mandag er 0. Men dayesOfWeek er mandag 1.
+					int day = (int)((DateTime)reader["Date_"]).DayOfWeek -1; 
 					int timeSlotID = (int)reader["TimeSlotID"];
 
 
