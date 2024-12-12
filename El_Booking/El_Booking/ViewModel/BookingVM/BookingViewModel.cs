@@ -21,9 +21,11 @@ namespace El_Booking.ViewModel.BookingVM
     {
 
         public ICommand MakeBookingCommand { get; }
+        public ICommand ChangeWeekBackwardCommand { get; }
+		public ICommand ChangeWeekForwardCommand { get; }
 
-        public DateOnly MondayOfWeek { get; set; } // Dato for mandagen i den valgte uge.
-        private readonly DateOnly _startingDate;
+		public DateOnly MondayOfWeek { get; set; } // Dato for mandagen i den valgte uge.
+        internal readonly DateOnly _startingDate;
         private readonly Storer _storer;
 
         public MainBookingViewModel MainBookingViewModel { get; }
@@ -39,6 +41,8 @@ namespace El_Booking.ViewModel.BookingVM
             _storer = storer;
 
             MakeBookingCommand = new MakeBookingCommand(this, storer);
+            ChangeWeekBackwardCommand = new ChangeWeekBackwardCommand(this);
+            ChangeWeekForwardCommand = new ChangeWeekForwardCommand(this);
 
 			WeekNr = DateUtils.GetIso8601WeekOfYear(_startingDate);
 			MondayOfWeek = _startingDate.StartOfWeek();
@@ -47,14 +51,6 @@ namespace El_Booking.ViewModel.BookingVM
             GetCurrentDays(MondayOfWeek);
 
             SetTimeSlotsAsPassed();
-
-            if (MainBookingViewModel.CurrentBooking != null)
-            {
-                if (MainBookingViewModel.CurrentBooking.Date >= MondayOfWeek && MainBookingViewModel.CurrentBooking.Date <= MondayOfWeek.AddDays(5))
-                {
-                    SetTimeSlotsAsYours();
-                }
-            }
 
             MainBookingViewModel.PropertyChanged += OnMainBookingViewModelPropertyChanged;
 
@@ -91,7 +87,7 @@ namespace El_Booking.ViewModel.BookingVM
             }
         } 
 
-        private void GetCurrentTimeSlots(DateOnly monday)
+        internal void GetCurrentTimeSlots(DateOnly monday)
         {
             IEnumerable<TimeSlot> availableTimeSlots = _storer.TimeSlotRepository.GetAll();
 
@@ -132,7 +128,7 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-        private void SetTimeSlotsAsPassed()
+        internal void SetTimeSlotsAsPassed()
         {
 
             int currentDayAsInt = (int)DateTime.Now.DayOfWeek-1;
@@ -168,7 +164,7 @@ namespace El_Booking.ViewModel.BookingVM
 
         }
 
-        private void SetTimeSlotsAsYours()
+        internal void SetTimeSlotsAsYours()
         {
             int bookingTimeSlotID = MainBookingViewModel.CurrentBooking.TimeSlot.TimeSlotID; 
             int bookingDate = (int)MainBookingViewModel.CurrentBooking.Date.DayOfWeek-1;
@@ -193,7 +189,7 @@ namespace El_Booking.ViewModel.BookingVM
             }
         }
 
-        private void GetCurrentDays(DateOnly monday)
+        internal void GetCurrentDays(DateOnly monday)
         {
             List<string> days = new List<string>();
             
@@ -238,146 +234,8 @@ namespace El_Booking.ViewModel.BookingVM
 
         public bool HasBooking => MainBookingViewModel.CurrentBooking != null ? true : false;
 
-        public RelayCommand ChangeWeekForwardCommand => new RelayCommand(
-        execute => ChangeWeek(1),
-        canExecute => NotMoreThanMonthInFuture()
-        );
-
-        public RelayCommand ChangeWeekBackwardCommand => new RelayCommand(
-        execute => ChangeWeek(-1),
-        canExecute => NotLessThanCurrentWeek()
-        );
-
-        public void ChangeWeek(int difference) // forskellen kan være -1 eller 1. Men kan også bruges til at ændre flere uger på en gang fx 3 uger frem
-        {
-            MondayOfWeek = MondayOfWeek.AddDays(7 * difference);
-
-            SelectedDay = null;
-            SelectedTimeSlot = null;
-            WeekNr = DateUtils.GetIso8601WeekOfYear(MondayOfWeek);
-            GetCurrentTimeSlots(MondayOfWeek) ;
-            GetCurrentDays(MondayOfWeek) ;
-
-            if (DateOnly.FromDateTime(DateTime.Today) >= MondayOfWeek)
-            {
-                SetTimeSlotsAsPassed();
-            }
-
-            if (MainBookingViewModel.CurrentBooking != null)
-            {
-                if (MainBookingViewModel.CurrentBooking.Date >= MondayOfWeek && MainBookingViewModel.CurrentBooking.Date <= MondayOfWeek.AddDays(5))
-                {
-                    SetTimeSlotsAsYours();
-                }
-            };
-        }
-
-        private bool NotLessThanCurrentWeek()
-        {
-            DateTime currentDay = DateTime.Today;
-            return MondayOfWeek > currentDay.StartOfWeek();
-        }
-
-        private bool NotMoreThanMonthInFuture()
-        {
-            DateOnly limit = DateOnly.FromDateTime(DateTime.Today);
-            return MondayOfWeek <= (limit.AddDays(30));
-        }
         // Dynamisk højde Binding
 		public int RowHeight => (CurrentTimeSlots.Count * 50) + 2;
     }
 
-    public class TimeSlotViewModel
-    {
-        public readonly int TimeSlotID;
-
-        public string Time { get; set; }
-        public TimeOnly StartTime { get; set; }
-
-        public int MondayFull { get; set; }
-        public int TuesdayFull { get; set; }
-        public int WednesdayFull { get; set; }
-        public int ThursdayFull { get; set; }
-        public int FridayFull { get; set; }
-
-        public TimeSlotViewModel(TimeSlot timeSlot)
-        {
-            TimeSlotID = timeSlot.TimeSlotID;
-
-            Time = $"{timeSlot.TimeSlotStart.ToString("HH:mm")} - {timeSlot.TimeSlotEnd.ToString("HH:mm")}";
-            StartTime = timeSlot.TimeSlotStart;
-
-            MondayFull = 0;
-            TuesdayFull = 0;
-            WednesdayFull = 0;
-            ThursdayFull = 0;
-            FridayFull = 0;
-        }
-
-        public void SetDayFull(int day)
-        {
-            switch (day)
-            {
-                case 0:
-                    MondayFull = 1;
-                    break;
-                case 1:
-                    TuesdayFull = 1;
-                    break;
-                case 2:
-                    WednesdayFull = 1;
-                    break;
-                case 3:
-                    ThursdayFull = 1;
-                    break;
-                case 4:
-                    FridayFull = 1;
-                    break;
-            }
-        }
-
-        public void SetPassedAsGrey(int day)
-        {
-            switch (day)
-            {
-                case 0:
-                    MondayFull = 2;
-                    break;
-                case 1:
-                    TuesdayFull = 2;
-                    break;
-                case 2:
-                    WednesdayFull = 2;
-                    break;
-                case 3:
-                    ThursdayFull = 2;
-                    break;
-                case 4:
-                    FridayFull = 2;
-                    break;
-            }
-        }
-
-        public void SetYoursAsOrange(int day)
-        {
-            switch (day)
-            {
-                case 0:
-                    MondayFull = 3;
-                    break;
-                case 1:
-                    TuesdayFull = 3;
-                    break;
-                case 2:
-                    WednesdayFull = 3;
-                    break;
-                case 3:
-                    ThursdayFull = 3;
-                    break;
-                case 4:
-                    FridayFull = 3;
-                    break;
-            }
-        }
-    }
 }
