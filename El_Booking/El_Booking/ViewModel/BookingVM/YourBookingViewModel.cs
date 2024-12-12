@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using El_Booking.Commands;
 using El_Booking.Model;
 using El_Booking.Model.Repositories;
@@ -24,10 +25,13 @@ namespace El_Booking.ViewModel.BookingVM
 
         private readonly Storer _storer;
 
+        public ICommand DeleteBookingCommand { get; }
+
         public YourBookingViewModel(Storer storer, MainBookingViewModel mainBookingViewModel)
         {
             MainBookingViewModel = mainBookingViewModel;
             _storer = storer;
+            DeleteBookingCommand = new DeleteBookingCommand(mainBookingViewModel, storer);
             MainBookingViewModel.PropertyChanged += OnMainBookingViewModelPropertyChanged;
         }
 
@@ -36,25 +40,5 @@ namespace El_Booking.ViewModel.BookingVM
             OnPropertyChanged();
         }
 
-        public RelayCommand DeleteBookingCommand => new RelayCommand(
-                execute => DeleteBooking(),
-                canExecute => CurrentBooking is not null
-                );
-
-        public void DeleteBooking()
-        {
-
-            var result = MessageBox.Show(
-                "Er du sikker på, at du vil slette din booking?",
-                "Bekræft sletning",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-
-            if (result == MessageBoxResult.Yes)
-            {
-				_storer.BookingRepository.Delete(MainBookingViewModel.CurrentBooking.BookingID);
-				MainBookingViewModel.CurrentBooking = null;
-            }
-        }
     }
 }
