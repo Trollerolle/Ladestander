@@ -15,10 +15,22 @@ namespace El_Booking.ViewModel
     {
 
         public ICommand NavigateLoginCommand { get; }
+		public ICommand ForgotPasswordCommand { get; }
 
         public ForgotPasswordViewModel(Storer storer, Navigation navigation) 
         {
             NavigateLoginCommand = new NavigateCommand<LoginViewModel>(navigation, () => new LoginViewModel(storer, navigation));
+			ForgotPasswordCommand = new ForgotPasswordCommand(this, storer);
         }
-    }
+		private string? _enteredEmail;
+		public string? EnteredEmail
+		{
+			get { return _enteredEmail; }
+			set
+			{
+				_enteredEmail = value;
+				OnPropertyChanged();
+			}
+		}
+	}
 }

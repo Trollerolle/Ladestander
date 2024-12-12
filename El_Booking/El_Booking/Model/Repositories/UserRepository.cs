@@ -137,5 +137,18 @@ namespace El_Booking.Model.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public void Forgot(string parameter)
+        {
+            string query = "EXEC [dbo].[usp_ForgotPW] @Email;";
+
+            using (SqlConnection connection = new SqlConnection(_connString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Email", parameter);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }

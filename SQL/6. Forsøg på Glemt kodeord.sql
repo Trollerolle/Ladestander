@@ -39,6 +39,8 @@ SET @char = CHAR(@charI)
 END;
 GO
 
+GRANT EXEC ON usp_ForgotPW TO WPFApp;
+
 CREATE OR ALTER PROC usp_ForgotPW
 (
 @Email NvarChar(50)
@@ -49,10 +51,16 @@ DECLARE @TempPW Nvarchar(8);
 DECLARE @Date_ datetime = GETDATE();
 DECLARE @UserID INT;
 
+
 SET @UserID = (SELECT UserID FROM Users WHERE Email = @Email);
 
 IF @UserID IS NULL
 	Begin
+		RETURN 2;
+	END;
+
+IF EXISTS (SELECT 1 FROM ForgotPassword WHERE UserID = @UserID AND Date_ >= DATEADD(MINUTE, -15, @Date_)) 
+	Begin 
 		RETURN 2;
 	END;
 
