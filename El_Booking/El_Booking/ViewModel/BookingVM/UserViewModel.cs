@@ -54,6 +54,8 @@ namespace El_Booking.ViewModel.BookingVM
                 OnPropertyChanged();
             }
         }
+
+        // Binding fra UserPage xaml.
         public string? CarDetails => GetCarDetails(MainBookingViewModel.CurrentCar);
         public string? LicensePlate => GetLicensePlate(MainBookingViewModel.CurrentCar);
 

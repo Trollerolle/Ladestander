@@ -46,7 +46,6 @@ namespace El_Booking.Model.Repositories
 				connection.Open();
 				command.ExecuteNonQuery();
 
-				//currentApp.CurrentUser.Car.CarID = (int)scopeCarIDParam.Value;
 			}
 
 		}
@@ -95,7 +94,6 @@ namespace El_Booking.Model.Repositories
 		public void Update(Car car)
 		{
 			string query = "EXEC [dbo].[usp_UpdateCar] @CarID, @Brand, @Model, @LicensePlate;";
-			// Så skal vi have flere SP ud fra hver kombination af data der skal opdateres ? tjek update i UserRepo.
 
 			using (SqlConnection connection = new SqlConnection(_connString))
 			{

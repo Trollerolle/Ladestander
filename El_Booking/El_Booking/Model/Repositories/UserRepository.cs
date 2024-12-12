@@ -10,7 +10,6 @@ using Windows.System;
 
 namespace El_Booking.Model.Repositories
 {
-    // ændre til internal
     public class UserRepository : IRepository<User>
     {
 		private readonly App currentApp;

@@ -120,8 +120,8 @@ namespace El_Booking.ViewModel.BookingVM
         }
 
 
-        //Prop til SetTimeslotsAsPassed som bruges til at gemme den
-        private TimeSlotViewModel _nearestTimeSlot;
+		// Prop til SetTimeslotsAsPassed som bruges til at gemme den "nærmeste" timeslot (Hvis klokken er 10:30 får man time slot fra 9:00-12:00)
+		private TimeSlotViewModel _nearestTimeSlot;
         public TimeSlotViewModel NearestTimeSlot
         {
             get => _nearestTimeSlot;
@@ -149,8 +149,7 @@ namespace El_Booking.ViewModel.BookingVM
             int? closestTimeSlotID = _nearestTimeSlot?.TimeSlotID; // Sætter det ID der er tættest til en int
 
 
-            //// Listen er af int[] som er: [TimeSlotID, Day]
-            //List<int[]> passedSlots = new List<int[]>();
+       
                      
 
             for (int day = 0; day <= currentDayAsInt; day++) // Kør fra mandag til idag
@@ -171,10 +170,9 @@ namespace El_Booking.ViewModel.BookingVM
 
         private void SetTimeSlotsAsYours()
         {
-            int bookingTimeSlotID = MainBookingViewModel.CurrentBooking.TimeSlot.TimeSlotID; //2;//User.Booking.TimeSlotID;
-            int bookingDate = (int)MainBookingViewModel.CurrentBooking.Date.DayOfWeek-1;//4;//(int)User.Booking.Date; //date parsed til int
+            int bookingTimeSlotID = MainBookingViewModel.CurrentBooking.TimeSlot.TimeSlotID; 
+            int bookingDate = (int)MainBookingViewModel.CurrentBooking.Date.DayOfWeek-1;
 
-            //CurrentTimeSlots.Find(x => x.TimeSlotID == bookingTimeSlotID).SetYoursAsOrange(bookingDate);
             var timeSlot = CurrentTimeSlots.FirstOrDefault(x => x.TimeSlotID == bookingTimeSlotID);
             if (timeSlot != null)
             {
@@ -200,7 +198,7 @@ namespace El_Booking.ViewModel.BookingVM
             List<string> days = new List<string>();
             
             for (int i = 0; i < 5; i++)
-                days.Add(monday.AddDays(i).ToString("dd/MM/yyyy")); // hvorfor formaterer den / som . ??
+                days.Add(monday.AddDays(i).ToString("dd/MM/yyyy")); // format vises ud fra OS culture.
 
             CurrentDays = new ObservableCollection<string>(days);
         }
@@ -285,6 +283,7 @@ namespace El_Booking.ViewModel.BookingVM
             DateOnly limit = DateOnly.FromDateTime(DateTime.Today);
             return MondayOfWeek <= (limit.AddDays(30));
         }
+        // Dynamisk højde Binding
 		public int RowHeight => (CurrentTimeSlots.Count * 50) + 2;
     }
 

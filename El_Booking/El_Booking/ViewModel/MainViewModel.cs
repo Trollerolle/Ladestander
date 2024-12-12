@@ -11,6 +11,7 @@ namespace El_Booking.ViewModel
     {
         private readonly Navigation _navigation;
 
+        // Binding fra Xaml i MainWindow.
         public BaseViewModel CurrentViewModel { get { return _navigation.CurrentViewModel; } }
 
         public MainViewModel(Navigation navigation) 

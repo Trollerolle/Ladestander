@@ -60,7 +60,6 @@ namespace El_Booking.Commands
                 !string.IsNullOrWhiteSpace(_loginViewModel.EnteredPassword) &&
                 base.CanExecute(parameter);
 
-            // https://www.youtube.com/watch?v=DNez3wIpHeE&list=PLA8ZIAm2I03hS41Fy4vFpRw8AdYNBXmNm&index=4
         }
 
     }

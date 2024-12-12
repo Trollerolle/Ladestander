@@ -37,8 +37,6 @@ namespace El_Booking.View.Converters
 
                 }
 
-
-                //return full ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Green);
             }
             return DependencyProperty.UnsetValue;
         }

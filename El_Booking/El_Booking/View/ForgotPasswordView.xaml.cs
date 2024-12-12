@@ -15,9 +15,7 @@ using System.Windows.Shapes;
 
 namespace El_Booking.View
 {
-    /// <summary>
-    /// Interaction logic for ForgotPasswordView1.xaml
-    /// </summary>
+
     public partial class ForgotPasswordView : UserControl
     {
         public ForgotPasswordView()
