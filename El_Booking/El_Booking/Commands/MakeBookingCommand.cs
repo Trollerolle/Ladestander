@@ -49,7 +49,7 @@ namespace El_Booking.Commands
                 _storer.BookingRepository.Add(newBooking);
                 newBooking = _storer.BookingRepository.GetBy(newBooking.CarID.ToString());
                 _bookingViewModel.MainBookingViewModel.CurrentBooking = newBooking;
-                _bookingViewModel.ChangeWeek(0);
+                _bookingViewModel.GetCurrentDays(_bookingViewModel._startingDate.StartOfWeek());
 
 				MessageBox.Show($"Din booking er gennemført.", "Succes", MessageBoxButton.OK); 
 				_bookingViewModel.MainBookingViewModel.SeeYourBookingCommand.Execute(parameter);

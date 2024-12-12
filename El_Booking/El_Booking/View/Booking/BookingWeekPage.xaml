@@ -85,9 +85,9 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Button Content="Forrige" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekBackwardCommand}"/>
+                <Button Content="Forrige" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekBackwardCommand, UpdateSourceTrigger=PropertyChanged}" />
                 <Label Content="{Binding WeekNr}" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"/>
-                <Button Content="Næste" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekForwardCommand}"/>
+                <Button Content="Næste" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Command="{Binding ChangeWeekForwardCommand, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
 
             <!-- Grid for Days of Week Labels -->
