@@ -87,6 +87,15 @@ CREATE TABLE Bookings
 )
 GO
 
+CREATE TABLE ForgotPassword 
+(
+	FpID INT IDENTITY(1,1) PRIMARY KEY,
+	UserID INT NOT NULL FOREIGN KEY REFERENCES Users(UserID),
+	Date_ datetime,
+	TempPW NvarChar(8)
+);
+GO
+
 
 
 -- on cascade bookings_cars
@@ -97,6 +106,12 @@ GO
 
 -- on cascade cars_users
 ALTER TABLE [dbo].[Cars]  WITH CHECK ADD  CONSTRAINT [FK_Cars_Users] FOREIGN KEY([UserID])
+REFERENCES [dbo].[Users] ([UserID])
+ON DELETE CASCADE
+GO
+
+-- on cascade forgotpasswords_users
+ALTER TABLE [dbo].[ForgotPassword]  WITH CHECK ADD  CONSTRAINT [FK_forgotpasswords_users] FOREIGN KEY([UserID])
 REFERENCES [dbo].[Users] ([UserID])
 ON DELETE CASCADE
 GO

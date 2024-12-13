@@ -36,6 +36,11 @@ GRANT EXECUTE ON OBJECT::[dbo].[usp_Login]
     TO WPFApp;
 GO
 
+	-- usp_ForgotPW
+GRANT EXECUTE ON OBJECT::[dbo].[usp_ForgotPW] 
+	TO WPFApp;
+GO
+
 
 
 -- opret et login til alle brugere til connectionstrig.
