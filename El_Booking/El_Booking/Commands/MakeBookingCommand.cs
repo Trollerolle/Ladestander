@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Windows.Devices.SmartCards;
 
 namespace El_Booking.Commands
 {
@@ -39,12 +40,13 @@ namespace El_Booking.Commands
 
             try
             {
-                Booking newBooking = new Booking()
+
+				Booking newBooking = new Booking()
                 {
                     TimeSlot = timeSlots.ElementAt((int)_bookingViewModel.SelectedTimeSlot),
                     Date = date,
                     CarID = _bookingViewModel.MainBookingViewModel.CurrentCar.CarID
-                };
+				};
 
                 _storer.BookingRepository.Add(newBooking);
                 newBooking = _storer.BookingRepository.GetBy(newBooking.CarID.ToString());
@@ -55,9 +57,10 @@ namespace El_Booking.Commands
 				_bookingViewModel.MainBookingViewModel.SeeYourBookingCommand.Execute(parameter);
 
             }
-            catch (Exception ex)
+            catch (NullReferenceException ex)
             {
-                MessageBox.Show(" fejl besked som skal vises ", "Fejl", MessageBoxButton.OK);
+                MessageBox.Show("Din bruger har ikke opdateret sin bil.", "Fejl", MessageBoxButton.OK);
+                _bookingViewModel.MainBookingViewModel.SeeProfileCommand.Execute(parameter);
             }
         }
 
