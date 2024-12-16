@@ -13,6 +13,7 @@ namespace El_Booking.ViewModel.BookingVM
 
 		public string Time { get; set; }
 		public TimeOnly StartTime { get; set; }
+		public TimeOnly EndTime { get; set; } //HER ÆNDRINGER
 
 		public int MondayFull { get; set; }
 		public int TuesdayFull { get; set; }
@@ -26,6 +27,7 @@ namespace El_Booking.ViewModel.BookingVM
 
 			Time = $"{timeSlot.TimeSlotStart.ToString("HH:mm")} - {timeSlot.TimeSlotEnd.ToString("HH:mm")}";
 			StartTime = timeSlot.TimeSlotStart;
+			EndTime = timeSlot.TimeSlotEnd; //HER ÆNDRINGER
 
 			MondayFull = 0;
 			TuesdayFull = 0;

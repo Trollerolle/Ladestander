@@ -140,13 +140,22 @@ namespace El_Booking.ViewModel.BookingVM
             NearestTimeSlot = CurrentTimeSlots
             .Where(slot => slot.StartTime <= currentTime) // Kun time slots som er <= current time
             .OrderByDescending(slot => slot.StartTime)    // Sorter efter højeste først. (Hvis du kigger klokken 13, kan det være 6 12 eller 9, IKKE 15 som bliver sorteret til 12, 9, 6)
-            .FirstOrDefault();                                           // Vælg første, ( 12 )
+            .FirstOrDefault();                            // Vælg første, ( 12 )
 
-            int? closestTimeSlotID = _nearestTimeSlot?.TimeSlotID; // Sætter det ID der er tættest til en int
+            int? closestTimeSlotID;
+            if (NearestTimeSlot.EndTime < currentTime) //Hvis klokken er efter slutningen på sidste timeslot
+            {
+                closestTimeSlotID = _nearestTimeSlot?.TimeSlotID + 1; //så skal den nærmest være +1 for at gøre den grå
+            }
+            else
+            { 
+                closestTimeSlotID = _nearestTimeSlot?.TimeSlotID; // Sætter det ID der er tættest til en int
+            }
 
 
-       
-                     
+
+
+
 
             for (int day = 0; day <= currentDayAsInt; day++) // Kør fra mandag til idag
             {
