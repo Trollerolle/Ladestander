@@ -40,9 +40,21 @@ namespace El_Booking.Commands
 				_bookingViewModel.SetTimeSlotsAsPassed();
 			}
 
+			if (_bookingViewModel.MainBookingViewModel.CurrentBooking != null)
+			{
+				if (_bookingViewModel.MainBookingViewModel.CurrentBooking.Date >= _bookingViewModel.MondayOfWeek && _bookingViewModel.MainBookingViewModel.CurrentBooking.Date <= _bookingViewModel.MondayOfWeek.AddDays(5))
+				{
+					_bookingViewModel.SetTimeSlotsAsYours();
+				}
+			}
+
 		}
 		public override bool CanExecute(object? parameter)
 		{
+			if (currentDay.DayOfWeek == DayOfWeek.Saturday)
+				currentDay = currentDay.AddDays(2);
+			else if (currentDay.DayOfWeek == DayOfWeek.Sunday)
+				currentDay = currentDay.AddDays(1);
 			if 
 			(
 			_bookingViewModel.MondayOfWeek > currentDay.StartOfWeek()

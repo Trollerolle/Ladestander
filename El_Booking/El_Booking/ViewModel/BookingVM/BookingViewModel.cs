@@ -32,7 +32,7 @@ namespace El_Booking.ViewModel.BookingVM
 
 		public BookingViewModel(Storer storer, MainBookingViewModel mainBookingViewModel)
 		{
-            _startingDate = DateOnly.FromDateTime(DateTime.Today.AddDays(-1));
+            _startingDate = DateOnly.FromDateTime(DateTime.Today);
             if (_startingDate.DayOfWeek == DayOfWeek.Saturday)
                 _startingDate = _startingDate.AddDays(2);
             else if (_startingDate.DayOfWeek == DayOfWeek.Sunday)
