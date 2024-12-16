@@ -57,17 +57,17 @@ namespace El_Booking.Commands
                 _bookingViewModel.MainBookingViewModel.SeeYourBookingCommand.Execute(parameter);
 
             }
-            catch (NullReferenceException ex)
-            {
-                MessageBox.Show("Din bruger har ikke opdateret sin bil.", "Fejl", MessageBoxButton.OK);
-                _bookingViewModel.MainBookingViewModel.SeeProfileCommand.Execute(parameter);
-            }
             catch (Microsoft.Data.SqlClient.SqlException ex)
             {
                 MessageBox.Show("Din valgte booking kunne ikke foretages, prøv igen.", "Fejl", MessageBoxButton.OK);
                 _bookingViewModel.GetCurrentTimeSlots(_bookingViewModel.MondayOfWeek);
                 _bookingViewModel.SetTimeSlotsAsPassed();
             }
+			catch (NullReferenceException ex)
+			{
+				MessageBox.Show("Din bruger har ikke opdateret sin bil.", "Fejl", MessageBoxButton.OK);
+				_bookingViewModel.MainBookingViewModel.SeeProfileCommand.Execute(parameter);
+			}
 
 		}
 
