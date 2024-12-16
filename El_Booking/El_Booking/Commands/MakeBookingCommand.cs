@@ -41,20 +41,20 @@ namespace El_Booking.Commands
             try
             {
 
-				Booking newBooking = new Booking()
+                Booking newBooking = new Booking()
                 {
                     TimeSlot = timeSlots.ElementAt((int)_bookingViewModel.SelectedTimeSlot),
                     Date = date,
                     CarID = _bookingViewModel.MainBookingViewModel.CurrentCar.CarID
-				};
+                };
 
                 _storer.BookingRepository.Add(newBooking);
                 newBooking = _storer.BookingRepository.GetBy(newBooking.CarID.ToString());
                 _bookingViewModel.MainBookingViewModel.CurrentBooking = newBooking;
                 _bookingViewModel.GetCurrentDays(_bookingViewModel._startingDate.StartOfWeek());
 
-				MessageBox.Show($"Din booking er gennemført.", "Succes", MessageBoxButton.OK); 
-				_bookingViewModel.MainBookingViewModel.SeeYourBookingCommand.Execute(parameter);
+                MessageBox.Show($"Din booking er gennemført.", "Succes", MessageBoxButton.OK);
+                _bookingViewModel.MainBookingViewModel.SeeYourBookingCommand.Execute(parameter);
 
             }
             catch (NullReferenceException ex)
@@ -62,7 +62,14 @@ namespace El_Booking.Commands
                 MessageBox.Show("Din bruger har ikke opdateret sin bil.", "Fejl", MessageBoxButton.OK);
                 _bookingViewModel.MainBookingViewModel.SeeProfileCommand.Execute(parameter);
             }
-        }
+            catch (Microsoft.Data.SqlClient.SqlException ex)
+            {
+                MessageBox.Show("Din valgte booking kunne ikke foretages, prøv igen.", "Fejl", MessageBoxButton.OK);
+                _bookingViewModel.GetCurrentTimeSlots(_bookingViewModel.MondayOfWeek);
+                _bookingViewModel.SetTimeSlotsAsPassed();
+            }
+
+		}
 
         public override bool CanExecute(object? parameter)
         {
