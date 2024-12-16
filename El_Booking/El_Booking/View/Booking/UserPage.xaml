@@ -47,14 +47,14 @@
                         <TextBlock Text="Nyt Telefonnummer"/>
                         <TextBox Width="280" Text="{Binding NewPhoneNumber, UpdateSourceTrigger=PropertyChanged}"/>
                     </WrapPanel>
-                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Width="280" Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Center">
                         <StackPanel Margin="0,0,10,0">
                             <TextBlock Text="Nyt Kodeord" />
-                            <PasswordBox Width="100" MaxLength="21" PasswordChanged="pwdBox1_PasswordChanged" />
+                            <PasswordBox Width="130" MaxLength="21" PasswordChanged="pwdBox1_PasswordChanged" />
                         </StackPanel>
                         <StackPanel Margin="10,0,0,0">
                             <TextBlock Text="Gentag Kodeord"/>
-                            <PasswordBox Width="100" MaxLength="21" PasswordChanged="pwdBox2_PasswordChanged" />
+                            <PasswordBox Width="130" MaxLength="21" PasswordChanged="pwdBox2_PasswordChanged" />
                         </StackPanel>
                     </StackPanel>
                     <Button Margin="0,10,0,0" Width="280" Content="Gem Ændring" Command="{Binding UpdateUserCommand}"/>
