@@ -167,22 +167,10 @@ CREATE OR ALTER PROC usp_AddBooking
 	@CarID INT
 )
 AS
-DECLARE @ChargingPoint INT = 
-	(
-		SELECT TOP 1
-			[dbo].[ChargingPoints].[ChargingPointID]
-		FROM
-			[dbo].[ChargingPoints]
-			LEFT JOIN 
-				(SELECT [ChargingPointID] AS bcp FROM [dbo].[Bookings] WHERE [Date_] = @Date AND [TimeSlotID] = @TimeSlotID) AS Bookings_
-			ON 
-				[dbo].[ChargingPoints].[ChargingPointID] = Bookings_.bcp
-		WHERE
-			bcp IS NULL
-		ORDER BY
-			[ChargingPointID]%2 DESC, [ChargingPointID] -- Hvis ulige tal ønskes: DESC, [ChargingPointID]
-	)
+DECLARE @ChargingPoint INT; 
 
+EXECUTE usp_GetAvailableChargingPoint @Date, @TimeSlotID, @ChargingPoint out;
+	
 DECLARE @msg NVARCHAR(100) = 'No available Charging Points on Date: ' + FORMAT(@Date, 'yyyy-MM-dd', 'en-US') + ', Time Slot: ' + CAST(@TimeslotID AS NVarChar(5));
 IF @ChargingPoint IS NULL
 	THROW 50001, @msg, 1;
@@ -274,13 +262,18 @@ BEGIN
 
 SET @ChargingPointID = (
 
-SELECT TOP 1 ChargingPoints.ChargingPointID
-FROM ChargingPoints
-LEFT JOIN Bookings
-	ON ChargingPoints.ChargingPointID = Bookings.ChargingPointID
-	AND Bookings.Date_ = @Date
-	AND Bookings.TimeSlotID = @TimeSlotID
-	WHERE Bookings.ChargingPointID IS NULL
+SELECT TOP 1
+			[dbo].[ChargingPoints].[ChargingPointID]
+		FROM
+			[dbo].[ChargingPoints]
+			LEFT JOIN 
+				(SELECT [ChargingPointID] AS bcp FROM [dbo].[Bookings] WHERE [Date_] = @Date AND [TimeSlotID] = @TimeSlotID) AS Bookings_
+			ON 
+				[dbo].[ChargingPoints].[ChargingPointID] = Bookings_.bcp
+		WHERE
+			bcp IS NULL
+		ORDER BY
+			[ChargingPointID]%2 DESC, [ChargingPointID] -- Hvis ulige tal ønskes: DESC, [ChargingPointID]
 	);
 
 IF @ChargingPointID IS NULL
