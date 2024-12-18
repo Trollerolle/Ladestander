@@ -45,7 +45,7 @@ namespace El_Booking.Commands
             {
 				User loggedInUser = _storer.UserRepository.GetBy(email);
 				var currentApp = Application.Current as App;
-                currentApp?.SetCurrentConnection("BookingConnection");
+                currentApp.SetCurrentConnection("BookingConnection");
 				_navigation.CurrentViewModel = new MainBookingViewModel(_storer, _navigation, loggedInUser);
             }
 

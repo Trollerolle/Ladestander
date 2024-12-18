@@ -22,20 +22,20 @@ namespace El_Booking
 
         private string _connection = "AppConnection";
 
-        public string Connection
+        private string Connection
         {
             get { return _connection; }
             set { _connection = value; }
         }
 
-        public void SetCurrentConnection(string connection)
+        internal void SetCurrentConnection(string connection)
         {
-            _connection = connection;
+            Connection = connection;
         }
 
-        public void ClearConnection()
+        internal void ClearConnection()
         {
-            _connection = "AppConnection";
+            Connection = "AppConnection";
         }
 
         public App()
