@@ -76,7 +76,7 @@
                 <StackPanel Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <WrapPanel Margin="0,0,0,10" Width="280" HorizontalAlignment="Left">
                         <TextBlock Text="Bilmærke og model: " FontWeight="Bold"/>
-                        <TextBlock Text="{Binding CarDetails}"/>
+                        <TextBlock Text="{Binding CarDetails, FallbackValue='Venligst opdater din bil.'}"/>
                     </WrapPanel>
                     <WrapPanel HorizontalAlignment="Left">
                         <TextBlock Text="Registreringsnummer: " FontWeight="Bold"/>
