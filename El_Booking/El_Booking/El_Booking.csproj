@@ -7,11 +7,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <StartupObject>El_Booking.App</StartupObject>
+    <ApplicationIcon>1-287f8d6d.ico</ApplicationIcon>
   </PropertyGroup>
 
 
 
   <ItemGroup>
+    <Content Include="1-287f8d6d.ico" />
     <Content Include="View\Background1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
