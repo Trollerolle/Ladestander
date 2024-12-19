@@ -159,6 +159,42 @@ GO
 --DECLARE @monday DATE = '2024-11-18';
 --EXEC usp_GetPlannedBookings @monday;
 
+-- SP til at få en ledig ladestander for den valgte Timeslot.
+CREATE OR ALTER PROC usp_GetAvailableChargingPoint
+@Date DATE,
+@TimeSlotID INT,
+@ChargingPointID INT OUTPUT
+AS 
+BEGIN
+
+SET @ChargingPointID = (
+
+SELECT TOP 1
+			[dbo].[ChargingPoints].[ChargingPointID]
+		FROM
+			[dbo].[ChargingPoints]
+			LEFT JOIN 
+				(SELECT [ChargingPointID] AS bcp FROM [dbo].[Bookings] WHERE [Date_] = @Date AND [TimeSlotID] = @TimeSlotID) AS Bookings_
+			ON 
+				[dbo].[ChargingPoints].[ChargingPointID] = Bookings_.bcp
+		WHERE
+			bcp IS NULL
+		ORDER BY
+			[ChargingPointID]%2 DESC, [ChargingPointID] -- Hvis ulige tal ønskes: DESC, [ChargingPointID]
+	);
+
+IF @ChargingPointID IS NULL
+	PRINT 
+	'Ingen ledige ladestandere.';
+	Return -1;
+
+END;
+GO
+--Til at execute usp_GetAvailableChargingPoint.
+--DECLARE @Result INT;
+--EXECUTE usp_GetAvailableChargingPoint '2024-11-19', 2, @Result OUT;
+--PRINT @Result;
+
 -- usp_AddBooking 
 CREATE OR ALTER PROC usp_AddBooking
 (
@@ -252,41 +288,6 @@ SELECT
 ;
 GO
 
--- SP til at få en ledig ladestander for den valgte Timeslot.
-CREATE OR ALTER PROC usp_GetAvailableChargingPoint
-@Date DATE,
-@TimeSlotID INT,
-@ChargingPointID INT OUTPUT
-AS 
-BEGIN
-
-SET @ChargingPointID = (
-
-SELECT TOP 1
-			[dbo].[ChargingPoints].[ChargingPointID]
-		FROM
-			[dbo].[ChargingPoints]
-			LEFT JOIN 
-				(SELECT [ChargingPointID] AS bcp FROM [dbo].[Bookings] WHERE [Date_] = @Date AND [TimeSlotID] = @TimeSlotID) AS Bookings_
-			ON 
-				[dbo].[ChargingPoints].[ChargingPointID] = Bookings_.bcp
-		WHERE
-			bcp IS NULL
-		ORDER BY
-			[ChargingPointID]%2 DESC, [ChargingPointID] -- Hvis ulige tal ønskes: DESC, [ChargingPointID]
-	);
-
-IF @ChargingPointID IS NULL
-	PRINT 
-	'Ingen ledige ladestandere.';
-	Return -1;
-
-END;
-GO
---Til at execute usp_GetAvailableChargingPoint.
---DECLARE @Result INT;
---EXECUTE usp_GetAvailableChargingPoint '2024-11-19', 2, @Result OUT;
---PRINT @Result;
 
 CREATE OR ALTER PROC usp_AddCar 
 (
