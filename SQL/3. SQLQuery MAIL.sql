@@ -56,18 +56,6 @@ IF NOT EXISTS(SELECT *
 @is_default = 1;
 
 
-  -- SEND EN TEST MAIL
-  EXEC msdb.dbo.sp_send_dbmail  
-    @profile_name = 'ElBookingMail',  
-    @recipients = 'sean62359@edu.ucl.dk', --'info@elbooking.dk',  
-    @body = 'Voila..!! This email has been sent from SQL Server Express Edition.',  
-    @subject = 'Voila..!! This email has been sent from SQL Server Express Edition.' ;
-
-	-- MAIL k� status
-
-	EXEC msdb.dbo.sysmail_help_queue_sp @queue_type = 'Mail';
-
-
 	--
 
 	IF EXISTS (
@@ -82,5 +70,4 @@ BEGIN
 END
 
 --
-EXECUTE dbo.sysmail_start_sp;
 EXECUTE dbo.sysmail_start_sp;
